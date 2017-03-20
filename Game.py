@@ -17,4 +17,4 @@ class Game():
 if __name__ == "__main__":
     deck = Deck()
     deck.init_deck()
-    print(deck.cards[0].stats)
+    print(deck)
