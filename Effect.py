@@ -6,7 +6,7 @@ class Effect():
         if trigger == None:
             trigger = choice(TRIGGER_LIST)
         if target == None:
-            target = "WIP" #Add target based on stuff???
+            target = choice(TARGET_LIST) #Add target based on stuff???
         if effect == None:
             effect = choice(EFFECT_LIST)
         if numeric == None:
@@ -18,11 +18,12 @@ class Effect():
     def __str__(self):
         s = """True
 
+###EFFECT###
 trigger: %s
 target: %s
 effectType: %s
 magnitude: %s
-""" % (TRIGGER_DICT[self.trigger], self.target, EFFECT_DICT[self.effect], self.numeric)
+""" % (TRIGGER_DICT[self.trigger], TARGET_DICT[self.target], EFFECT_DICT[self.effect], self.numeric)
         return s
 
 #print(Effect(0))
