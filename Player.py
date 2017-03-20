@@ -7,4 +7,5 @@ class Player():
     """
     def __init__(self):
         self.deck = Deck()
-        self.hand = Hand(deck)
+        self.deck.init_deck()
+        self.hand = Hand(self.deck)

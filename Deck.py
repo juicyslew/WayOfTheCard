@@ -15,3 +15,5 @@ class Deck():
             self.cards.append(Card(cardType=TYPE_CREATURE, effect = True)) #Using TestCards for now
     def shuffle_deck(self):
         shuffle(cards)
+    def draw(hand):
+        hand.cards.append(self.cards.pop(0))

@@ -15,6 +15,5 @@ class Game():
         self.init_game()
 
 if __name__ == "__main__":
-    deck = Deck()
-    deck.init_deck()
-    print(deck)
+    player1 = Player()
+    print(player1.hand)
