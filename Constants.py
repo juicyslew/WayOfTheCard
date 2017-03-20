@@ -1,0 +1,18 @@
+"""
+Python File to contain Constants for Card Game
+"""
+
+DECK_INIT_SIZE = 30
+MAX_NUMERIC = 3
+HAND_INIT_SIZE = 4
+
+CREATURE = 0
+SPELL = 1
+
+MAX_DEF = 10
+MAX_ATT = 10
+MAX_COST = 10
+MAX_STATS = [MAX_COST, MAX_ATT, MAX_DEF]
+
+STATE_SLEEP = 0
+STATE_AWAKE = 1
