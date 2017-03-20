@@ -27,9 +27,8 @@ def name_list():
     "aegis", "honor", "mystic", "barrier", "burst", "charge", "aether",
     "meltdown", "rift", "shock", "shockwave", "lightning", "thunder",
     "hell", "storm", "tide", "ancient", "renegade", "agility", "warp",
-    "aim", "shoot", "nature", "vengeance", "fucking", "fuck", "damage",
-    "shitty", "broke-ass", "wrath", "sun", "shadow", "light", "dark",
-    "destiny", "favor", "ruin"]
+    "aim", "shoot", "nature", "vengeance", "damage", "wrath", "sun",
+    "shadow", "light", "dark", "destiny", "favor", "ruin"]
 
 def noun_list():
     return ["cat", "mage", "horror", "bears", "warrior", "soldier",
