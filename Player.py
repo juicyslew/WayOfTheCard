@@ -28,6 +28,7 @@ class Player():
         self.hand = Hand(self.deck)
         self.discard = Discard()
         self.dead = False
+        self.mana = 1
 
     def __str__(self):
         return '\n\n'.join([str(card) for card in self.cards])

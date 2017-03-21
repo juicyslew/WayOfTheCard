@@ -90,6 +90,7 @@ class Game():
         return False
     def game_loop(self, player1, player2):
         while(self.running):
+            player1.mana = (turn+1) * MANA_PER_TURN
             player1.activate_cards()
             print("### PLAYER 1 ###")
             print(player1.hand)
@@ -117,6 +118,7 @@ class Game():
                 break
 
             while True:
+                player2.mana = (turn+1) * MANA_PER_TURN
                 player2.activate_cards()
                 print("\n### PLAYER 2 ###")
                 print(player2.hand)
