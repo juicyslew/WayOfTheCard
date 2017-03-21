@@ -31,6 +31,7 @@ class Card():
         if stats == None:
             stats = [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
             stats[0] = int(min(MAX_COST, max(0, randint(0, 3)-2 + (stats[1] + stats[2])/2)))
+            starting_stats = stats
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None:
@@ -59,5 +60,10 @@ Effect: %s
 """ % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-    def play(self, player):
+    def play(self, player, enemy_player):
         player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+        try:
+            if self.effect.trigger == TRIGGER_PLAY:
+                self.effect.activate(player, enemy_player)
+        except AttributeError:
+            pass

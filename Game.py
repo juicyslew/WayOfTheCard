@@ -29,8 +29,8 @@ class Game():
                 i = int(i)
                 try:
                     print(player1.hand.cards[i-1])
-                    player1.hand.cards[i-1].play(player1)
-                    player1.deck.draw(player1.hand)
+                    player1.hand.cards[i-1].play(player1, player2)
+                    player1.deck.draw(player1.hand, 1)
                 except IndexError:
                     print("\nYou don't have that many cards!")
             except ValueError:
@@ -43,8 +43,8 @@ class Game():
                 i = int(i)
                 try:
                     print(player2.hand.cards[i-1])
-                    player2.hand.cards[i-1].play(player2)
-                    player2.deck.draw(player2.hand)
+                    player2.hand.cards[i-1].play(player2, player1)
+                    player2.deck.draw(player2.hand, 1)
                 except IndexError:
                     print("\nYou don't have that many cards!")
             except ValueError:

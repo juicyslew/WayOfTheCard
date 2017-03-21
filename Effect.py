@@ -30,4 +30,33 @@ magnitude: %s
 """ % (TRIGGER_DICT[self.trigger], TARGET_DICT[self.target], EFFECT_DICT[self.effect], self.numeric)
         return s
 
-#print(Effect(0))
+    def determine_target(self, own_player, enemy_player):
+        if self.target == TARGET_SELF:
+            return own_player
+        elif self.target == TARGET_OPPONENT:
+            return enemy_player
+        elif self.target == TARGET_PLAYERS:
+            self.waiting = True
+            while(self.waiting):
+                self.i = input('Target Which Player? (1 for self, 2 for enemy)')
+                try:
+                    self.i = int(self.i)
+                    if self.i == 1:
+                        own_player.deck.draw(own_player.hand)
+                        self.waiting = False
+                    elif self.i == 2:
+                        enemy_player.deck.draw(enemy_player.hand)
+                        self.waiting = False
+                    else:
+                        print('Input a Number Between 1 and 2!')
+                except ValueError:
+                    print('\nInput a Number!')
+
+    def activate(self, own_player, enemy_player):
+        if self.effect == DRAW_EFFECT:
+            if self.target == TARGET_BOTH:
+                own_player.deck.draw(own_player.hand, self.numeric)
+                enemy_player.deck.draw(enemy_player.hand, self.numeric)
+            else:
+                self.t = self.determine_target(own_player, enemy_player)
+                self.t.deck.draw(self.t.hand, self.numeric)
