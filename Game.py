@@ -20,14 +20,14 @@ class Game():
         player2 = Player()
         self.game_loop(player1, player2)
 
-    def play_card(self, player):
+    def play_card(self, player, opp):
         i = input('Index of Card to Play: ')
         try:
             i = int(i)
             try:
                 print(player.hand.cards[i-1])
-                player.hand.cards[i-1].play(player)
-                player.deck.draw(player.hand)
+                player.hand.cards[i-1].play(player, opp)
+                player.deck.draw(player.hand, 1)
             except IndexError:
                 print("\nYou don't have that many cards!")
                 return False
@@ -82,7 +82,7 @@ class Game():
             player1.activate_cards()
             print("### PLAYER 1 ###")
             print(player1.hand)
-            if not self.play_card(player1):
+            if not self.play_card(player1, player2):
                 continue
             player1.check_dead()
             player2.check_dead()
@@ -95,7 +95,7 @@ class Game():
             player2.activate_cards()
             print("\n### PLAYER 2 ###")
             print(player2.hand)
-            if not self.play_card(player2):
+            if not self.play_card(player2, player1):
                 continue
             player1.check_dead()
             player2.check_dead()
