@@ -12,8 +12,9 @@ class Deck():
         return '\n\n'.join([str(card) for card in self.cards])
     def init_deck(self):
         for i in range(DECK_INIT_SIZE):
-            self.cards.append(Card(cardType=TYPE_CREATURE, effect = True)) #Using TestCards for now
+            self.cards.append(Card(state = STATE_SLEEP, cardType=TYPE_CREATURE, effect = True)) #Using TestCards for now
     def shuffle_deck(self):
         shuffle(cards)
-    def draw(self, hand):
-        hand.cards.append(self.cards.pop(0))
+    def draw(self, hand, num):
+        for n in range(num):
+            hand.cards.append(self.cards.pop(0))

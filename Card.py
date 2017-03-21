@@ -1,6 +1,6 @@
 from Constants import *
 from Effect import *
-from random import choice, random
+from random import choice, random, randint
 from randGen import generate
 
 class Card():
@@ -29,7 +29,9 @@ class Card():
         if cardType == None:
             cardType = choice(TYPE_LIST)
         if stats == None:
-            stats =  [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
+            stats = [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
+            stats[0] = int(min(MAX_COST, max(0, randint(0, 3)-2 + (stats[1] + stats[2])/2)))
+            starting_stats = stats
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None:
@@ -49,14 +51,28 @@ class Card():
         self.effect = effect
     def __str__(self):
         s = """###Card###
-name: %s
-Card Type: %s
+Name: %s
 Stats: %s
-State: %s
-Creature Type: %s
 Effect: %s
-""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
+""" % (self.name, self.stats, self.effect)
+        #s = """###Card###
+#name: %s
+#Card Type: %s
+#Stats: %s
+#State: %s
+#Creature Type: %s
+#Effect: %s
+#""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-    def play(self, player):
+    def play(self, player, enemy_player):
         player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+        try:
+            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+        except AttributeError:
+            pass
+
+    def attack(self, opp_card):
+        self.state = STATE_SLEEP
+        self.stats[DEF] -= opp_card.stats[ATT]
+        opp_card.stats[DEF] -= self.stats[ATT]
