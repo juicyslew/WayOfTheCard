@@ -17,10 +17,12 @@ class Game():
     def init_game(self):
         self.running = True
         player1 = Player()
-        self.game_loop(player1)
+        player2 = Player()
+        self.game_loop(player1, player2)
 
-    def game_loop(self, player1):
+    def game_loop(self, player1, player2):
         while(self.running):
+            print("### PLAYER 1 ###")
             print(player1)
             i = input('Index of Card to Play: ')
             try:
@@ -33,6 +35,21 @@ class Game():
                     print("\nYou don't have that many cards!")
             except ValueError:
                 print('\nInput a Number!')
+
+            print("### PLAYER 2 ###")
+            print(player2)
+            i = input('Index of Card to Play: ')
+            try:
+                i = int(i)
+                try:
+                    print(player2.hand.cards[i-1])
+                    player2.hand.cards[i-1].play(player2)
+                    player2.deck.draw(player2.hand)
+                except IndexError:
+                    print("\nYou don't have that many cards!")
+            except ValueError:
+                print('\nInput a Number!')
+
 
 if __name__ == "__main__":
     game = Game()
