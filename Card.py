@@ -57,5 +57,5 @@ Effect: %s
 """ % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-
-#print(Card('wow', TYPE_CREATURE, [1,2,3], STATE_ACTIVE, CREATURE_MECH, Effect(TRIGGER_PLAY)))
+    def play(self, player):
+        player.cards.append(player.hand.cards.pop(0))

@@ -14,6 +14,18 @@ class Game():
         self.turn = 0
         self.init_game()
 
+    def init_game():
+        self.running = True
+        player1 = Player()
+        self.game_loop()
+
+    def game_loop():
+        while(self.running):
+            print(player1.hand)
+            i = raw_input('Index of Card to Play: ')
+            try int(i):
+
+
 if __name__ == "__main__":
-    player1 = Player()
-    print(player1.hand)
+    game = Game()
+    player1.hand.cards[1].play(player1)
