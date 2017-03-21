@@ -20,6 +20,7 @@ class Player():
     Player class: Contains deck and hand of player
     """
     def __init__(self, name):
+        self.name = name
         self.player = Player_Card(name)
         self.cards = [self.player]
         self.deck = Deck()

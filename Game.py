@@ -77,6 +77,17 @@ class Game():
             opp.check_dead()
             a = player.check_active()
             active = [str(card) for card in a]
+    def check_game_end(self, player1, player2):
+        if player1.dead and player2.dead:
+            print("Well Shoot.  A Tie.")
+            return True
+        elif player2.dead:
+            print(player1.name + " Wins!!!")
+            return True
+        elif player1.dead:
+            print(player2.name + " Wins!!!")
+            return True
+        return False
     def game_loop(self, player1, player2):
         while(self.running):
             player1.activate_cards()
@@ -90,6 +101,8 @@ class Game():
             self.use_cards(player1, player2)
             player1.check_dead()
             player2.check_dead()
+            if self.check_game_end(player1, player2):
+                break
             #Check End of turn Triggers
 
             while True:
@@ -104,6 +117,8 @@ class Game():
                 self.use_cards(player2, player1)
                 player1.check_dead()
                 player2.check_dead()
+                break
+            if self.check_game_end(player1, player2):
                 break
             #Check End of turn Triggers
             self.turn += 1
