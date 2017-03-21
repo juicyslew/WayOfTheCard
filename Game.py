@@ -82,22 +82,40 @@ class Game():
             player1.activate_cards()
             print("### PLAYER 1 ###")
             print(player1.hand)
-            if not self.play_card(player1, player2):
-                continue
+            for card in player1.cards:
+                try:
+                    card.effect.activate(player1, player2, TRIGGER_BEGIN)
+                except AttributeError:
+                    pass
+            while True:
+                if not self.play_card(player1, player2):
+                    continue
+                break
             player1.check_dead()
             player2.check_dead()
             print(player1)
             self.use_cards(player1, player2)
             player1.check_dead()
             player2.check_dead()
-            #Check End of turn Triggers
+            for card in player1.cards:
+                try:
+                    card.effect.activate(player1, player2, TRIGGER_END)
+                except AttributeError:
+                    pass
 
             while True:
                 player2.activate_cards()
                 print("\n### PLAYER 2 ###")
                 print(player2.hand)
-                if not self.play_card(player2, player1):
-                    continue
+                for card in player2.cards:
+                    try:
+                        card.effect.activate(player2, player1, TRIGGER_BEGIN)
+                    except AttributeError:
+                        pass
+                while True:
+                    if not self.play_card(player2, player1):
+                        continue
+                    break
                 player1.check_dead()
                 player2.check_dead()
                 print(player2)
@@ -105,8 +123,11 @@ class Game():
                 player1.check_dead()
                 player2.check_dead()
                 break
-            #Check End of turn Triggers
-            self.turn += 1
+                for card in player2.cards:
+                    try:
+                        card.effect.activate(player2, player1, TRIGGER_END)
+                    except AttributeError:
+                        pass
 
 
 if __name__ == "__main__":

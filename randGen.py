@@ -34,7 +34,7 @@ def name_list():
     "aegis", "honor", "mystic", "barrier", "burst", "charge", "aether",
     "meltdown", "rift", "shock", "shockwave", "lightning", "thunder",
     "hell", "storm", "tide", "ancient", "renegade", "agility", "warp",
-    "aim", "nature", "vengeance", "damage", "wrath", "sun",
+    "aim", "nature", "vengeance", "damage", "damaged", "wrath", "sun",
     "shadow", "light", "dark", "destiny", "favor", "ruin", "fucking", "soul",
     "Broke", "frozen", "earth"]
 

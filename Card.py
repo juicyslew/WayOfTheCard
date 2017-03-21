@@ -67,10 +67,10 @@ Stats: %s
     def play(self, player, enemy_player):
         player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
         try:
-            if self.effect.trigger == TRIGGER_PLAY:
-                self.effect.activate(player, enemy_player)
+            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
         except AttributeError:
             pass
+
     def attack(self, opp_card):
         self.state = STATE_SLEEP
         self.stats[DEF] -= opp_card.stats[ATT]

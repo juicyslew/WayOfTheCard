@@ -35,6 +35,10 @@ magnitude: %s
             return own_player
         elif self.target == TARGET_OPPONENT:
             return enemy_player
+        elif self.target == TARGET_ALL:
+            return own_player.cards + enemy_player.cards
+        elif self.target == TARGET_BOTH:
+            return own_player + enemy_player
         elif self.target == TARGET_PLAYERS:
             self.waiting = True
             while(self.waiting):
@@ -50,11 +54,18 @@ magnitude: %s
                 except ValueError:
                     print('\nInput a Number!')
 
-    def activate(self, own_player, enemy_player):
-        if self.effect == DRAW_EFFECT:
-            if self.target == TARGET_BOTH:
-                own_player.deck.draw(own_player.hand, self.numeric)
-                enemy_player.deck.draw(enemy_player.hand, self.numeric)
-            else:
+    def activate(self, own_player, enemy_player, time):
+        if time == self.trigger:
+            if self.effect == DRAW_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
-                self.t.deck.draw(self.t.hand, self.numeric)
+                for c in self.t:
+                    c.deck.draw(c.hand, self.numeric)
+            if self.effect == DEAL_EFFECT:
+                if self.target == TARGET_BOTH:
+                    own_player.deck.draw(own_player.hand, self.numeric)
+                    enemy_player.deck.draw(enemy_player.hand, self.numeric)
+                else:
+                    self.t = self.determine_target(own_player, enemy_player)
+                    self.t.deck.draw(self.t.hand, self.numeric)
+            if self.effect == DEAL_EFFECT:
+                self.stats[DEF]
