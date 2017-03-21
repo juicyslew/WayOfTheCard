@@ -1,6 +1,6 @@
 from Constants import *
 from Effect import *
-from random import choice, random
+from random import choice, random, randint
 from randGen import generate
 
 class Card():
@@ -29,7 +29,8 @@ class Card():
         if cardType == None:
             cardType = choice(TYPE_LIST)
         if stats == None:
-            stats =  [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
+            stats = [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
+            stats[0] = int(min(MAX_COST, max(0, randint(0, 3)-2 + (stats[1] + stats[2])/2)))
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None:
