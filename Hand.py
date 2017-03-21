@@ -8,4 +8,4 @@ class Hand():
         for i in range(HAND_INIT_SIZE):
             self.cards.append(deck.cards.pop(0))
     def __str__(self):
-        return '\n\n'.join([str(card) for card in self.cards])
+        return '\n' + '\n'.join([str(card) for card in self.cards]) + '\n'

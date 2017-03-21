@@ -52,12 +52,16 @@ class Card():
     def __str__(self):
         s = """###Card###
 name: %s
-Card Type: %s
 Stats: %s
-State: %s
-Creature Type: %s
-Effect: %s
-""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
+""" % (self.name, self.stats)
+        #s = """###Card###
+#name: %s
+#Card Type: %s
+#Stats: %s
+#State: %s
+#Creature Type: %s
+#Effect: %s
+#""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
     def play(self, player, enemy_player):
@@ -67,3 +71,7 @@ Effect: %s
                 self.effect.activate(player, enemy_player)
         except AttributeError:
             pass
+    def attack(self, opp_card):
+        self.state = STATE_SLEEP
+        self.stats[DEF] -= opp_card.stats[ATT]
+        opp_card.stats[DEF] -= self.stats[ATT]

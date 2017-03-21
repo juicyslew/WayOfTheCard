@@ -20,35 +20,84 @@ class Game():
         player2 = Player()
         self.game_loop(player1, player2)
 
+    def play_card(self, player):
+        i = input('Index of Card to Play: ')
+        try:
+            i = int(i)
+            try:
+                print(player.hand.cards[i-1])
+                player.hand.cards[i-1].play(player)
+                player.deck.draw(player.hand)
+            except IndexError:
+                print("\nYou don't have that many cards!")
+                return False
+        except ValueError:
+            print('\nInput a Number!')
+            return False
+        return True
+
+    def use_cards(self, player, opp):
+        a = player.check_active()
+        active = [str(card) for card in a]
+        while len(active) > 0:
+            print("### YOUR FIELD ### \n")
+            print('\n'.join(active) + '\n\n')
+            i = input('Index To Attack With (End Turn = 0): ')
+            try:
+                i = int(i)
+                try:
+                    if i == 0:
+                        break
+                    print(player.cards[i-1])
+                    attack_card = player.cards[i-1]
+                except IndexError:
+                    print("\nYou don't have that many cards!")
+                    continue
+            except ValueError:
+                print('\nInput a Number!')
+                continue
+            print("### ENEMY FIELD ### \n")
+            print(opp + '\n\n')
+            i = input('Index to Attack (Cancel Attack = 0): ')
+            try:
+                i = int(i)
+                try:
+                    if i == 0:
+                        continue
+                    defend_card = opp.cards[i-1]
+                    attack_card.attack(defend_card)
+                except IndexError:
+                    print("\nYou don't have that many cards!")
+                    continue
+            except ValueError:
+                print('\nInput a Number!')
+                continue
+            player.check_dead()
+            opp.check_dead()
+            a = player.check_active()
+            active = [str(card) for card in a]
     def game_loop(self, player1, player2):
         while(self.running):
+            player1.activate_cards()
             print("### PLAYER 1 ###")
+            print(player1.hand)
+            if self.play_card(player1):
+                continue
             print(player1)
-            i = input('Index of Card to Play: ')
-            try:
-                i = int(i)
-                try:
-                    print(player1.hand.cards[i-1])
-                    player1.hand.cards[i-1].play(player1, player2)
-                    player1.deck.draw(player1.hand, 1)
-                except IndexError:
-                    print("\nYou don't have that many cards!")
-            except ValueError:
-                print('\nInput a Number!')
+            self.use_cards(player1, player2)
+            player1.check_dead()
+            #Check End of turn Triggers
 
-            print("### PLAYER 2 ###")
+            player2.activate_cards()
+            print("\n### PLAYER 2 ###")
+            print(player2.hand)
+            if self.play_card(player2):
+                continue
             print(player2)
-            i = input('Index of Card to Play: ')
-            try:
-                i = int(i)
-                try:
-                    print(player2.hand.cards[i-1])
-                    player2.hand.cards[i-1].play(player2, player1)
-                    player2.deck.draw(player2.hand, 1)
-                except IndexError:
-                    print("\nYou don't have that many cards!")
-            except ValueError:
-                print('\nInput a Number!')
+            self.use_cards(player2, player1)
+            player2.check_dead()
+            #Check End of turn Triggers
+            self.turn += 1
 
 
 if __name__ == "__main__":
