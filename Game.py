@@ -43,6 +43,7 @@ class Game():
             print("### YOUR FIELD ### \n")
             print('\n'.join(active) + '\n\n')
             i = input('Index To Attack With (End Turn = 0): ')
+            print('')
             try:
                 i = int(i)
                 try:
@@ -57,7 +58,7 @@ class Game():
                 print('\nInput a Number!')
                 continue
             print("### ENEMY FIELD ### \n")
-            print(opp + '\n\n')
+            print(str(opp) + '\n')
             i = input('Index to Attack (Cancel Attack = 0): ')
             try:
                 i = int(i)
@@ -81,20 +82,26 @@ class Game():
             player1.activate_cards()
             print("### PLAYER 1 ###")
             print(player1.hand)
-            if self.play_card(player1):
+            if not self.play_card(player1):
                 continue
+            player1.check_dead()
+            player2.check_dead()
             print(player1)
             self.use_cards(player1, player2)
             player1.check_dead()
+            player2.check_dead()
             #Check End of turn Triggers
 
             player2.activate_cards()
             print("\n### PLAYER 2 ###")
             print(player2.hand)
-            if self.play_card(player2):
+            if not self.play_card(player2):
                 continue
+            player1.check_dead()
+            player2.check_dead()
             print(player2)
             self.use_cards(player2, player1)
+            player1.check_dead()
             player2.check_dead()
             #Check End of turn Triggers
             self.turn += 1

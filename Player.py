@@ -16,7 +16,7 @@ class Player():
         self.discard = Discard()
 
     def __str__(self):
-        return '\n\n'.join([card.name for card in self.cards])
+        return '\n\n'.join([str(card) for card in self.cards])
     #def str_hand(self):
         #return '\n\n'.join([card.name for card in self.hand.cards])
     def activate_cards(self):
