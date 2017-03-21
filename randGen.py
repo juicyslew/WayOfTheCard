@@ -51,7 +51,7 @@ def noun_list():
     "succubis", "hydra", "basilisk", "satyr", "minotaur", "fish",
     "gargoyle", "wolf", "ooze", "protector", "goblin", "destroyer", "ape",
     "roc", "beast", "colossus", "titan", "dwarf", "sphinx", "ravager",
-    "hellhound", "rogue", "knight", "tiger", "unicorn", "eater", "king"]
+    "hellhound", "rogue", "knight", "tiger", "unicorn", "eater", "king", "gremlin"]
 
 def random_name():
     name = ""

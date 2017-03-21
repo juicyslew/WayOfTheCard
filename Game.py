@@ -16,8 +16,8 @@ class Game():
 
     def init_game(self):
         self.running = True
-        player1 = Player()
-        player2 = Player()
+        player1 = Player("Lord Jaraxxus")
+        player2 = Player("Medivh")
         self.game_loop(player1, player2)
 
     def play_card(self, player, opp):
@@ -50,7 +50,7 @@ class Game():
                     if i == 0:
                         break
                     print(player.cards[i-1])
-                    attack_card = player.cards[i-1]
+                    attack_card = a[i-1]
                 except IndexError:
                     print("\nYou don't have that many cards!")
                     continue
@@ -92,17 +92,19 @@ class Game():
             player2.check_dead()
             #Check End of turn Triggers
 
-            player2.activate_cards()
-            print("\n### PLAYER 2 ###")
-            print(player2.hand)
-            if not self.play_card(player2, player1):
-                continue
-            player1.check_dead()
-            player2.check_dead()
-            print(player2)
-            self.use_cards(player2, player1)
-            player1.check_dead()
-            player2.check_dead()
+            while True:
+                player2.activate_cards()
+                print("\n### PLAYER 2 ###")
+                print(player2.hand)
+                if not self.play_card(player2, player1):
+                    continue
+                player1.check_dead()
+                player2.check_dead()
+                print(player2)
+                self.use_cards(player2, player1)
+                player1.check_dead()
+                player2.check_dead()
+                break
             #Check End of turn Triggers
             self.turn += 1
 
