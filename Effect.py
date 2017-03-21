@@ -32,40 +32,54 @@ magnitude: %s
 
     def determine_target(self, own_player, enemy_player):
         if self.target == TARGET_SELF:
-            return own_player
+            return [own_player]
         elif self.target == TARGET_OPPONENT:
-            return enemy_player
+            return [enemy_player]
         elif self.target == TARGET_ALL:
             return own_player.cards + enemy_player.cards
         elif self.target == TARGET_BOTH:
-            return own_player + enemy_player
+            return own_player.cards[0] + enemy_player.cards[0]
         elif self.target == TARGET_PLAYERS:
-            self.waiting = True
-            while(self.waiting):
+            while True:
                 self.i = input('Target Which Player? (1 for self, 2 for enemy)')
                 try:
                     self.i = int(self.i)
                     if self.i == 1:
-                        return own_player
+                        return [own_player]
                     elif self.i == 2:
-                        return enemy_player
+                        return [enemy_player]
                     else:
                         print('Input a Number Between 1 and 2!')
                 except ValueError:
                     print('\nInput a Number!')
+        elif self.target == TARGET_CREATURE:
+            while True:
+                self.i = input('Target Which (Enemy) Creature?')
+                try:
+                    self.i = int(i)
+                    try:
+                        if self.i != 1:
+                            return enemy_player.cards[self.i-1]
+                        else:
+                            print("\nMust target Creature")
+                    except IndexError:
+                        print("\nYou don't have that many cards!")
+                        continue
+                except ValueError:
+                    print('\nInput a Number!')
+                    continue
 
     def activate(self, own_player, enemy_player, time):
         if time == self.trigger:
             if self.effect == DRAW_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
                 for c in self.t:
+                    print('-----------------------------------')
+                    print(len(c.hand))
                     c.deck.draw(c.hand, self.numeric)
+                    print(len(c.hand))
+                    print('-----------------------------------')
             if self.effect == DEAL_EFFECT:
-                if self.target == TARGET_BOTH:
-                    own_player.deck.draw(own_player.hand, self.numeric)
-                    enemy_player.deck.draw(enemy_player.hand, self.numeric)
-                else:
-                    self.t = self.determine_target(own_player, enemy_player)
-                    self.t.deck.draw(self.t.hand, self.numeric)
-            if self.effect == DEAL_EFFECT:
-                self.stats[DEF]
+                self.t = self.determine_target(own_player, enemy_player)
+                for c in self.t:
+                    c.stats[DEF] -= self.numeric

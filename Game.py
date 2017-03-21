@@ -77,6 +77,17 @@ class Game():
             opp.check_dead()
             a = player.check_active()
             active = [str(card) for card in a]
+    def check_game_end(self, player1, player2):
+        if player1.dead and player2.dead:
+            print("Well Shoot.  A Tie.")
+            return True
+        elif player2.dead:
+            print(player1.name + " Wins!!!")
+            return True
+        elif player1.dead:
+            print(player2.name + " Wins!!!")
+            return True
+        return False
     def game_loop(self, player1, player2):
         while(self.running):
             player1.activate_cards()
@@ -102,6 +113,8 @@ class Game():
                     card.effect.activate(player1, player2, TRIGGER_END)
                 except AttributeError:
                     pass
+            if self.check_game_end(player1, player2):
+                break
 
             while True:
                 player2.activate_cards()
@@ -122,12 +135,15 @@ class Game():
                 self.use_cards(player2, player1)
                 player1.check_dead()
                 player2.check_dead()
-                break
                 for card in player2.cards:
                     try:
                         card.effect.activate(player2, player1, TRIGGER_END)
                     except AttributeError:
                         pass
+                break
+            if self.check_game_end(player1, player2):
+                break
+            self.turn += 1
 
 
 if __name__ == "__main__":

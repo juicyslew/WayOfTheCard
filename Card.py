@@ -51,9 +51,10 @@ class Card():
         self.effect = effect
     def __str__(self):
         s = """###Card###
-name: %s
+Name: %s
 Stats: %s
-""" % (self.name, self.stats)
+Effect: %s
+""" % (self.name, self.stats, self.effect)
         #s = """###Card###
 #name: %s
 #Card Type: %s
