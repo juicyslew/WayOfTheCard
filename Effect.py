@@ -42,11 +42,9 @@ magnitude: %s
                 try:
                     self.i = int(self.i)
                     if self.i == 1:
-                        own_player.deck.draw(own_player.hand)
-                        self.waiting = False
+                        return own_player
                     elif self.i == 2:
-                        enemy_player.deck.draw(enemy_player.hand)
-                        self.waiting = False
+                        return enemy_player
                     else:
                         print('Input a Number Between 1 and 2!')
                 except ValueError:
