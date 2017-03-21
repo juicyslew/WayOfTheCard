@@ -25,7 +25,7 @@ def generate(cardType = TYPE_CREATURE):
     string = ""
     for item in name:
         string = string + item.capitalize() + " "
-    return string
+    return string[:,-1]
 
 def name_list():
     return  ["fire", "slash", "ice", "sword", "smite", "destruction",
