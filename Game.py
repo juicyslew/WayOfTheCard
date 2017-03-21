@@ -14,18 +14,25 @@ class Game():
         self.turn = 0
         self.init_game()
 
-    def init_game():
+    def init_game(self):
         self.running = True
         player1 = Player()
-        self.game_loop()
+        self.game_loop(player1)
 
-    def game_loop():
+    def game_loop(self, player1):
         while(self.running):
-            print(player1.hand)
-            i = raw_input('Index of Card to Play: ')
-            try int(i):
-
+            print(player1)
+            i = input('Index of Card to Play: ')
+            try:
+                i = int(i)
+                try:
+                    print(player1.hand.cards[i-1])
+                    player1.hand.cards[i-1].play(player1)
+                    player1.deck.draw(player1.hand)
+                except IndexError:
+                    print("\nYou don't have that many cards!")
+            except ValueError:
+                print('\nInput a Number!')
 
 if __name__ == "__main__":
     game = Game()
-    player1.hand.cards[1].play(player1)

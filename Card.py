@@ -1,6 +1,7 @@
 from Constants import *
 from Effect import *
 from random import choice, random
+from randGen import generate
 
 class Card():
     """
@@ -25,8 +26,6 @@ class Card():
     EFFECT CLASS
     """
     def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False): #Replace eventually with no init variables and just random generation.
-        if name == None:
-            name = choice(NAME_LIST)
         if cardType == None:
             cardType = choice(TYPE_LIST)
         if stats == None:
@@ -35,6 +34,8 @@ class Card():
             state = choice(STATE_LIST)
         if creatureType == None:
             creatureType = choice(CREATURE_LIST)
+        if name == None:
+            name = generate(cardType)
         if effect == True:
             if random() < EFFECT_CHANCE:
                 effect = Effect()
@@ -58,4 +59,4 @@ Effect: %s
         return s
 
     def play(self, player):
-        player.cards.append(player.hand.cards.pop(0))
+        player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))

@@ -10,6 +10,7 @@ class Player():
         self.deck = Deck()
         self.deck.init_deck()
         self.hand = Hand(self.deck)
-        
+
     def __str__(self):
-        return '\n\n'.join([str(card) for card in self.cards])
+        return '\n\n'.join([card.name for card in self.hand.cards])
+        #return '\n\n'.join([str(card) for card in self.cards])

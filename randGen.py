@@ -1,23 +1,24 @@
 import random
+from Constants import *
 
 class randGen():
     def __init__(self, type = "creature", word_num = random.choice([1, 2, 3])):
         pass
 
-def generate(type = "creature"):
+def generate(cardType = TYPE_CREATURE):
     word_num = random.choice([1,2,3])
-    if type == "creature":
+    if cardType == TYPE_CREATURE:
         word_num = random.choice([1,2])
     name = []
     i = 0
     while i < word_num:
         i += 1
         name.append(random.choice(name_list()))
-    if type == "creature":
+    if cardType == TYPE_CREATURE:
         name.append(random.choice(noun_list()))
     string = ""
     for item in name:
-        string = string + item + " "
+        string = string + item.capitalize() + " "
     return string
 
 def name_list():
