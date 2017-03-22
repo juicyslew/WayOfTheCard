@@ -20,6 +20,7 @@ class Effect():
         self.target = target
         self.effect = effect
         self.numeric = numeric
+        self.class_type = EFFECT_CLASS_DICT[self.effect]
     def __str__(self):
         s = """True
 
@@ -32,26 +33,32 @@ magnitude: %s
         return s
 
     def determine_target(self, own_player, enemy_player):
+        if self.class_type == CLASS_PLAYER:
+            a = own_player
+            b = enemey_player
+        elif self.class_type == CLASS_CARDS:
+            a = own_player.cards[0]
+            b = enemy_player.cards[0]
         print("Effect: %s , Numeric: %i" % (EFFECT_DICT[self.effect], self.numeric))
         if self.target == TARGET_SELF:
-            return [own_player]
+            return [a]
         elif self.target == TARGET_OPPONENT:
-            return [enemy_player]
+            return [b]
         elif self.target == TARGET_ALL:
             print(own_player.cards + enemy_player.cards)
             return own_player.cards + enemy_player.cards
         elif self.target == TARGET_BOTH:
-            return [own_player, enemy_player]
+            return [a, b]
         elif self.target == TARGET_PLAYERS:
             while True:
-                print("Your Health: %i\nEnemy Health: %i" % (own_player.stats[DEF], enemy_player.stats[DEF]))
+                print("Your Health: %i\nEnemy Health: %i" % (own_player.cards[0].stats[DEF], enemy_player.cards[0].stats[DEF]))
                 self.i = input('Target Which Player? (1 for self, 2 for enemy)')
                 try:
                     self.i = int(self.i)
                     if self.i == 1:
-                        return [own_player]
+                        return [a]
                     elif self.i == 2:
-                        return [enemy_player]
+                        return [b]
                     else:
                         print('Input a Number Between 1 and 2!')
                 except ValueError:
@@ -59,7 +66,7 @@ magnitude: %s
         elif self.target == TARGET_CREATURE:
             print(enemy_player)
             while True:
-                self.i = input('Target Which (Enemy) Creature?')
+                self.i = input('Target Which (Enemy) Creature? (0 to not attack)')
                 try:
                     self.i = int(self.i)
                     try:
@@ -80,23 +87,15 @@ magnitude: %s
             if self.effect == DRAW_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
                 for c in self.t:
-                    try:
-                        type(c.mana) == int
-                        print('-----------------------------------')
-                        print("%s's hand increased from %i cards," %(c.name, len(c.hand.cards)))
-                        c.deck.draw(c.hand, self.numeric)
-                        print("to %i cards" % len(c.hand.cards))
-                        print('-----------------------------------')
-                    except TypeError:
-                        pass
+                    print('-----------------------------------')
+                    print("%s's hand increased from %i cards," %(c.name, len(c.hand.cards)))
+                    c.deck.draw(c.hand, self.numeric)
+                    print("to %i cards" % len(c.hand.cards))
+                    print('-----------------------------------')
             if self.effect == DEAL_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
                 print("target number: " + str(len(self.t)))
                 for c in self.t:
-                    try: ## THIS IS IMPORTANT FOR ALLOWING DRAW TO USE PLAYERS BUT WHEN NOT DRAW CONVERTING C FROM PLAYER TO HERO
-                        c = c.cards[0]
-                    except TypeError:
-                        print("failed to turn card")
                     print('-----------------------------------')
                     c.stats[DEF] -= self.numeric
                     print('%i damage dealt to %s.  Result Health: %i' % (self.numeric, c.name, c.stats[DEF]))
@@ -104,12 +103,8 @@ magnitude: %s
             if self.effect == HEAL_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
                 for c in self.t:
-                    try: ## THIS IS IMPORTANT FOR ALLOWING DRAW TO USE PLAYERS BUT WHEN NOT DRAW CONVERTING C FROM PLAYER TO HERO
-                        c = c.cards[0]
-                    except TypeError:
-                        pass #???
                     print('-----------------------------------')
                     c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
                     print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
                     print('-----------------------------------')
-            print(self.t)
+            #print(self.t)
