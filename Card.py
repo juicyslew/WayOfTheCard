@@ -1,7 +1,8 @@
 from Constants import *
 from Effect import *
 from random import choice, random, randint
-from randGen import generate
+from randGen import generate, generate_stats
+import numpy as np
 
 class Card():
     """
@@ -25,13 +26,9 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, effect_spend = None, cost = None): #Replace eventually with no init variables and just random generation.
         if cardType == None:
             cardType = choice(TYPE_LIST)
-        if stats == None:
-            stats = [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
-            stats[0] = int(min(MAX_COST, max(0, randint(0, 3)-2 + (stats[1] + stats[2])/2)))
-        starting_stats = stats
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None:
@@ -40,9 +37,22 @@ class Card():
             name = generate(cardType)
         if effect == True:
             if random() < effect_chance:
-                effect = Effect()
+                effect = True
             else:
                 effect = False
+        if stats == None:
+            if cost == None:
+                cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
+            stats = generate_stats(effect, cost) #Generate Stats if None
+        if effect_spend == None: # if effect_spend == None
+            effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
+        else: #if not then
+            stats.pop(-1) #still remove final value
+        if effect:
+            effect = Effect(effect_spend)
+            if effect.effect == None:
+                effect = False
+        starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType
         self.stats = stats

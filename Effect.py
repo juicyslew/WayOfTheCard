@@ -1,17 +1,24 @@
 from Constants import *
 import Card
 from Card import *
+from randGen import generate_numerical_effect
 from random import choice, random
 import math
 
 class Effect():
-    def __init__(self, trigger = None, target = None, effect = None, numeric = None):#, effect = None):
-        if trigger == None:
-            trigger = choice(TRIGGER_LIST)
-        if effect == None:
-            effect = choice(EFFECT_LIST)
+    def __init__(self, effect_spend, trigger = None, target = None, effect = None, numeric = None):#, effect = None):
+        if trigger == None and effect == None and numeric == None:
+            effect, trigger, numeric = generate_numerical_effect(effect_spend)
+        else:
+            if trigger == None:
+                trigger = choice(TRIGGER_LIST)
+            if effect == None:
+                effect = choice(EFFECT_LIST)
         self.effect = effect
-        self.class_type = EFFECT_CLASS_DICT[self.effect]
+        if self.effect == None:
+            self.class_type = CLASS_PLAYER #Random Class
+        else:
+            self.class_type = EFFECT_CLASS_DICT[self.effect]
         self.trigger = trigger
         if target == None:
             if self.class_type == CLASS_PLAYER:
@@ -19,10 +26,11 @@ class Effect():
             else:
                 target = choice(TARGET_LIST)
         if numeric == None:
-            if self.effect != SUMMON_EFFECT:
-                numeric = math.ceil(MAX_NUMERIC * random())
+            if self.effect == SUMMON_EFFECT:
+                numeric = np.random.choice(np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE))
             else:
-                numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
+                numeric = math.ceil(MAX_NUMERIC * random())
+            #numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
         self.numeric = numeric
         self.target = target
     def __str__(self):
@@ -117,6 +125,7 @@ magnitude: %s
             if self.effect == SUMMON_EFFECT:
                 self.t = self.determine_target(own_player, enemy_player)
                 for c in self.t:
-                    c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, stats = [0, self.numeric[0], self.numeric[1]], state = STATE_SLEEP, effect = True, effect_chance=0.1))
+                    c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, cost = self.numeric))
+                    #c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, stats = [0, self.numeric[0], self.numeric[1]], state = STATE_SLEEP, effect = True, effect_chance=0.1))
                     print("Creature Summonned for %s" %c.name)
             #print(self.t)
