@@ -1,4 +1,5 @@
 from Constants import *
+import Card
 from Card import *
 from random import choice, random
 import math
@@ -9,18 +10,21 @@ class Effect():
             trigger = choice(TRIGGER_LIST)
         if effect == None:
             effect = choice(EFFECT_LIST)
+        self.effect = effect
+        self.class_type = EFFECT_CLASS_DICT[self.effect]
+        self.trigger = trigger
         if target == None:
-            if effect == DRAW_EFFECT:
-                target = choice(DRAW_TARGET_LIST) #Add target based on stuff???
+            if self.class_type == CLASS_PLAYER:
+                target = choice(PLAYER_TARGET_LIST) #Add target based on stuff???
             else:
                 target = choice(TARGET_LIST)
         if numeric == None:
-            numeric = math.ceil(MAX_NUMERIC * random())
-        self.trigger = trigger
-        self.target = target
-        self.effect = effect
+            if self.effect != SUMMON_EFFECT:
+                numeric = math.ceil(MAX_NUMERIC * random())
+            else:
+                numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
         self.numeric = numeric
-        self.class_type = EFFECT_CLASS_DICT[self.effect]
+        self.target = target
     def __str__(self):
         s = """True
 
@@ -35,11 +39,14 @@ magnitude: %s
     def determine_target(self, own_player, enemy_player):
         if self.class_type == CLASS_PLAYER:
             a = own_player
-            b = enemey_player
+            b = enemy_player
         elif self.class_type == CLASS_CARDS:
             a = own_player.cards[0]
             b = enemy_player.cards[0]
-        print("Effect: %s , Numeric: %i" % (EFFECT_DICT[self.effect], self.numeric))
+        try:
+            print("Effect: %s , Numeric: %i" % (EFFECT_DICT[self.effect], self.numeric))
+        except TypeError:
+            print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
         if self.target == TARGET_SELF:
             return [a]
         elif self.target == TARGET_OPPONENT:
@@ -107,4 +114,9 @@ magnitude: %s
                     c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
                     print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
                     print('-----------------------------------')
+            if self.effect == SUMMON_EFFECT:
+                self.t = self.determine_target(own_player, enemy_player)
+                for c in self.t:
+                    c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, stats = [0, self.numeric[0], self.numeric[1]], state = STATE_SLEEP, effect = True, effect_chance=0.1))
+                    print("Creature Summonned for %s" %c.name)
             #print(self.t)

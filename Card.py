@@ -25,13 +25,13 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE): #Replace eventually with no init variables and just random generation.
         if cardType == None:
             cardType = choice(TYPE_LIST)
         if stats == None:
             stats = [round(random()*MAX_STATS[i]) for i in range(len(MAX_STATS))]
             stats[0] = int(min(MAX_COST, max(0, randint(0, 3)-2 + (stats[1] + stats[2])/2)))
-            starting_stats = stats
+        starting_stats = stats
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None:
@@ -39,7 +39,7 @@ class Card():
         if name == None:
             name = generate(cardType)
         if effect == True:
-            if random() < EFFECT_CHANCE:
+            if random() < effect_chance:
                 effect = Effect()
             else:
                 effect = False

@@ -10,6 +10,7 @@ class Player_Card(Card):
         self.stats = [0, 0, PLAYER_HEALTH]
         self.starting_stats = [0, 0, PLAYER_HEALTH]
         self.state = STATE_ACTIVE
+        self.effect = False
     def __str__(self):
         s = """### Hero ###
 name: %s
