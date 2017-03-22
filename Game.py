@@ -21,20 +21,27 @@ class Game():
         self.game_loop(player1, player2)
 
     def play_card(self, player, opp):
-        i = input('Index of Card to Play: ')
+        print(player.mana)
+        i = input('Index of Card to Play (End Placement, Start Attack = 0): ')
+        if i == '0':
+            return True
         try:
             i = int(i)
             try:
-                print(player.hand.cards[i-1])
-                player.hand.cards[i-1].play(player, opp)
-                player.deck.draw(player.hand, 1)
+                card = player.hand.cards[i-1]
+                if card.stats[COST] > player.mana:
+                    print("That Card Cost's Too Much!")
+                    return False
+                print(card)
+                card.play(player, opp)
+                player.mana -= card.stats[COST]
+                player.check_dead(opp)
+                opp.check_dead(player)
             except IndexError:
                 print("\nYou don't have that many cards!")
-                return False
         except ValueError:
             print('\nInput a Number!')
-            return False
-        return True
+        return False
 
     def use_cards(self, player, opp):
         a = player.check_active()
@@ -52,7 +59,7 @@ class Game():
                     print(player.cards[i-1])
                     attack_card = a[i-1]
                 except IndexError:
-                    print("\nYou don't have that many cards!")
+                    print("\nYou don't have that many cards in field!")
                     continue
             except ValueError:
                 print('\nInput a Number!')
@@ -68,13 +75,13 @@ class Game():
                     defend_card = opp.cards[i-1]
                     attack_card.attack(defend_card)
                 except IndexError:
-                    print("\nYou don't have that many cards!")
+                    print("\nThe enemy doesn't have that many cards in field!")
                     continue
             except ValueError:
                 print('\nInput a Number!')
                 continue
-            player.check_dead()
-            opp.check_dead()
+            player.check_dead(opp)
+            opp.check_dead(player)
             a = player.check_active()
             active = [str(card) for card in a]
     def check_game_end(self, player1, player2):
@@ -89,59 +96,60 @@ class Game():
             return True
         return False
     def game_loop(self, player1, player2):
+        """
+        THIS NEEDS MORE COMMENTS, ADD THEM AS POSSIBLE.
+        """
         while(self.running):
-            player1.mana = (turn+1) * MANA_PER_TURN
+            player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA)
             player1.activate_cards()
             print("### PLAYER 1 ###")
-            print(player1.hand)
             for card in player1.cards:
                 try:
                     card.effect.activate(player1, player2, TRIGGER_BEGIN)
                 except AttributeError:
-                    pass
+                    continue
             while True:
+                print(player1.hand)
                 if not self.play_card(player1, player2):
                     continue
                 break
-            player1.check_dead()
-            player2.check_dead()
-            print(player1)
             self.use_cards(player1, player2)
-            player1.check_dead()
-            player2.check_dead()
+            player1.deck.draw(player1.hand, 1)
             for card in player1.cards:
                 try:
                     card.effect.activate(player1, player2, TRIGGER_END)
+                    player1.check_dead(player2)
+                    player2.check_dead(player1)
                 except AttributeError:
-                    pass
+                    continue
             if self.check_game_end(player1, player2):
                 break
 
             while True:
-                player2.mana = (turn+1) * MANA_PER_TURN
+                player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA)
+                print(player2.mana)
                 player2.activate_cards()
                 print("\n### PLAYER 2 ###")
-                print(player2.hand)
                 for card in player2.cards:
                     try:
                         card.effect.activate(player2, player1, TRIGGER_BEGIN)
                     except AttributeError:
-                        pass
+                        continue
                 while True:
+                    print(player2.hand)
                     if not self.play_card(player2, player1):
                         continue
                     break
-                player1.check_dead()
-                player2.check_dead()
                 print(player2)
                 self.use_cards(player2, player1)
-                player1.check_dead()
-                player2.check_dead()
+                player2.deck.draw(player2.hand, 1)
                 for card in player2.cards:
                     try:
                         card.effect.activate(player2, player1, TRIGGER_END)
+                        player1.check_dead(player2)
+                        player2.check_dead(player1)
                     except AttributeError:
-                        pass
+                        continue
                 break
             if self.check_game_end(player1, player2):
                 break

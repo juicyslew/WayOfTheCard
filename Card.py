@@ -46,6 +46,7 @@ class Card():
         self.name = name
         self.cardType = cardType
         self.stats = stats
+        self.starting_stats = starting_stats
         self.state = state
         self.creatureType = creatureType
         self.effect = effect
@@ -76,3 +77,7 @@ Effect: %s
         self.state = STATE_SLEEP
         self.stats[DEF] -= opp_card.stats[ATT]
         opp_card.stats[DEF] -= self.stats[ATT]
+        print('-----------------------------------')
+        print('%s dealt %i damage to %s.  Result Health: %i' % (self.name, self.stats[ATT], opp_card.name, opp_card.stats[DEF]))
+        print('%s dealt %i damage to %s.  Result Health: %i' % (opp_card.name, opp_card.stats[ATT], self.name, self.stats[DEF]))
+        print('-----------------------------------')
