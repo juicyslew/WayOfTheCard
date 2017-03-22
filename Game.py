@@ -45,7 +45,7 @@ class Game():
 
     def use_cards(self, player, opp):
         a = player.check_active()
-        active = [str(card) for card in a]
+        active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))]
         while len(active) > 0:
             print("### YOUR FIELD ### \n")
             print('\n'.join(active) + '\n\n')

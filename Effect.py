@@ -77,6 +77,8 @@ magnitude: %s
                 try:
                     self.i = int(self.i)
                     try:
+                        if self.i == 0:
+                            return []
                         if self.i != 1:
                             return [enemy_player.cards[self.i-1]]
                         else:

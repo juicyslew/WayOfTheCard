@@ -54,10 +54,7 @@ class Player():
                 if card is self.player:
                     self.dead = True
                 card.state = STATE_GRAVEYARD
-                try:
-                    card.effect.activate(self, enemy_player, TRIGGER_DEATH)
-                except AttributeError:
-                    pass
+                card.effect.activate(self, enemy_player, TRIGGER_DEATH)
                 print('~~~~~~  '+card.name + ' Has Died.')
                 ls.append(card)
                 self.discard.cards.append(self.cards.pop(self.cards.index(card)))
