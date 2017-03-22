@@ -35,7 +35,7 @@ magnitude: %s
     def determine_target(self, own_player, enemy_player):
         if self.class_type == CLASS_PLAYER:
             a = own_player
-            b = enemey_player
+            b = enemy_player
         elif self.class_type == CLASS_CARDS:
             a = own_player.cards[0]
             b = enemy_player.cards[0]
@@ -70,6 +70,8 @@ magnitude: %s
                 try:
                     self.i = int(self.i)
                     try:
+                        if self.i == 0:
+                            return []
                         if self.i != 1:
                             return [enemy_player.cards[self.i-1]]
                         else:
