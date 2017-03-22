@@ -68,7 +68,10 @@ Effect: %s
 
     def play(self, player, enemy_player):
         player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-        self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+        try:
+            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+        except AttributeError:
+            pass
 
     def attack(self, opp_card):
         self.state = STATE_SLEEP
