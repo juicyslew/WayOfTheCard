@@ -11,28 +11,44 @@ import random
 class Game():
     def __init__(self):
         #Rule Generation
-        self.turn = 0
-        self.init_game()
+        self.turn = 0 #Initialize Turns
+        self.init_game() #Initialize Game
 
     def init_game(self):
-        self.running = True
-        player1 = Player("Lord Jaraxxus")
-        player2 = Player("Medivh")
-        self.game_loop(player1, player2)
+        self.running = True #Set Running
+        print('Player 1:')
+        while True: #Create Loop for picking Name
+            name = random_name().capitalize() #Create Name
+            print(name) #Display Name
+            i = input('Are You Ok With This Name(y/n): ') #Check if Player Likes
+            if i is 'y': #If player liked
+                player1 = Player(name) #Save Player Name
+                break
+            continue #If player doesn't like it, then generate new name
+        print('Player 2:')
+        while True: #Create Loop for picking Name
+            name = random_name().capitalize() #Create Name
+            print(name) #Display Name
+            i = input('Are You Ok With This Name(y/n): ') #Check if Player Likes
+            if i is 'y': #If player liked
+                player2 = Player(name) #Save Player Name
+                break
+            continue #If player doesn't like it, then generate new name
+        self.game_loop(player1, player2) #Start Game Loop
 
-    def play_card(self, player, opp):
-        print(player.mana)
-        i = input('Index of Card to Play (End Placement, Start Attack = 0): ')
-        if i == '0':
+    def play_card(self, player, opp): #Function for putting cards into the field
+        print(player.mana) #display mana
+        i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
+        if i == '0': #if 0 then end function
             return True
         try:
-            i = int(i)
+            i = int(i) #set input to integer
             try:
-                card = player.hand.cards[i-1]
-                if card.stats[COST] > player.mana:
+                card = player.hand.cards[i-1] #pull the card from hand
+                if card.stats[COST] > player.mana: #if player can't pay for card
                     print("That Card Cost's Too Much!")
-                    return False
-                print(card)
+                    return False #End Function
+                #print(card)
                 card.play(player, opp)
                 player.mana -= card.stats[COST]
                 player.check_dead(opp)
