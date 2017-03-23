@@ -2,11 +2,12 @@ from Constants import *
 import Card
 from Card import *
 from randGen import generate_numerical_effect
-from random import choice, random
+from random import choice, random, randint
 import math
+import numpy as np
 
 class Effect():
-    def __init__(self, effect_spend, trigger = None, target = None, effect = None, numeric = None):#, effect = None):
+    def __init__(self, effect_spend, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None: #If there is no information about the effect in general Then
             effect, trigger, numeric = generate_numerical_effect(effect_spend) #Use Effect Spend to Generate Effect
         else: #Otherwise Generate Effect Normally
@@ -24,11 +25,17 @@ class Effect():
         if target == None: #If no specified target, Generate Target
             if self.class_type == CLASS_PLAYER:
                 target = choice(PLAYER_TARGET_LIST) #Add target based on stuff???
+            if self.class_type == CLASS_CREATURE:
+                target = choice(CREATURE_TARGET_LIST)
             else:
                 target = choice(TARGET_LIST)
         if numeric == None: #If no numeric value, Generate Numeric
             if self.effect == SUMMON_EFFECT:
                 numeric = np.random.choice(np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE))
+            elif self.effect == BUFF_EFFECT:
+                r = math.ceil(MAX_NUMERIC * random())
+                s = randint(0, r)
+                numeric = [s, r-s]
             else:
                 numeric = math.ceil(MAX_NUMERIC * random())
             #numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
@@ -55,7 +62,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             print("Effect: %s , Numeric: %i" % (EFFECT_DICT[self.effect], self.numeric))
         except TypeError:
             print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
-        if self.target == TARGET_SELF: # If Target Is Own Player, Return
+        if self.target == TARGET_OWN_PLAYER: # If Target Is Own Player, Return
             return [a]
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
             return [b]
@@ -70,6 +77,14 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             return [choice(enemy_player.cards)]
         elif self.target == TARGET_RANDOM_ALLY:
             return [choice(own_player.cards)]
+        elif self.target == TARGET_RANDOM_CREATURE:
+            return [choice(own_player.cards[1:] + enemy_player.cards[1:])]
+        elif self.target == TARGET_RANDOM_ALLY_CREATURE:
+            return [choice(own_player.cards[1:])]
+        elif self.target == TARGET_RANDOM_ENEMY_CREATURE:
+            return [choice(enemy_player.cards[1:])]
+        elif self.target == TARGET_ALL_CREATURE:
+            return own_player.cards[1:] + enemy_player.cards[1:]
         elif self.target == TARGET_PLAYERS: # If Target is Player of Choice
             while True:
                 print("Your Health: %i\nEnemy Health: %i" % (own_player.cards[0].stats[DEF], enemy_player.cards[0].stats[DEF]))
@@ -144,4 +159,9 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     #Summon Card of Cost Numeric
                     c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
                     print("Creature Summonned for %s" %c.name)
-            #print(self.t)
+            if self.effect == BUFF_EFFECT: # If Buff
+                self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                for c in self.t: # Loop Through Targets
+                    c.stats[ATT] += self.numeric[0]
+                    c.stats[DEF] += self.numeric[1]
+                    print("%s was buffed +%i/+%i" %(c.name, self.numeric[0], self.numeric[1]))

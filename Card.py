@@ -50,9 +50,12 @@ class Card():
         else: #if not then
             stats.pop(-1) #still remove final value
         if effect: #If effect is true then
-            effect = Effect(effect_spend) #Generate an effect with the effect spend
-            if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
-                effect = False
+            if cardType == TYPE_CREATURE:
+                effect = Effect(effect_spend) #Generate an effect with the effect spend
+                if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
+                    effect = False
+            elif cardType == TYPE_SPELL:
+                effect = Effect(effect_spend, trigger=TRIGGER_PLAY)
         starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType

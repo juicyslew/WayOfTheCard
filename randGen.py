@@ -102,7 +102,7 @@ def generate_stats(effect, cost, card_type):
     if not effect: # Check if Effect is True
         rands[2] = 0 # If Not then set its relative value to 0
     if card_type == TYPE_SPELL:
-        rands[2] = cost
+        rands[2] = cost+1
     tot = sum(rands) #Sum of randoms
     norm_rands = [r/tot for r in rands] #Normalized Randoms relative importance of ATT DEF and COST while also adding to 1
     spend = (cost-cost*CARD_STRENGTH_DROPOFF) * (CARD_STRENGTH + np.random.normal(0, 1/4)) #Determines amount of arbitrary spending money for each stat #Arbitrary values added to nerf higher cost enemies a bit and add some randomness
