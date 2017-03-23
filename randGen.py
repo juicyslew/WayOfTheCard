@@ -135,7 +135,7 @@ def generate_numerical_effect(effect_spend):
     effect_costs = [] # Initialize List
     minimums = [] #Initialize List
     for eff, trig in trials: #For values in the trials list
-        eff_trig = EFFECT_COST_DICT[eff] * TRIGGER_COST_DICT[trig]*(.5*random.random() + .75) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
+        eff_trig = EFFECT_COST_DICT[eff] * TRIGGER_COST_DICT[trig]*(.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
         effect_costs.append(eff_trig) #add cost of effect to respective list
         if effect_spend < eff_trig: #If can't afford effect
             minimums.append(9999) #add obscenly large value
@@ -154,7 +154,7 @@ def generate_numerical_effect(effect_spend):
     ind = minimums.index(val) # Find index of the value
     #print('ind = ' + str(ind))
     #eff_trig = EFFECT_COST_DICT[trials[ind][0]] * TRIGGER_COST_DICT[trials[ind][1]]
-    numeric = int(effect_spend/(effect_costs[ind]*(.4*random.random()+.8))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
+    numeric = int(effect_spend/(trials[ind][0]*trials[ind][1]*(.4*random.random()+ .8))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
     #print('numeric = ' + str(numeric))
     if numeric >= 1:
         return [trials[ind][0], trials[ind][1], numeric]
