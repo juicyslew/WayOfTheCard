@@ -92,7 +92,7 @@ def random_name():
         name = name + random.choice(consonants)
     return name
 
-def generate_stats(effect, cost):
+def generate_stats(effect, cost, card_type):
     """
     Generates stats ATT, DEF and effect for a card based on COST
     effect is a boolean dictating whether or not there is an effect
@@ -101,6 +101,8 @@ def generate_stats(effect, cost):
     rands = [(random.random()*PREF_MULTIPLIERS[i] * .6)+.2 for i in range(3)] #Generate 3 Random Numbers to represent the relative amounts of ATT DEF and Effect  #Static Values were added to prevent ridiculously high and low values
     if not effect: # Check if Effect is True
         rands[2] = 0 # If Not then set its relative value to 0
+    if card_type == TYPE_SPELL:
+        rands[2] = cost
     tot = sum(rands) #Sum of randoms
     norm_rands = [r/tot for r in rands] #Normalized Randoms relative importance of ATT DEF and COST while also adding to 1
     spend = (cost-cost*CARD_STRENGTH_DROPOFF) * (CARD_STRENGTH + np.random.normal(0, 1/4)) #Determines amount of arbitrary spending money for each stat #Arbitrary values added to nerf higher cost enemies a bit and add some randomness

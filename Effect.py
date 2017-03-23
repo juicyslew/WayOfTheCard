@@ -64,6 +64,12 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             return own_player.cards + enemy_player.cards
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
             return [a, b]
+        elif self.target == TARGET_RANDOM:
+            return [choice(own_player.cards + enemy_player.cards)]
+        elif self.target == TARGET_RANDOM_ENEMY:
+            return [choice(enemy_player.cards)]
+        elif self.target == TARGET_RANDOM_ALLY:
+            return [choice(own_player.cards)]
         elif self.target == TARGET_PLAYERS: # If Target is Player of Choice
             while True:
                 print("Your Health: %i\nEnemy Health: %i" % (own_player.cards[0].stats[DEF], enemy_player.cards[0].stats[DEF]))
@@ -136,6 +142,6 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 self.t = self.determine_target(own_player, enemy_player) # Determine Target
                 for c in self.t: # Loop Through Targets
                     #Summon Card of Cost Numeric
-                    c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, cost = self.numeric))
+                    c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
                     print("Creature Summonned for %s" %c.name)
             #print(self.t)

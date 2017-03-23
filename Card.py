@@ -44,10 +44,7 @@ class Card():
         if stats == None: # If stats not specified generate them
             if cost == None: #If cost not specified generate it
                 cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
-            if cardType == TYPE_CREATURE:
-                stats = generate_stats(effect, cost) #Generate Stats if None
-            else:
-                stats = [0, 0, 0]
+            stats = generate_stats(effect, cost, cardType) #Generate Stats if None
         if effect_spend == None: # if effect_spend == None
             effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         else: #if not then
@@ -65,11 +62,14 @@ class Card():
         self.creatureType = creatureType
         self.effect = effect
     def __str__(self): # Pret Pretty Strings
-        if self.effect == False:
-            eff_s = ''
-        else:
-            eff_s = self.effect
-        s = """@@@ %s || %s @@@%s""" % (self.name, self.stats, eff_s)
+        if self.cardType == TYPE_CREATURE:
+            if self.effect == False:
+                eff_s = ''
+            else:
+                eff_s = self.effect
+            s = """@@@ %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], self.stats, eff_s)
+        if self.cardType == TYPE_SPELL:
+            s = """@@@ %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], self.stats[0], self.effect)
         #s = """###Card###
 #name: %s
 #Card Type: %s
@@ -92,6 +92,7 @@ class Card():
                 pass
         if self.cardType == TYPE_SPELL:
             self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+            player.hand.cards.pop(player.hand.cards.index(self))
 
     def attack(self, opp_card):
         """
