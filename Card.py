@@ -32,20 +32,22 @@ class Card():
             cardType = choice(TYPE_LIST)
         if state == None:
             state = choice(STATE_LIST)
-        if creatureType == None:
+        if creatureType == None and cardType == TYPE_CREATURE:
             creatureType = choice(CREATURE_LIST)
         if name == None:
             name = generate(cardType)
-
         if effect == True: #If effect equals True
-            if random() < effect_chance: #chance of having an effect
+            if random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
                 effect = True
             else:
                 effect = False
         if stats == None: # If stats not specified generate them
             if cost == None: #If cost not specified generate it
                 cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
-            stats = generate_stats(effect, cost) #Generate Stats if None
+            if cardType == TYPE_CREATURE:
+                stats = generate_stats(effect, cost) #Generate Stats if None
+            else:
+                stats = [0, 0, 0]
         if effect_spend == None: # if effect_spend == None
             effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         else: #if not then
@@ -82,11 +84,14 @@ class Card():
         """
         Put card from hand into field
         """
-        player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-        try:
+        if self.cardType == TYPE_CREATURE:
+            player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+            try:
+                self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+            except AttributeError:
+                pass
+        if self.cardType == TYPE_SPELL:
             self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-        except AttributeError:
-            pass
 
     def attack(self, opp_card):
         """

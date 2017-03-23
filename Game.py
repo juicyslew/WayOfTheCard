@@ -53,7 +53,7 @@ class Game():
                     try:
                         card = player.hand.cards[i-1] #pull the card from hand
                         if card.stats[COST] > player.mana: #if player can't pay for card
-                            print("That Card Cost's Too Much!")
+                            print("That Card Costs Too Much!")
                             continue #return False #End Function and Return that it failed, and thus should be run again.
                         #print(card)
                         card.play(player, opp) #If it succeeded, Put the card in the field

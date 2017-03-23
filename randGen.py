@@ -90,12 +90,12 @@ def random_name():
         name = name + random.choice(vowels)
     if random.random() < 0.5:
         name = name + random.choice(consonants)
-        name = name + random.choice(consonants)
     return name
 
 def generate_stats(effect, cost):
     """
     Generates stats ATT, DEF and effect for a card based on COST
+    effect is a boolean dictating whether or not there is an effect
     """
     stats = [0, 0, 0] #[ATT, DEF, EFFECT]
     rands = [(random.random()*PREF_MULTIPLIERS[i] * .6)+.2 for i in range(3)] #Generate 3 Random Numbers to represent the relative amounts of ATT DEF and Effect  #Static Values were added to prevent ridiculously high and low values
@@ -154,7 +154,7 @@ def generate_numerical_effect(effect_spend):
     ind = minimums.index(val) # Find index of the value
     #print('ind = ' + str(ind))
     #eff_trig = EFFECT_COST_DICT[trials[ind][0]] * TRIGGER_COST_DICT[trials[ind][1]]
-    numeric = int(effect_spend/(trials[ind][0]*trials[ind][1]*(.4*random.random()+ .8))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
+    numeric = int(effect_spend/(EFFECT_COST_DICT[trials[ind][0]]*TRIGGER_COST_DICT[trials[ind][1]]*(.4*random.random()+ .8))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
     #print('numeric = ' + str(numeric))
     if numeric >= 1:
         return [trials[ind][0], trials[ind][1], numeric]

@@ -53,8 +53,8 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             b = enemy_player.cards[0]
         try:
             print("Effect: %s , Numeric: %i" % (EFFECT_DICT[self.effect], self.numeric))
-        #except TypeError:
-        #    print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
+        except TypeError:
+            print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
         if self.target == TARGET_SELF: # If Target Is Own Player, Return
             return [a]
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
