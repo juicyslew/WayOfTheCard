@@ -61,11 +61,11 @@ class Card():
         self.creatureType = creatureType
         self.effect = effect
     def __str__(self):
-        s = """###Card###
-Name: %s
-Stats: %s
-Effect: %s
-""" % (self.name, self.stats, self.effect)
+        if self.effect == False:
+            eff_s = ''
+        else:
+            eff_s = self.effect
+        s = """@@@ %s || %s @@@%s""" % (self.name, self.stats, eff_s)
         #s = """###Card###
 #name: %s
 #Card Type: %s

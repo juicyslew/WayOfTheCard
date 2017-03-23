@@ -37,6 +37,8 @@ EFFECT_PREF_MULTIPLIER = 1 # Set Preference of Effects over Defense and Attack
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER, EFFECT_PREF_MULTIPLIER) #Put multipliers in tuple together
 EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.
+CARD_STRENGTH = 2.2 #Overall strength of the generated cards
+CARD_STRENGTH_DROPOFF =.125 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
 
 
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
@@ -47,6 +49,7 @@ MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the init
 MAX_COST = 10 #Maximum possible Cost
 MAX_ATT = 10 #Maximum Attack
 MAX_DEF = 10 #Maximum Defense
+MIN_DEF = 1
 MAX_STATS = (MAX_COST, MAX_ATT, MAX_DEF) #List of Max Stats
 
 #States, State Encoder List, and State Decoder Dictionary
@@ -98,7 +101,7 @@ TARGET_PLAYERS = 4
 TARGET_BOTH = 5
 TARGET_LIST = (TARGET_ALL, TARGET_SELF, TARGET_CREATURE, TARGET_OPPONENT, TARGET_PLAYERS, TARGET_BOTH)
 PLAYER_TARGET_LIST = (TARGET_BOTH, TARGET_SELF, TARGET_OPPONENT, TARGET_PLAYERS)
-TARGET_DICT = {TARGET_BOTH:"Both Players", TARGET_ALL:"All", TARGET_SELF:"Own Player", TARGET_CREATURE:"Creatures", TARGET_OPPONENT:"Opponent", TARGET_PLAYERS:"A Player"}
+TARGET_DICT = {TARGET_BOTH:"Both Players", TARGET_ALL:"All", TARGET_SELF:"Own Player", TARGET_CREATURE:"A Creature", TARGET_OPPONENT:"Opponent", TARGET_PLAYERS:"A Player"}
 
 #Classes, Class Decoder Dictionary
 CLASS_PLAYER = 0

@@ -5,61 +5,74 @@ from Discard import *
 from Card import *
 
 class Player_Card(Card):
+    """
+    Card for Representing the Player.  This is in the player's field and is the physical hero that the opponent can attack
+    """
     def __init__(self, name):
-        self.name = name
-        self.stats = [0, 0, PLAYER_HEALTH]
-        self.starting_stats = [0, 0, PLAYER_HEALTH]
-        self.state = STATE_ACTIVE
-        self.effect = False
-    def __str__(self):
-        s = """### Hero ###
-name: %s
-Stats: %s
-""" % (self.name, self.stats)
+        self.name = name #Player Name
+        self.stats = [0, 0, PLAYER_HEALTH] #Player Stats
+        self.starting_stats = [0, 0, PLAYER_HEALTH] # Player Base Stats
+        self.state = STATE_SLEEP #Player State is Pretty Much Constantly Asleep
+        self.effect = False #Player Has No Effects
+
+    def __str__(self): #When printing the player
+        s = """### %s || %s\n""" % (self.name, self.stats) # Return this string
         return s
 
 class Player():
     """
-    Player class: Contains deck and hand of player
+    Player class: Acts as a Hub for most Player specific actions and code (Which is allot)
     """
     def __init__(self, name):
-        self.name = name
-        self.player = Player_Card(name)
-        self.cards = [self.player]
-        self.deck = Deck()
+        self.name = name #Player Name
+        self.player = Player_Card(name) #Player Card
+        self.cards = [self.player] # Player Field
+        self.deck = Deck() # Initialize Player Deck
         self.deck.init_deck()
-        self.hand = Hand(self.deck)
-        self.discard = Discard()
-        self.dead = False
-        self.mana = 0
-        self.max_mana = MAX_MANA
+        self.hand = Hand(self.deck) # Initialize Player Hand
+        self.discard = Discard() # Initialize Player Discard
+        self.dead = False # Set Player to Alive
+        self.mana = 0 #Set Initial Mana
+        self.max_mana = MAX_MANA #Set Max Mana
 
-    def __str__(self):
-        return '\n\n'.join(['%i)\n%s'%(i+1,str(self.cards[i])) for i in range(len(self.cards))])
+    def __str__(self): # Return Formatted Cards from the Field
+        return '\n' + '\n'.join(['%i)\n%s\n==============================================='%(i+1,str(self.cards[i])) for i in range(len(self.cards))]) + '\n'
     #def str_hand(self):
         #return '\n\n'.join([card.name for card in self.hand.cards])
     def activate_cards(self):
+        """
+        Awaken all the Cards from sleep state
+        """
         for card in self.cards:
-            card.state = STATE_ACTIVE
+            if not card == self.player:
+                card.state = STATE_ACTIVE
     def check_active(self):
+        """
+        return only active state cards
+        """
         ls = []
         for card in self.cards:
-            if card.state == STATE_ACTIVE and not card is self.player:
+            if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
         return ls
+
     def check_dead(self, enemy_player):
-        ls = []
-        for card in self.cards:
-            if card.stats[DEF] <= 0:
-                if card is self.player:
-                    self.dead = True
-                card.state = STATE_GRAVEYARD
-                ls.append(card)
-                self.discard.cards.append(self.cards.pop(self.cards.index(card)))
-        for card in ls:
+        """
+        Function for Checking if anything has died
+        """
+        ls = [] #Initialize List
+        for card in self.cards: #for each card
+            if card.stats[DEF] <= 0: #If card has no defense/health
+                if card is self.player: #If card is player
+                    self.dead = True #This player is dead
+                card.state = STATE_GRAVEYARD #Change Card State To Dead
+                ls.append(card) # Add to list of cards that died
+                self.discard.cards.append(self.cards.pop(self.cards.index(card))) #Remove from Player Field, Add to Discard Pile
+
+        for card in ls: #Go back through list and check for any On Death effects
             try:
                 card.effect.activate(self, enemy_player, TRIGGER_DEATH)
             except AttributeError:
                 pass
-            print('~~~~~~  '+card.name + ' Has Died.')
-        return ls
+            print('~~~~~~ '+card.name + ' Has Died. ~~~~~~')
+        return ls # Return Death List

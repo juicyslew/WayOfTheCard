@@ -34,14 +34,8 @@ class Effect():
         self.numeric = numeric
         self.target = target
     def __str__(self):
-        s = """True
-
-###EFFECT###
-trigger: %s
-target: %s
-effectType: %s
-magnitude: %s
-""" % (TRIGGER_DICT[self.trigger], TARGET_DICT[self.target], EFFECT_DICT[self.effect], self.numeric)
+        s = """
+$$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_DICT[self.effect], TRIGGER_DICT[self.trigger], TARGET_DICT[self.target], self.numeric)
         return s
 
     def determine_target(self, own_player, enemy_player):
@@ -85,6 +79,8 @@ magnitude: %s
                 try:
                     self.i = int(self.i)
                     try:
+                        if self.i == 0:
+                            return []
                         if self.i != 1:
                             return [enemy_player.cards[self.i-1]]
                         else:
