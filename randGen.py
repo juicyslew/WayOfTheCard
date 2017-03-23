@@ -129,38 +129,43 @@ def generate_numerical_effect(effect_spend):
     if min_eff >= effect_spend: # If don't have enough for minimum
         return [None, None, 0] #Return none
 
-    trials = [] #Initialize List
-    for i in range(20): #Take 20 trial effects
-        eff = random.choice(EFFECT_LIST) #Choose random effect
-        trig = random.choice(TRIGGER_LIST) #Choose random Trigger
-        trials.append((eff,trig)) #Add to List
-    effect_costs = [] # Initialize List
-    minimums = [] #Initialize List
-    for eff, trig in trials: #For values in the trials list
-        eff_trig = EFFECT_COST_DICT[eff] * TRIGGER_COST_DICT[trig]*(.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
-        effect_costs.append(eff_trig) #add cost of effect to respective list
-        if effect_spend < eff_trig: #If can't afford effect
-            minimums.append(9999) #add obscenly large value
-        else: #Otherwise
-            minimums.append(effect_spend % eff_trig) #Append the modulus of the spending available by the cost (since we can have any int numeric, we care about how close the spending is to a multiple of the value not to the cost itself)
+    #trials = [] #Initialize List
+    #for i in EFFECT_LIST: #Take 20 trial effects
+    #    for j in TRIGGER_LIST:
+    #        eff = random.choice(EFFECT_LIST) #Choose random effect
+    #        trig = random.choice(TRIGGER_LIST) #Choose random Trigger
+    #        trials.append((eff,trig)) #Add to List
+    #effect_costs = [] # Initialize List
+    #minimums = [] #Initialize List
+    #i = 0
 
-    choices = [i for i in minimums if i < EFFECT_THRESHOLD] #Only allow values over a certain threshold
-    if len(choices) != 0: #If there is at least one choice
-        val = random.choice(choices) #Choose one at random
-    else: #Otherwise
-        val = min(minimums) #Pick the value that most closely matches the cost, regardless of how far off that is
+    valid_effs = [i for i in EFFECT_POSSIBILITIES if effect_spend > i[2]]
+    #for eff, trig, eff_cost in trial: #For values in the trials list
+        #eff_cost = eff_cost_base #* (.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
+        #trial[2] = eff_cost #add cost of effect to respective list
+    #    if effect_spend < eff_cost: #If can't afford effect
+    #        trial.remove(i) #add obscenly large value
+        #else: #Otherwise
+        #    minimums.append(1) #Append the modulus of the spending available by the cost (since we can have any int numeric, we care about how close the spending is to a multiple of the value not to the cost itself)
+    #    i+=1
 
-    if val == 9999: #If somehow none of the values worked
-        return [None, None, 0] #Return none
+    #choices = [i for i in minimums if i < EFFECT_THRESHOLD] #Only allow values over a certain threshold
+    #if len(choices) != 0: #If there is at least one choice
+    val = random.choice(valid_effs) #Choose one at random
+    #else: #Otherwise
+    #    val = min(minimums) #Pick the value that most closely matches the cost, regardless of how far off that is
 
-    ind = minimums.index(val) # Find index of the value
+    #if val == 9999: #If somehow none of the values worked
+    #    return [None, None, 0] #Return none
+
+    #ind = minimums.index(val) # Find index of the value
     #print('ind = ' + str(ind))
     #eff_trig = EFFECT_COST_DICT[trials[ind][0]] * TRIGGER_COST_DICT[trials[ind][1]]
-    numeric = int(effect_spend/(EFFECT_COST_DICT[trials[ind][0]]*TRIGGER_COST_DICT[trials[ind][1]]*(.4*random.random()+ .8))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
+    numeric = int(effect_spend/(val[2]*(.15*random.random()+ .85))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
     #print('numeric = ' + str(numeric))
-    if numeric >= 1:
-        return [trials[ind][0], trials[ind][1], numeric]
-    else:
-        return [None, None, 0]
+    #if numeric >= 1:
+    return [val[0], val[1], numeric]#[trials[ind][0], trials[ind][1], numeric]
+    #else:
+    #    return [None, None, 0]
         #return [SORTED_EFFECT_COST[0][0], SORTED_TRIGGER_COST[0][0], 1]
     #return [sorted_eff[0][0], sorted_trig[0][0], 1]

@@ -126,3 +126,9 @@ EFFECT_CLASS_DICT = {DRAW_EFFECT:CLASS_PLAYER, DEAL_EFFECT:CLASS_CARDS, HEAL_EFF
 #Sorted Cost Dictionaries from Minimum cost to maximum cost.  Used to identify the least costly effect.
 SORTED_EFFECT_COST = sorted(EFFECT_COST_DICT.items(), key=operator.itemgetter(1))
 SORTED_TRIGGER_COST = sorted(TRIGGER_COST_DICT.items(), key=operator.itemgetter(1))
+
+EFFECT_POSSIBILITIES = []
+for i in EFFECT_LIST:
+    for j in TRIGGER_LIST:
+        eff_cost = EFFECT_COST_DICT[i] * EFFECT_COST_DICT[j]
+        EFFECT_POSSIBILITIES.append((i, j, eff_cost))
