@@ -153,7 +153,9 @@ class Game():
             #clock.tick(60)
             screen.fill((0, 0, 255))
 
-            for card in player1.cards[1:] + player2.cards[1:]:
+            pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
+
+            for card in player1.cards + player2.cards:
                 try:
                     pygame.draw.rect(screen, [255, 255, 255], (player1.cards.index(card)*64, 100, 32, 32))
                 except ValueError:
