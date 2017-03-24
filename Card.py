@@ -26,7 +26,7 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, effect_spend = None, cost = None): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, effect_spend = None, cost = None, x = -100, y = -100): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
         if cardType == None:
             cardType = choice(TYPE_LIST)
@@ -51,11 +51,11 @@ class Card():
             stats.pop(-1) #still remove final value
         if effect: #If effect is true then
             if cardType == TYPE_CREATURE:
-                effect = Effect(effect_spend) #Generate an effect with the effect spend
+                effect = Effect(effect_spend, cardType) #Generate an effect with the effect spend
                 if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
                     effect = False
             elif cardType == TYPE_SPELL:
-                effect = Effect(effect_spend, trigger=TRIGGER_PLAY)
+                effect = Effect(effect_spend, cardType, trigger=TRIGGER_PLAY)
         starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType

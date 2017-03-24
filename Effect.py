@@ -7,7 +7,7 @@ import math
 import numpy as np
 
 class Effect():
-    def __init__(self, effect_spend, trigger = None, target = None, effect = None, numeric = None):
+    def __init__(self, effect_spend, card_type, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None: #If there is no information about the effect in general Then
             effect, trigger, numeric = generate_numerical_effect(effect_spend) #Use Effect Spend to Generate Effect
         else: #Otherwise Generate Effect Normally
@@ -17,21 +17,24 @@ class Effect():
                 effect = choice(EFFECT_LIST)
         #Set self values
         self.effect = effect
-        if self.effect == None: #If effect not set from the generate effect function, make self.class_type not reliant on self.effect
-            self.class_type = CLASS_PLAYER #Random Class
+        if self.effect == None:
+            self.class_type = CLASS_PLAYER
         else:
             self.class_type = EFFECT_CLASS_DICT[self.effect]
         self.trigger = trigger
         if target == None: #If no specified target, Generate Target
             if self.class_type == CLASS_PLAYER:
                 target = choice(PLAYER_TARGET_LIST) #Add target based on stuff???
-            if self.class_type == CLASS_CREATURE:
+            elif self.class_type == CLASS_CREATURE:
                 target = choice(CREATURE_TARGET_LIST)
             else:
                 target = choice(TARGET_LIST)
         if numeric == None: #If no numeric value, Generate Numeric
             if self.effect == SUMMON_EFFECT:
-                numeric = np.random.choice(np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE))
+                try:
+                    numeric = np.random.choice(np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE))
+                except ValueError:
+                    numeric = effect_spend
             elif self.effect == BUFF_EFFECT:
                 r = math.ceil(MAX_NUMERIC * random())
                 s = randint(0, r)
@@ -40,6 +43,8 @@ class Effect():
                 numeric = math.ceil(MAX_NUMERIC * random())
             #numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
         #Set leftover self values
+        if card_type == TYPE_SPELL and numeric == 0:
+            numeric = 1
         self.numeric = numeric
         self.target = target
 

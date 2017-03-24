@@ -7,6 +7,8 @@ from Hand import *
 from Player import *
 from randGen import *
 import random
+import pygame
+from pygame.locals import *
 
 class Game():
     def __init__(self):
@@ -139,7 +141,27 @@ class Game():
         """
         Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
         """
+        pygame.init()
+
+        pygame.display.set_caption('MAGIC STONES')
+        #clock = pygame.time.Clock()
+        screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
+        screen.fill((0, 0, 255))
+
         while(self.running):  #While the game is still running (Which is essentially While True)
+            pygame.display.update()
+            #clock.tick(60)
+            screen.fill((0, 0, 255))
+
+            for card in player1.cards[1:] + player2.cards[1:]:
+                try:
+                    pygame.draw.rect(screen, [255, 255, 255], (player1.cards.index(card)*64, 100, 32, 32))
+                except ValueError:
+                    try:
+                        pygame.draw.rect(screen, [255, 255, 255], (player2.cards.index(card)*64, 100, 32, 32))
+                    except ValueError:
+                        pass
+
             pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
             player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) #Update player mana for the turn based on which turn it is.
             player1.activate_cards() #Activate cards in the field for usage

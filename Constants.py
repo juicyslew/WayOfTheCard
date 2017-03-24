@@ -3,6 +3,9 @@ Python File to contain Constants for Card Game
 """
 import operator
 
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+
 DECK_INIT_SIZE = 30 #Initial Deck Size
 MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
 HAND_INIT_SIZE = 4 # Initial Hand Size
