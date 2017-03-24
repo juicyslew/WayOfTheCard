@@ -44,7 +44,7 @@ def name_list():
     "aegis", "honor", "mystic", "barrier", "burst", "charge", "aether",
     "meltdown", "rift", "shock", "shockwave", "lightning", "thunder",
     "hell", "storm", "tide", "ancient", "renegade", "agility", "warp",
-    "aim", "nature", "vengeance", "damage", "damaged", "wrath", "sun",
+    "aim", "nature", "vengeance", "damaged", "wrath", "sun",
     "shadow", "light", "dark", "destiny", "favor", "ruin", "fucking", "soul",
     "Broke", "frozen", "earth"]
 
@@ -138,8 +138,8 @@ def generate_numerical_effect(effect_spend):
     #effect_costs = [] # Initialize List
     #minimums = [] #Initialize List
     #i = 0
-
-    valid_effs = [i for i in EFFECT_POSSIBILITIES if effect_spend > i[2]]
+    varied_costs = [(i[0], i[1], i[2]*(.85+random.random()*.3)) for i in EFFECT_POSSIBILITIES]
+    valid_effs = [i for i in varied_costs if effect_spend > i[2]]
     #for eff, trig, eff_cost in trial: #For values in the trials list
         #eff_cost = eff_cost_base #* (.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
         #trial[2] = eff_cost #add cost of effect to respective list
@@ -161,7 +161,7 @@ def generate_numerical_effect(effect_spend):
     #ind = minimums.index(val) # Find index of the value
     #print('ind = ' + str(ind))
     #eff_trig = EFFECT_COST_DICT[trials[ind][0]] * TRIGGER_COST_DICT[trials[ind][1]]
-    numeric = int(effect_spend/(val[2]*(.15*random.random()+ .85))) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
+    numeric = int(effect_spend/(val[2])) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
     #print('numeric = ' + str(numeric))
     #if numeric >= 1:
     return [val[0], val[1], numeric]#[trials[ind][0], trials[ind][1], numeric]

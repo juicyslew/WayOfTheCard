@@ -40,8 +40,8 @@ EFFECT_PREF_MULTIPLIER = 1 # Set Preference of Effects over Defense and Attack
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER, EFFECT_PREF_MULTIPLIER) #Put multipliers in tuple together
 EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.
-CARD_STRENGTH = 2.2 #Overall strength of the generated cards
-CARD_STRENGTH_DROPOFF =.125 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
+CARD_STRENGTH = 2.3 #Overall strength of the generated cards
+CARD_STRENGTH_DROPOFF =.15 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
 
 
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
