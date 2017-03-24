@@ -102,7 +102,8 @@ def generate_stats(effect, cost, card_type):
     if not effect: # Check if Effect is True
         rands[2] = 0 # If Not then set its relative value to 0
     if card_type == TYPE_SPELL:
-        rands[2] = cost+1
+        rands[0] = 0#cost+1
+        rands[1] = 0
     tot = sum(rands) #Sum of randoms
     norm_rands = [r/tot for r in rands] #Normalized Randoms relative importance of ATT DEF and COST while also adding to 1
     spend = (cost-cost*CARD_STRENGTH_DROPOFF) * (CARD_STRENGTH + np.random.normal(0, 1/4)) #Determines amount of arbitrary spending money for each stat #Arbitrary values added to nerf higher cost enemies a bit and add some randomness
@@ -121,7 +122,7 @@ def generate_stats(effect, cost, card_type):
 
 #print(generate_stats(True, 10))
 
-def generate_numerical_effect(effect_spend):
+def generate_numerical_effect(effect_spend, cardType):
     """
     Generates Slightly More Balanced Numerical Effects
     """
@@ -138,8 +139,20 @@ def generate_numerical_effect(effect_spend):
     #effect_costs = [] # Initialize List
     #minimums = [] #Initialize List
     #i = 0
-    varied_costs = [(i[0], i[1], i[2]*(.85+random.random()*.3)) for i in EFFECT_POSSIBILITIES]
-    valid_effs = [i for i in varied_costs if effect_spend > i[2]]
+    if cardType == TYPE_SPELL:
+        varied_costs = [(i[0], TRIGGER_PLAY, EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY  * (.85+random.random()*.3)) for i in EFFECT_POSSIBILITIES] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
+        valid_effs = [i for i in varied_costs if effect_spend > i[2]]
+        if len(valid_effs) == 0:
+            return[random.choice(EFFECT_LIST), TRIGGER_PLAY, 1]
+        val = random.choice(valid_effs)
+        numeric = int(effect_spend/(val[2]))
+        return [val[0], val[1], numeric]
+    else:
+        varied_costs = [(i[0], i[1], i[2]*(.85+random.random()*.3)) for i in EFFECT_POSSIBILITIES]
+        valid_effs = [i for i in varied_costs if effect_spend > i[2]]
+        val = random.choice(valid_effs)
+        numeric = int(effect_spend/(val[2]))
+        return [val[0], val[1], numeric]
     #for eff, trig, eff_cost in trial: #For values in the trials list
         #eff_cost = eff_cost_base #* (.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
         #trial[2] = eff_cost #add cost of effect to respective list
@@ -151,7 +164,7 @@ def generate_numerical_effect(effect_spend):
 
     #choices = [i for i in minimums if i < EFFECT_THRESHOLD] #Only allow values over a certain threshold
     #if len(choices) != 0: #If there is at least one choice
-    val = random.choice(valid_effs) #Choose one at random
+     #Choose one at random
     #else: #Otherwise
     #    val = min(minimums) #Pick the value that most closely matches the cost, regardless of how far off that is
 
@@ -161,10 +174,10 @@ def generate_numerical_effect(effect_spend):
     #ind = minimums.index(val) # Find index of the value
     #print('ind = ' + str(ind))
     #eff_trig = EFFECT_COST_DICT[trials[ind][0]] * TRIGGER_COST_DICT[trials[ind][1]]
-    numeric = int(effect_spend/(val[2])) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
+    #numeric = int(effect_spend/(val[2])) #int(effect_spend/(eff_trig*(.4*random.random()+.8)))
     #print('numeric = ' + str(numeric))
     #if numeric >= 1:
-    return [val[0], val[1], numeric]#[trials[ind][0], trials[ind][1], numeric]
+    #[trials[ind][0], trials[ind][1], numeric]
     #else:
     #    return [None, None, 0]
         #return [SORTED_EFFECT_COST[0][0], SORTED_TRIGGER_COST[0][0], 1]

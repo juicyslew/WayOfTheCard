@@ -55,7 +55,7 @@ class Card():
                 if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
                     effect = False
             elif cardType == TYPE_SPELL:
-                effect = Effect(effect_spend, cardType, trigger=TRIGGER_PLAY)
+                effect = Effect(effect_spend, cardType)
         starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType

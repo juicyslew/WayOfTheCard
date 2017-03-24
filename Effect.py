@@ -7,9 +7,9 @@ import math
 import numpy as np
 
 class Effect():
-    def __init__(self, effect_spend, card_type, trigger = None, target = None, effect = None, numeric = None):
+    def __init__(self, effect_spend, cardType, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None: #If there is no information about the effect in general Then
-            effect, trigger, numeric = generate_numerical_effect(effect_spend) #Use Effect Spend to Generate Effect
+            effect, trigger, numeric = generate_numerical_effect(effect_spend, cardType) #Use Effect Spend to Generate Effect
         else: #Otherwise Generate Effect Normally
             if trigger == None:
                 trigger = choice(TRIGGER_LIST)
@@ -31,19 +31,18 @@ class Effect():
                 target = choice(TARGET_LIST)
         if numeric == None: #If no numeric value, Generate Numeric
             if self.effect == SUMMON_EFFECT:
-                try:
-                    numeric = np.random.choice(np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE))
-                except ValueError:
-                    numeric = effect_spend
-            elif self.effect == BUFF_EFFECT:
-                r = math.ceil(MAX_NUMERIC * random())
-                s = randint(0, r)
-                numeric = [s, r-s]
+                #try:
+                numeric = random()*MAX_NUMERIC #np.random.choice(np.random.choice(range(0, MAX_COST), p = MANA_CURVE))
+                #except ValueError:
+                #    numeric = effect_spend
             else:
                 numeric = math.ceil(MAX_NUMERIC * random())
             #numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
         #Set leftover self values
-        if card_type == TYPE_SPELL and numeric == 0:
+        if self.effect == BUFF_EFFECT:
+            r = randint(0, numeric)
+            numeric = [r, numeric-r]
+        if cardType == TYPE_SPELL and numeric == 0:
             numeric = 1
         self.numeric = numeric
         self.target = target
