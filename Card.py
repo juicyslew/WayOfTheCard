@@ -26,36 +26,41 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, effect_spend = None, cost = None, x = -100, y = -100): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100, spell_chance = SPELL_CHANCE): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
         if cardType == None:
-            cardType = choice(TYPE_LIST)
+            if random() < spell_chance:
+                cardType = TYPE_SPELL
+            else:
+                cardType = TYPE_CREATURE
         if state == None:
             state = choice(STATE_LIST)
         if creatureType == None and cardType == TYPE_CREATURE:
             creatureType = choice(CREATURE_LIST)
         if name == None:
             name = generate(cardType)
+        if stats == None: # If stats not specified generate them
+            if cost == None: #If cost not specified generate it
+                cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
         if effect == True: #If effect equals True
             if random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
                 effect = True
             else:
                 effect = False
-        if stats == None: # If stats not specified generate them
-            if cost == None: #If cost not specified generate it
-                cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
-            stats = generate_stats(effect, cost, cardType) #Generate Stats if None
-        if effect_spend == None: # if effect_spend == None
-            effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
-        else: #if not then
-            stats.pop(-1) #still remove final value
         if effect: #If effect is true then
             if cardType == TYPE_CREATURE:
-                effect = Effect(effect_spend, cardType) #Generate an effect with the effect spend
+                effect = Effect(self, cost, cardType) #Generate an effect with the effect spend
                 if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
                     effect = False
             elif cardType == TYPE_SPELL:
-                effect = Effect(effect_spend, cardType)
+                effect = Effect(self, cost, cardType)
+        if stats == None:
+            if effect:
+                stats = generate_stats(effect, cost, cardType, effect.leftover) #Generate Stats if None
+            else:
+                stats = generate_stats(effect, cost, cardType, effect)
+        #if effect_spend == None: # if effect_spend == None
+            #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType
