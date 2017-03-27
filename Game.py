@@ -147,7 +147,7 @@ class Game():
         """
         pygame.init()
 
-        pygame.display.set_caption('MAGIC STONES')
+        pygame.display.set_caption(random_game_name())
         #clock = pygame.time.Clock()
         screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
         screen.fill((0, 0, 255))

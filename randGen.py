@@ -95,6 +95,22 @@ def random_name():
         name = name + random.choice(consonants)
     return name
 
+    def random_game_name():
+        wordlist = ["hearth", "magic", "stone", "sweep", "fire", "shadow",
+        "monster", "poke", "lock", "war", "craft", "mine", "star", "fate"]
+        rand1 = random.choice(wordlist)
+        wordlist.remove(rand1)
+        rand2 = random.choice(wordlist)
+        return rand1.capitalize() + rand2.capitalize()
+
+def random_game_name():
+    wordlist = ["hearth", "stone", "sweep", "magic", "monster", "iron", "fire"
+    "emblem", "war", "craft", "spell", "fate", "shadow"]
+    rand1 = random.choice(wordlist)
+    wordlist.remove(rand1)
+    rand2 = random.choice(wordlist)
+    return rand1.capitalize() + rand2.capitalize()
+
 def generate_stats(effect, cost, card_type, leftover):
     """
     Generates stats ATT, DEF and effect for a card based on COST
