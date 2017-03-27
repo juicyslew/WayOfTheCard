@@ -24,7 +24,7 @@ class Game():
             #print(name) #Display Name
             i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
             if i is 'y': #If player liked
-                player1 = Player(name) #Save Player Name
+                player1 = Player(name, 3) #Save Player Name
                 break
             continue #If player doesn't like it, then generate new name
         print('Player 2:')
@@ -33,7 +33,7 @@ class Game():
             #print(name) #Display Name
             i = input('\n%s\nAre You Ok With This Name(y/n): '%name) #Display Name and Check if Player Likes
             if i is 'y': #If player liked
-                player2 = Player(name) #Save Player Name
+                player2 = Player(name, 4) #Save Player Name
                 break
             continue #If player doesn't like it, then generate new name
         self.game_loop(player1, player2) #Start Game Loop
@@ -164,7 +164,7 @@ class Game():
                     pygame.draw.rect(screen, [255, 255, 255], (player1.cards.index(card)*64, 100, 32, 32))
                 except ValueError:
                     try:
-                        pygame.draw.rect(screen, [255, 255, 255], (player2.cards.index(card)*64, 100, 32, 32))
+                        pygame.draw.rect(screen, [255, 255, 255], (player2.cards.index(card)*64, 200, 32, 32))
                     except ValueError:
                         pass
 

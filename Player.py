@@ -23,13 +23,14 @@ class Player():
     """
     Player class: Acts as a Hub for most Player specific actions and code (Which is allot)
     """
-    def __init__(self, name):
+    def __init__(self, name, handstart):
         self.name = name #Player Name
         self.player = Player_Card(name) #Player Card
         self.cards = [self.player] # Player Field
         self.deck = Deck() # Initialize Player Deck
         self.deck.init_deck()
-        self.hand = Hand(self.deck) # Initialize Player Hand
+        self.handstart = handstart
+        self.hand = Hand(self.deck, self.handstart) # Initialize Player Hand
         self.discard = Discard() # Initialize Player Discard
         self.dead = False # Set Player to Alive
         self.mana = 0 #Set Initial Mana
