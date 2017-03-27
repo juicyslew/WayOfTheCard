@@ -15,10 +15,10 @@ class Deck():
     def init_deck(self):
         """ Generate Deck """
         for i in range(DECK_INIT_SIZE):
-            self.cards.append(Card(state = STATE_SLEEP, cardType=TYPE_CREATURE, effect = True)) #Using TestCards for now
+            self.cards.append(Card(state = STATE_SLEEP, effect = True)) #Using TestCards for now
     def shuffle_deck(self):
         """ Shuffle Deck """
-        shuffle(cards)
+        shuffle(self.cards)
     def draw(self, hand, num):
         """ Draw "num" Cards into Hand """
         for n in range(num):
