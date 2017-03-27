@@ -48,6 +48,8 @@ class Game():
                 i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
                 if i == '0': #if 0 then end function, showing that the player is done with their turn.
                     return True
+                elif i == '-1':
+                    return
                 try:
                     i = int(i) #set input to integer
                     try:
@@ -112,6 +114,8 @@ class Game():
             opp.check_dead(player) # Check if anything died on your field.
             a = player.check_active() # Update a (active cards list)
             active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
+        player.check_dead(opp) # Check if anything died on your opponent's field
+        opp.check_dead(player) # Check if anything died on your field.
 
     def check_game_end(self, player1, player2):
         """
