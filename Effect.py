@@ -135,6 +135,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     continue
 
                 ## Now that player is picked, choose specific enemy
+                print(targ)
                 self.i = input("Which of %s's Creatures to target? (0 to not attack)" % targ.name) # Get Input
                 try:
                     self.i = int(self.i)
