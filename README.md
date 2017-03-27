@@ -1,7 +1,7 @@
-# WayOfTheCard
+# WayOfTheCard #
 A randomized card game in all senses of the word.
 
-Background and context: (3-5 minutes) 
+## Background and context: (3-5 minutes) ##
 
 For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards. 
 	
@@ -20,3 +20,6 @@ A brief outline of everything that you can see on the screen:
 
 Currently our random generation is limited to player names, card names, card costs, and card effects. We also do not have a UI currently. Eventually we also want to randomize rules and include random semi-random pictures mined from the top google images result to add another layer of fun to our game.
 
+## Game Demo (5 minutes + 3-4 minutes questions) ##
+
+Play our game to see it work! Ask questions as necessary
