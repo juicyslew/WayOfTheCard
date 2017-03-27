@@ -1,5 +1,5 @@
 # WayOfTheCard #
-A randomized card game in all senses of the word. Below is our architectural review overview.
+A randomized card game in all senses of the word. Below is our architectural review overview. 
 
 ## Background and context: (3-5 minutes) ##
 
@@ -23,6 +23,14 @@ Currently our random generation is limited to player names, card names, card cos
 ## Game Demo (5 minutes + 3-4 minutes questions) ##
 
 Play our game to see it work! Ask questions as necessary.
+
+Sample cards generated are below.
+
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20One.png" width="600">
+
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Two.png" width="600">
+
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Three.png" width="600">
 
 ## Future Work/Questions (3 minutes + 5 minutes question) ##
 
