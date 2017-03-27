@@ -45,8 +45,8 @@ def name_list():
     "meltdown", "rift", "shock", "shockwave", "lightning", "thunder",
     "hell", "storm", "tide", "ancient", "renegade", "agility", "warp",
     "aim", "nature", "vengeance", "damaged", "wrath", "sun",
-    "shadow", "light", "dark", "destiny", "favor", "ruin", "fucking", "soul",
-    "Broke", "frozen", "earth", "sudden"]
+    "shadow", "light", "dark", "destiny", "ruin", "soul",
+    "broke", "frozen", "earth", "sudden"]
 
 def adjective():
     """
@@ -54,7 +54,8 @@ def adjective():
     """
     return ["forgotten", "ancient", "frozen", "scornful", "vengeful",
     "resilient", "crafty", "colossal", "ice", "fire", "earth", "brutal",
-    "fucking", "wandering", "black", "dark", "virtuous", "unholy", "fungal"]
+    "wandering", "black", "dark", "virtuous", "unholy", "fungal", "white", "flushed",
+    "red", "deadly"]
 
 def noun_list():
     """
