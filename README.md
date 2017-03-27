@@ -1,5 +1,5 @@
 # WayOfTheCard #
-A randomized card game in all senses of the word.
+A randomized card game in all senses of the word. Below is our architectural review overview.
 
 ## Background and context: (3-5 minutes) ##
 
@@ -22,4 +22,23 @@ Currently our random generation is limited to player names, card names, card cos
 
 ## Game Demo (5 minutes + 3-4 minutes questions) ##
 
-Play our game to see it work! Ask questions as necessary
+Play our game to see it work! Ask questions as necessary.
+
+## Future Work/Questions (3 minutes + 5 minutes question) ##
+
+The largest part of our project that still needs to completed is the graphics and user interface. Ideally, the final game will use pygame to show cards on the field and be controlled using mouse clicks or drag-and-drop. In addition, we will implement some amount of random generation of base game rules, rather than just having random cards being generated in the context of a standard game.
+	In addition, we can expand the game’s implemented ability effects, triggers, and other card attributes to make a more varied play experience. These effects can be based on common card effects in Magic or Hearthstone, and can interact with player hands and discard piles rather than just with creatures and life totals.
+
+## Free Play and Feedback (remainder of time) ##
+
+At this point, feel free to play around with our code. Ask any and all questions and if you have any suggestions feel free to tell us.
+
+Possible things you may want to discuss:
+
+* Discuss how to get random images for cards
+* Discussed RGB value based on descriptive for a saved dictionary of pictures
+* Could smash together pictures for different things
+* Feedback about scope of the project
+* Feedback about rules/how to give them
+* Wishlist for UI 
+* Randomness of rules: How much would you figure out vs. the game tell?
