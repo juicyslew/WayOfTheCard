@@ -11,4 +11,12 @@ This structure is based on Hearthstone. An outline of the Hearthstone UI is belo
 
 <img src="https://github.com/juicyslew/WayOfTheCard/blob/master/hearthStone.png" width="600">
 
+A brief outline of everything that you can see on the screen:
+
+Weapons (not currently implemented) are equippable items that can only be equipped to your hero, allowing your hero to attack an enemy.
+Minions are the “dudes” in our game who can attack other minions or your opponent’s character
+The minion with a shield on it is a “taunt” minion; this minion must be destroyed before the opponent’s hero can be attacked.
+A hero power is not something we not are implementing (at least not yet); it costs 2 mana and is something that can be used recurringly.
+
+Currently our random generation is limited to player names, card names, card costs, and card effects. We also do not have a UI currently. Eventually we also want to randomize rules and include random semi-random pictures mined from the top google images result to add another layer of fun to our game.
 
