@@ -26,11 +26,11 @@ Play our game to see it work! Ask questions as necessary.
 
 Sample cards generated are below.
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20One.png" width="600">
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20One.png" width="200">
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Two.png" width="600">
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Two.png" width="200">
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Three.png" width="600">
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Three.png" width="200">
 
 ## Future Work/Questions (3 minutes + 5 minutes question) ##
 
