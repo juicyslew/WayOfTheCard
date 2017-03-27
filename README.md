@@ -4,7 +4,7 @@ A randomized card game in all senses of the word.
 
 
 
-<img src="https://github.com/juicyslew/WayOfTheCard/hearthStone.png" width="200">
+<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/hearthStone.png" width="200">
 
 <img src="https://github.com/olinrobotics/Lavabot/blob/master/team_members_info/YichenJiang.jpg" width="200">
 
