@@ -3,8 +3,8 @@ Python File to contain Constants for Card Game
 """
 import operator
 
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 1600
+WINDOW_HEIGHT = 900
 
 DECK_INIT_SIZE = 30 #Initial Deck Size
 MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
@@ -80,7 +80,6 @@ EFFECT_DICT = {None:"None",DRAW_EFFECT:"Draw Cards", DEAL_EFFECT:"Deal Damage", 
 EFFECT_COST_DICT = {DRAW_EFFECT:-1.5, DEAL_EFFECT:1, HEAL_EFFECT:-.6, SUMMON_EFFECT:-1.5, BUFF_EFFECT:-1.25, SPLIT_DEAL_EFFECT:1.2, SPLIT_HEAL_EFFECT:-1.2}#Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
 
 
-
 #Creature Types, Creature Type Encoder List, and Creature Type Decoder Dictionary
 CREATURE_HUMAN = 0
 CREATURE_MECH = 1
@@ -126,6 +125,9 @@ TARGET_COST_DICT = {TARGET_BOTH:.5, TARGET_ALL:1.5, TARGET_OWN_PLAYER:-1, TARGET
 TARGET_UNIVERSAL_POSITIVE = (TARGET_BOTH, TARGET_ALL, TARGET_CREATURE, TARGET_PLAYERS, TARGET_RANDOM, TARGET_RANDOM_CREATURE, TARGET_ALL_CREATURE)
 RANDOM_TARGET_LIST = (TARGET_RANDOM, TARGET_RANDOM_ALLY, TARGET_RANDOM_ENEMY, TARGET_RANDOM_ALLY_CREATURE, TARGET_RANDOM_ENEMY_CREATURE, TARGET_RANDOM_CREATURE)
 
+#Texts used in card rendering in Board
+EFFECT_TRIGGER_DICT = {TRIGGER_END:"at the end of your turn", TRIGGER_BEGIN:"at the start of your turn", TRIGGER_PLAY:"when you play this card", TRIGGER_DEATH:"when this creature dies"}
+TARGET_TEXT_DICT = {TARGET_BOTH:"both Players", TARGET_ALL:"all creatures and players", TARGET_OWN_PLAYER:"you", TARGET_CREATURE:"target creature", TARGET_OPPONENT:"your opponent", TARGET_PLAYERS:"target player", TARGET_RANDOM:"a random creature or player", TARGET_RANDOM_ENEMY:"a random enemy", TARGET_RANDOM_ALLY:"a random ally", TARGET_RANDOM_CREATURE:"a random creature", TARGET_RANDOM_ENEMY_CREATURE:"a random enemy creature", TARGET_RANDOM_ALLY_CREATURE:"a random ally creature", TARGET_ALL_CREATURE:"all creatures", TARGET_THIS_CREATURE:"this creature"}
 
 #Classes, Class Decoder Dictionary
 CLASS_PLAYER = 0

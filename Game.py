@@ -9,6 +9,7 @@ from randGen import *
 import random
 import pygame
 from pygame.locals import *
+from Board import *
 
 class Game():
     def __init__(self):
@@ -61,6 +62,7 @@ class Game():
                             continue #return False #End Function and Return that it failed, and thus should be run again.
                         #print(card)
                         card.play(player, opp) #If it succeeded, Put the card in the field
+                        self.update_board()
                         player.mana -= card.stats[COST] #Subtract from the player's mana
                         player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                         opp.check_dead(player)
@@ -69,7 +71,7 @@ class Game():
                         print("\nYou don't have that many cards!")
                 except ValueError: # if value converting to int is not possible, return error
                     print('\nInput a Number!')
-                #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
+                return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
 
     def use_cards(self, player, opp):
         """
@@ -141,32 +143,37 @@ class Game():
             print(player2.name + " Wins!!!")
             return True
         return False
+
     def game_loop(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
         """
         Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
         """
         pygame.init()
-
         pygame.display.set_caption(random_game_name())
         #clock = pygame.time.Clock()
-        screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
-        screen.fill((0, 0, 255))
+        self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
+        self.screen.fill((0, 0, 255))
+        self.board = Board(self.screen)
+        self.board.update_board(self.screen, player1, player2)
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             pygame.display.update()
-            #clock.tick(60)
-            screen.fill((0, 0, 255))
-
-            pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
-
-            for card in player1.cards + player2.cards:
-                try:
-                    pygame.draw.rect(screen, [255, 255, 255], (player1.cards.index(card)*64, 100, 32, 32))
-                except ValueError:
-                    try:
-                        pygame.draw.rect(screen, [255, 255, 255], (player2.cards.index(card)*64, 200, 32, 32))
-                    except ValueError:
-                        pass
+            self.board.update_board(self.screen, player1, player2)
+            # #clock.tick(60)
+            # screen.fill((0, 0, 255))
+            #
+            # pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
+            #
+            # for card in player1.cards + player2.cards:
+            #     try:
+            #         self.board.render_card(screen, (player1.cards.index(card)*64, 100))
+            #     except ValueError:
+            #         try:
+            #             self.board.render_card(screen, (player2.cards.index(card)*64, 200))
+            #         except ValueError:
+            #             pass
 
             pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
             player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) #Update player mana for the turn based on which turn it is.
@@ -227,6 +234,8 @@ class Game():
                 break
             self.turn += 1 # Increment turn by 1.
 
+    def update_board(self):
+        self.board.update_board(self.screen, self.player1, self.player2)
 
 if __name__ == "__main__": # If this is the run code (Game.py)
     game = Game() # Create Game

@@ -69,6 +69,7 @@ class Card():
         self.state = state
         self.creatureType = creatureType
         self.effect = effect
+        self.manacost = cost
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
             if self.effect == False:
