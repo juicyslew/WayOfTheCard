@@ -48,6 +48,7 @@ class Game():
             print(player.hand) #Print the player hand
             print("mana: %i" % player.mana) #display mana
             while True:
+                self.update_board()
                 i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
                 if i == '0': #if 0 then end function, showing that the player is done with their turn.
                     return True
@@ -62,10 +63,10 @@ class Game():
                             continue #return False #End Function and Return that it failed, and thus should be run again.
                         #print(card)
                         card.play(player, opp) #If it succeeded, Put the card in the field
-                        self.update_board()
                         player.mana -= card.stats[COST] #Subtract from the player's mana
                         player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                         opp.check_dead(player)
+                        self.update_board()
                         break
                     except IndexError: # If index is out of range, return an error
                         print("\nYou don't have that many cards!")
@@ -80,6 +81,7 @@ class Game():
         a = player.check_active() # Create Variable that contains the active cards on the board
         active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
         while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
+            self.update_board()
             print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
             print('\n'.join(active) + '\n') #Print active cards to choose from
             i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
@@ -118,8 +120,10 @@ class Game():
             opp.check_dead(player) # Check if anything died on your field.
             a = player.check_active() # Update a (active cards list)
             active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
+            self.update_board()
         player.check_dead(opp) # Check if anything died on your opponent's field
         opp.check_dead(player) # Check if anything died on your field.
+        self.update_board()
 
     def check_game_end(self, player1, player2):
         """
@@ -159,8 +163,7 @@ class Game():
         self.board.update_board(self.screen, player1, player2)
 
         while(self.running):  #While the game is still running (Which is essentially While True)
-            pygame.display.update()
-            self.board.update_board(self.screen, player1, player2)
+            self.update_board()
             # #clock.tick(60)
             # screen.fill((0, 0, 255))
             #
@@ -201,7 +204,7 @@ class Game():
                     continue
             if self.check_game_end(player1, player2): # if the game ends, end the game_loop
                 break
-
+            self.update_board()
             #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
             pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
             player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
@@ -235,6 +238,7 @@ class Game():
             self.turn += 1 # Increment turn by 1.
 
     def update_board(self):
+        pygame.display.update()
         self.board.update_board(self.screen, self.player1, self.player2)
 
 if __name__ == "__main__": # If this is the run code (Game.py)
