@@ -75,15 +75,15 @@ class Game():
                         except IndexError: # If index is out of range, return an error
                             print("\nYou don't have that many cards!")
                     except ValueError: # if value converting to int is not possible, return error
-                        print('\nInput a Number!')
-                    return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
+                        print('\n`Input a Number!`')
+                    #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
         else:
             while True:
                 print("### %s's Hand ###" % player.name)
                 print(player.hand) #Print the player hand
                 print("mana: %i" % player.mana) #display mana
                 while True:
-                    self.update_board()
+                    # self.update_board()
                     i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
                     if i == '0': #if 0 then end function, showing that the player is done with their turn.
                         return True
@@ -101,13 +101,13 @@ class Game():
                             player.mana -= card.stats[COST] #Subtract from the player's mana
                             player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                             opp.check_dead(player)
-                            self.update_board()
+                            # self.update_board()
                             break
                         except IndexError: # If index is out of range, return an error
                             print("\nYou don't have that many cards!")
                     except ValueError: # if value converting to int is not possible, return error
                         print('\nInput a Number!')
-                    return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
+                    #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
 
 
     def use_cards(self, player, opp, all_players = None):
@@ -304,15 +304,15 @@ class Game():
                 self.players[self.player_turn].activate_cards() #Activate cards in the field for usage
                 print("\n\n\n\n### %s || %ls ###" % (self.players[self.player_turn].name, self.players[self.player_turn].cards[0].stats)) # Print player for turn and Stats
                 #print() # Print Player Stats
-                blep = input("TEST2")
                 for card in self.players[self.player_turn].cards: #Run through the player cards on the field
                     try:
                         card.effect.activate(player1, player2, TRIGGER_BEGIN, all_players = self.players) #If the cards have a "Begin Turn" Trigger, then activate their effect
                     except AttributeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                         continue
-                blep = input("TEST3")
-                self.play_card(player1,player2, self.players)
-                self.use_cards(player1, player2, self.players) # Run Use Cards Script
+                playable = True
+                while playable:
+                    self.play_card(player1, player2, self.players)
+                    self.use_cards(player1, player2, self.players) # Run Use Cards Script
                 self.players[self.player_turn].deck.draw(self.players[self.player_turn].hand, 1) # Draw Card From Deck as turn ends
 
                 for card in self.players[self.player_turn].cards: #Run through cards on the field
@@ -323,7 +323,6 @@ class Game():
                     # self.update_board()
                     except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
-                blep = input("TEST4")
                 if self.check_game_end(player1, player2, self.players): # if the game ends, end the game_loop
                     break
                 # self.update_board()
