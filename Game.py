@@ -36,17 +36,16 @@ class Game():
                         player_list.append(Player(name, 4)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
-        # player_list.append(Player('Game Breaker', 4))
-        if len(player_list) == 2:
-            self.game_loop(player_list[0], player_list[1]) #Start Game Loop
-        else:
-            self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
+        # player_list.append(Player('Daniel', 4))
+        self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
-    def play_card(self, player, opp, all_players = None):
+    def play_card(self, player,all_players = None):
         """
         Function for putting cards into the field at the beginning of a player's turn
         """
-        if all_players == None:
+        if all_players == None or len(all_players) == 2:
+            player = all_players[0]
+            opp = all_players[1]
             while True:
                 print("### %s's Hand ###" % player.name)
                 print(player.hand) #Print the player hand
@@ -114,7 +113,7 @@ class Game():
         """
         Function for using cards to perform actions (Do Work)
         """
-        if all_players == None:
+        if all_players == None or len(all_players) == 2:
             a = player.check_active() # Create Variable that contains the active cards on the board
             active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
             while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
@@ -176,7 +175,7 @@ class Game():
         -- P2 Wins
         -- Tie
         """
-        if all_players == None:
+        if all_players == None or len(all_players) == 2:
             if player1.dead and player2.dead: #If both players died then
                 print("Well Shoot.  A Tie.")
                 return True
@@ -192,7 +191,7 @@ class Game():
 
 
     def game_loop(self, player1, player2, all_players = None):
-        if all_players == None:
+        if len(all_players) == 2:
             self.player1 = player1
             self.player2 = player2
             """
@@ -205,6 +204,7 @@ class Game():
             self.screen.fill((0, 0, 255))
             self.board = Board(self.screen)
             self.update_board()
+            self.player_turn = False
 
             while(self.running):  #While the game is still running (Which is essentially While True)
                 self.update_board()
@@ -236,7 +236,7 @@ class Game():
                 #    if not self.play_card(player1, player2): #Run play_card until it returns True, then break the loop
                 #        continue
                 #    break
-                self.play_card(player1,player2)
+                self.play_card(0 ,all_players) #Need to unhardcode
                 self.use_cards(player1, player2) # Run Use Cards Script
                 player1.deck.draw(player1.hand, 1) # Draw Card From Deck as turn ends
                 for card in player1.cards: #Run through cards on the field
@@ -266,7 +266,7 @@ class Game():
                 #    if not self.play_card(player2, player1):
                 #        continue
                 #    break
-                self.play_card(player2, player1)
+                self.play_card(1, all_players)
                 #print(player2) # display player 2 cards in field.
                 self.use_cards(player2, player1) # Run Use Function
                 player2.deck.draw(player2.hand, 1) # Draw one
@@ -281,6 +281,7 @@ class Game():
                 #break # Break out of player2 while loop
                 if self.check_game_end(player1, player2): # if game ends, end game_loop
                     break
+                self.player_turn = not self.player_turn
                 self.turn += 1 # Increment turn by 1.
 
 
@@ -310,9 +311,8 @@ class Game():
                     except AttributeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                         continue
                 playable = True
-                while playable:
-                    self.play_card(player1, player2, self.players)
-                    self.use_cards(player1, player2, self.players) # Run Use Cards Script
+                self.play_card(self.player_turn, self.players)
+                self.use_cards(player1, player2, self.players) # Run Use Cards Script
                 self.players[self.player_turn].deck.draw(self.players[self.player_turn].hand, 1) # Draw Card From Deck as turn ends
 
                 for card in self.players[self.player_turn].cards: #Run through cards on the field
@@ -329,7 +329,7 @@ class Game():
                 self.player_turn += 1
                 if self.player_turn >= len(self.players):
                     self.player_turn = 0
-                self.turn += 1 # Increment turn by 1.
+                    self.turn += 1 # Increment turn by 1.
 
     def update_board(self):
         pygame.display.update()
