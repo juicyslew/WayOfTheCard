@@ -16,28 +16,30 @@ class Game():
         #Rule Generation
         self.turn = 0 #Initialize Turns
         self.init_game() #Initialize Game
+        self.players = 2
 
     def init_game(self):
+        self.players = 2
         self.running = True #Set Running
-        print('Player 1:')
-        while True: #Create Loop for picking Name
-            name = random_name().capitalize() #Create Name
-            #print(name) #Display Name
-            i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
-            if i is 'y': #If player liked
-                player1 = Player(name, 3) #Save Player Name
-                break
-            continue #If player doesn't like it, then generate new name
-        print('Player 2:')
-        while True: #Create Loop for picking Name
-            name = random_name().capitalize() #Create Name
-            #print(name) #Display Name
-            i = input('\n%s\nAre You Ok With This Name(y/n): '%name) #Display Name and Check if Player Likes
-            if i is 'y': #If player liked
-                player2 = Player(name, 4) #Save Player Name
-                break
-            continue #If player doesn't like it, then generate new name
-        self.game_loop(player1, player2) #Start Game Loop
+        player_list = []
+        for i in range(1, self.players+1):
+            print('Player %i:' % i)
+            while True: #Create Loop for picking Name
+                name = random_name().capitalize() #Create Name
+                #print(name) #Display Name
+                i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
+                if i is 'y': #If player liked
+                    if i == 1:
+                        player_list.append(Player(name, 3)) #Save Player Name
+                    else:
+                        player_list.append(Player(name, 4)) #Save Player Name
+                    break
+                continue #If player doesn't like it, then generate new name
+        #player_list.append(Player('Game Breaker', 4))
+        if len(player_list) == 2:
+            self.game_loop(player_list[0], player_list[1]) #Start Game Loop
+        else:
+            self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
     def play_card(self, player, opp, all = None):
         """
@@ -161,7 +163,7 @@ class Game():
     def game_loop(self, player1, player2, all = None):
         if all == None:
             self.player1 = player1
-            self.player2 = player2
+            self.player2 =pass player2
             """
             Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
             """
@@ -250,7 +252,95 @@ class Game():
                     break
                 self.turn += 1 # Increment turn by 1.
         else:
-            pass
+            self.player1 = player1
+            self.player2 = player2
+            """
+            Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
+            """
+            pygame.init()
+            pygame.display.set_caption(random_game_name())
+            #clock = pygame.time.Clock()
+            self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
+            self.screen.fill((0, 0, 255))
+            self.board = Board(self.screen)
+            self.update_board()
+
+            while(self.running):  #While the game is still running (Which is essentially While True)
+                self.update_board()
+                    # #clock.tick(60)
+                    # screen.fill((0, 0, 255))
+                    #
+                    # pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
+                    #
+                    # for card in player1.cards + player2.cards:
+                    #     try:
+                    #         self.board.render_card(screen, (player1.cards.index(card)*64, 100))
+                    #     except ValueError:
+                    #         try:
+                    #             self.board.render_card(screen, (player2.cards.index(card)*64, 200))
+                    #         except ValueError:
+                    #             pass
+
+                pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
+                player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) #Update player mana for the turn based on which turn it is.
+                player1.activate_cards() #Activate cards in the field for usage
+                print("\n\n\n\n### %s || %ls ###" % (player1.name, player1.cards[0].stats)) # Print player for turn and Stats
+                #print() # Print Player Stats
+                for card in player1.cards: #Run through the player cards on the field
+                    try:
+                        card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
+                    except AttributeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
+                        continue
+                #while True: #Start Infinite Loop
+                #    if not self.play_card(player1, player2): #Run play_card until it returns True, then break the loop
+                #        continue
+                #    break
+                self.play_card(player1,player2)
+                self.use_cards(player1, player2) # Run Use Cards Script
+                player1.deck.draw(player1.hand, 1) # Draw Card From Deck as turn ends
+                for card in player1.cards: #Run through cards on the field
+                    try:
+                        card.effect.activate(player1, player2, TRIGGER_END) # If the cards have a "End Turn" Trigger, then activate effect
+                        player1.check_dead(player2) # Check if anything died
+                        player2.check_dead(player1)
+                        self.update_board()
+                    except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
+                if self.check_game_end(player1, player2): # if the game ends, end the game_loop
+                    break
+                self.update_board()
+                #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
+                pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
+                player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
+                print(player2.mana) # display mana
+                player2.activate_cards() # activate cards in field (wake them from sleep)
+                print("\n\n\n\n### %s || %ls ###" % (player2.name, player2.cards[0].stats)) # Print Player
+                #print(player2.cards[0].stats) #Display player stats
+                for card in player2.cards: # For card in player2's field
+                    try:
+                        card.effect.activate(player2, player1, TRIGGER_BEGIN) # If card has beginning trigger, activate effect
+                    except AttributeError:
+                        continue
+                #while True: # Display hand and run play_card until it return's true
+                #    if not self.play_card(player2, player1):
+                #        continue
+                #    break
+                self.play_card(player2, player1)
+                #print(player2) # display player 2 cards in field.
+                self.use_cards(player2, player1) # Run Use Function
+                player2.deck.draw(player2.hand, 1) # Draw one
+                for card in player2.cards: # For Card in player2.cards:
+                    try:
+                        card.effect.activate(player2, player1, TRIGGER_END) # if card has end trigger, activate effect.
+                        player1.check_dead(player2) # Check if anything died.
+                        player2.check_dead(player1)
+                        self.update_board()
+                    except AttributeError:
+                        continue
+                #break # Break out of player2 while loop
+                if self.check_game_end(player1, player2): # if game ends, end game_loop
+                    break
+                self.turn += 1 # Increment turn by 1.
 
     def update_board(self):
         pygame.display.update()
