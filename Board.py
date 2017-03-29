@@ -56,7 +56,10 @@ class Board():
         effect_text = effect_text.split("\n")
         return (name, mana, stats, effect_text)
 
-    def update_board(self, screen, player1, player2):   #   updates board with current cards in play
+    def update_board(self, screen, player1, player2, all = None):   #   updates board with current cards in play
+        """
+        Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
+        """
         screen.fill((0, 0, 255))
         pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
         xhalf = screen.get_size()[0]/2

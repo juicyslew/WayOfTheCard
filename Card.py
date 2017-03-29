@@ -89,19 +89,32 @@ class Card():
 #""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-    def play(self, player, enemy_player):
+    def play(self, player, enemy_player, all = None):
         """
         Put card from hand into field
         """
-        if self.cardType == TYPE_CREATURE:
-            player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-            try:
+        if all == None:
+            if self.cardType == TYPE_CREATURE:
+                player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+                try:
+                    self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+                except AttributeError:
+                    pass
+            if self.cardType == TYPE_SPELL:
                 self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-            except AttributeError:
-                pass
-        if self.cardType == TYPE_SPELL:
-            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-            player.hand.cards.pop(player.hand.cards.index(self))
+                player.hand.cards.pop(player.hand.cards.index(self))
+
+
+        else:       #3+ players
+            if self.cardType == TYPE_CREATURE:
+                all[0].cards.append(all[0].hand.cards.pop(all[0].hand.cards.index(self)))
+                try:
+                    self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                except AttributeError:
+                    pass
+            if self.cardType == TYPE_SPELL:
+                self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                all[0].hand.cards.pop(all[0].hand.cards.index(self))
 
     def attack(self, opp_card):
         """

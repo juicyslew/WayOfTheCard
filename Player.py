@@ -57,7 +57,7 @@ class Player():
                 ls.append(card)
         return ls
 
-    def check_dead(self, enemy_player):
+    def check_dead(self, enemy_player, allplayers = None):
         """
         Function for Checking if anything has died
         """
