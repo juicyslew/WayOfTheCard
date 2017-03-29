@@ -136,6 +136,7 @@ def generate_numerical_effect(effect_spend, cardType):
     """
     Generates Slightly More Balanced Numerical Effects
     """
+    print(effect_spend)
     min_eff = SORTED_EFFECT_COST[0][1] * SORTED_TRIGGER_COST[0][1] * SORTED_TARGET_COST[0][1] # Minimum Effect Cost
     if min_eff >= effect_spend and not cardType == TYPE_SPELL: # If don't have enough for minimum
         return [None, None, None, 0, 0]
@@ -151,34 +152,43 @@ def generate_numerical_effect(effect_spend, cardType):
     #minimums = [] #Initialize List
     #i = 0
     if cardType == TYPE_SPELL:
-        varied_costs = [(i[0], TRIGGER_PLAY, i[2], EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY * TARGET_COST_DICT[i[2]]) for i in EFFECT_POSSIBILITIES] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
-        valid_effs = [i for i in varied_costs if effect_spend > i[3] and i[3] > 0]
-        if len(valid_effs) == 0:
-            while True:
-                eff = random.choice(EFFECT_LIST)
-                targ = random.choice(TARGET_LIST)
-                if eff*targ > 0:
-                    break
+        #varied_costs = [(i, TRIGGER_PLAY, i[2], EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY * TARGET_COST_DICT[i[2]])
+        #                for i in EFFECT_POSSIBILITIES if not i in STATIC_EFFECT_LIST for j in EFFECT_POSSIBILITIES[i] for k, eff_cost in EFFECT_POSSIBILITIES[i][j]] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
+        valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES] #if effect_spend > i[3] and i[3] > 0]
+        ## Effect Choice
+        if len(valid_combs) == 0:
+            #while True:
+            #    eff = random.choice(EFFECT_LIST)
+            #    if eff in STATIC_EFFECT_LIST:
+            #        continue
+            #    targ = random.choice(SPELL_TARGET_LIST)
+            #    if eff*targ > 0:
+            #        break
+            eff = DEAL_EFFECT
+            targ = TARGET_OPPONENT
             return[eff, TRIGGER_PLAY, targ, 1, 0]
     else:
-        varied_costs = [(i[0], i[1], i[2], i[3]) for i in EFFECT_POSSIBILITIES]
-        valid_effs = [i for i in varied_costs if effect_spend > i[3]]
-
-    val = random.choice(valid_effs)
-    if cardType == TYPE_SPELL:
-        numeric = int(effect_spend/val[3])
+        valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
+    eff, val_trigs_targs = random.choice(valid_combs)
+    trig, val_targs = random.choice(val_trigs_targs)
+    targ, spend_cost = random.choice(val_targs)
+    #val = random.choice(valid_combs)
+    if eff in STATIC_EFFECT_LIST:
+        numeric = 1
+    elif cardType == TYPE_SPELL:
+        numeric = int(effect_spend/spend_cost)
         #print(effect_spend, val[3], numeric)
     else:
-        numeric_div = max(val[3]/TARGET_COST_DICT[val[2]], val[3])
+        numeric_div = max(spend_cost/TARGET_COST_DICT[targ], spend_cost)
         numeric = int(abs(effect_spend/numeric_div)) #Make it so numeric is based on effect_spend and cost, but also allow - costs that get pretty negative
         if numeric < 0:
             numeric = int(random.random()*MAX_NEGATIVE_NUMERIC+1)
-    leftover = effect_spend - val[3] * abs(numeric) #val[2] * numeric
+    leftover = effect_spend - spend_cost * abs(numeric) #val[2] * numeric
     #print(effect_spend, val[3], numeric, leftover)
     #print(val[0])
     if numeric == 0:
         numeric = 1
-    return val[0], val[1], val[2], abs(numeric), leftover
+    return eff, trig, targ, abs(numeric), leftover
     #for eff, trig, eff_cost in trial: #For values in the trials list
         #eff_cost = eff_cost_base #* (.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
         #trial[2] = eff_cost #add cost of effect to respective list

@@ -138,6 +138,15 @@ class Game():
                     print('\nInput a Number!')
                     continue #start over
 
+                taunt = False
+                for card in opp.cards:
+                    try:
+                        if card.effect.effect == TAUNT_EFFECT:
+                            taunt = True
+                            continue
+                    except AttributeError:
+                        pass
+
                 print("### %s FIELD ### \n" % opp.name) # Print Opponent Field Header
                 print(str(opp) + '\n') # Print Enemy Combatents
                 i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
@@ -147,6 +156,14 @@ class Game():
                         if i == 0: #if input is 0 go back to first step
                             continue
                         defend_card = opp.cards[i-1] #Set defence Card
+                        try:
+                            if taunt and not defend_card.effect.effect is TAUNT_EFFECT:
+                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                                continue
+                        except AttributeError:
+                            if taunt:
+                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                                continue
                         attack_card.attack(defend_card) #Run the Attack Function
                     except IndexError: # if index error
                         print("\nThe enemy doesn't have that many cards in field!")

@@ -33,7 +33,7 @@ class Board():
             effect_text = ""
         else:                                       # generates card text
             if card.cardType == TYPE_CREATURE:
-                effect_text = "%s," % (EFFECT_TRIGGER_DICT[effect.trigger])
+                effect_text = "%s," % (TRIGGER_TEXT_DICT[effect.trigger])
             if effect.effect == DEAL_EFFECT:
                 effect_text += "deal %s damage to %s." % (effect.numeric, TARGET_TEXT_DICT[effect.target])
             elif effect.effect == DRAW_EFFECT:
