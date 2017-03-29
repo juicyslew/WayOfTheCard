@@ -39,13 +39,13 @@ class Game():
         # player_list.append(Player('Daniel', 4))
         self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
-    def play_card(self, player,all_players = None):
+    def play_card(self, player, all_players = None):
         """
         Function for putting cards into the field at the beginning of a player's turn
         """
         if all_players == None or len(all_players) == 2:
-            player = all_players[0]
-            opp = all_players[1]
+            player = all_players[player]
+            opp = all_players[not self.player_turn]
             while True:
                 print("### %s's Hand ###" % player.name)
                 print(player.hand) #Print the player hand
@@ -109,11 +109,13 @@ class Game():
                     #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
 
 
-    def use_cards(self, player, opp, all_players = None):
+    def use_cards(self, player, all_players = None):
         """
         Function for using cards to perform actions (Do Work)
         """
         if all_players == None or len(all_players) == 2:
+            player = all_players[self.player_turn]
+            opp = all_players[not self.player_turn]
             a = player.check_active() # Create Variable that contains the active cards on the board
             active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
             while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
@@ -237,7 +239,7 @@ class Game():
                 #        continue
                 #    break
                 self.play_card(0 ,all_players) #Need to unhardcode
-                self.use_cards(player1, player2) # Run Use Cards Script
+                self.use_cards(self.player_turn, all_players) # Run Use Cards Script
                 player1.deck.draw(player1.hand, 1) # Draw Card From Deck as turn ends
                 for card in player1.cards: #Run through cards on the field
                     try:
@@ -268,7 +270,8 @@ class Game():
                 #    break
                 self.play_card(1, all_players)
                 #print(player2) # display player 2 cards in field.
-                self.use_cards(player2, player1) # Run Use Function
+                self.use_cards(self.player_turn, all_players) # Run Use Function
+                #NEED TO UPDATE ^ TO ACCOUNT FOR MANY OPPONENTS
                 player2.deck.draw(player2.hand, 1) # Draw one
                 for card in player2.cards: # For Card in player2.cards:
                     try:
@@ -312,7 +315,7 @@ class Game():
                         continue
                 playable = True
                 self.play_card(self.player_turn, self.players)
-                self.use_cards(player1, player2, self.players) # Run Use Cards Script
+                self.use_cards(self.player_turn, self.players) # Run Use Cards Script
                 self.players[self.player_turn].deck.draw(self.players[self.player_turn].hand, 1) # Draw Card From Deck as turn ends
 
                 for card in self.players[self.player_turn].cards: #Run through cards on the field
