@@ -4,7 +4,7 @@ Python File to contain Constants for Card Game
 import operator
 
 WINDOW_WIDTH = 1600
-WINDOW_HEIGHT = 900
+WINDOW_HEIGHT = 1000
 
 DECK_INIT_SIZE = 30 #Initial Deck Size
 MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
@@ -151,3 +151,13 @@ for i in EFFECT_LIST:
             if k in TARGET_UNIVERSAL_POSITIVE:
                 eff_cost = abs(eff_cost)
             EFFECT_POSSIBILITIES.append((i, j, k, eff_cost))
+
+#Constants for rendering the Field
+PLAYER_CARD_FONT_SIZE = 35
+PLAYER_HEALTH_FONT_SIZE = 100
+CREATURE_CARD_FONT_SIZE = 20
+CREATURE_STATS_FONT_SIZE = 30
+MANA_COST_FONT_SIZE = 40
+
+CARD_WIDTH = 150
+CARD_HEIGHT = 210

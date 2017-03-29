@@ -5,11 +5,13 @@ class Board():
     def __init__(self, screen):
         self.screen = screen
         self.card_name_font = pygame.font.SysFont("arial narrow", 25)   #   sets card fonts
-        self.card_text_font = pygame.font.SysFont("arial narrow", 20)
-        self.mana_font = pygame.font.SysFont("arial narrow", 40)
-        self.stats_font = pygame.font.SysFont("arial narrow", 30)
-        self.cardwidth = 150         #  width in pixels of a card. Other scaling changes because of this
-        self.cardheight = 210
+        self.hero_name_font = pygame.font.SysFont("arial narrow", PLAYER_CARD_FONT_SIZE)
+        self.card_text_font = pygame.font.SysFont("arial narrow", CREATURE_CARD_FONT_SIZE)
+        self.mana_font = pygame.font.SysFont("arial narrow", MANA_COST_FONT_SIZE)
+        self.stats_font = pygame.font.SysFont("arial narrow", CREATURE_STATS_FONT_SIZE)
+        self.health_font = pygame.font.SysFont("arial narrow", PLAYER_HEALTH_FONT_SIZE)
+        self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
+        self.cardheight = CARD_HEIGHT
 
     def render_card(self, card_obj, position):  #   display card on screen
         pygame.draw.rect(self.screen, [255, 255, 255], pygame.Rect(position[0], position[1], self.cardwidth, self.cardheight))
@@ -61,17 +63,30 @@ class Board():
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
         screen.fill((0, 0, 255))
-        pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
         xhalf = screen.get_size()[0]/2
         yhalf = screen.get_size()[1]/2
+        card_y_offset = 30
+        name_y_offset = 15
+        name_x_offset = 15
+        health_x_offset = 35
+        health_y_offset = 45
 
-        self.render_card(player1.cards[0], (xhalf - self.cardwidth/2, 30))
-        self.render_card(player2.cards[0], (xhalf - self.cardwidth/2, screen.get_size()[1] - 30 - self.cardheight))
+        self.render_card(player2.cards[0], (xhalf - self.cardwidth/2, card_y_offset))
+        player2_name_render = self.hero_name_font.render(player2.player.name, 1, (0, 0, 0))          #   define name font object
+        player2_health_render = self.health_font.render(str(player2.player.stats[2]), 1, (0, 0, 0))     #   define health font object
+        screen.blit(player2_name_render, (xhalf - self.cardwidth/2 + name_x_offset, 30 + name_y_offset))                  #   blit player 2 name
+        screen.blit(player2_health_render, (xhalf - self.cardwidth/2 + health_x_offset, card_y_offset + health_y_offset))
+
+        self.render_card(player1.cards[0], (xhalf - self.cardwidth/2, screen.get_size()[1] - card_y_offset - self.cardheight))
+        player1_name_render = self.hero_name_font.render(player1.player.name, 1, (0, 0, 0))
+        player1_health_render = self.health_font.render(str(player1.player.stats[2]), 1, (0, 0, 0))     #   define health font object
+        screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
+        screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
         for card in player2.cards[1:] + player1.cards[1:]:
             try:
                 x = player2.cards.index(card)*(self.cardwidth + 20) + 80
-                y = yhalf - 50 - self.cardheight
+                y = yhalf - 15 - self.cardheight
                 self.render_card(screen, (x, y))
                 if self.read_card(card) != None:
                     (name, mana, stats, effect_text) = self.read_card(card)
@@ -93,7 +108,7 @@ class Board():
             except ValueError:
                 try:
                     x = player1.cards.index(card)*(self.cardwidth + 20) + 80
-                    y = yhalf + 50
+                    y = yhalf + 15
                     self.render_card(screen, (x, y))
                     if self.read_card(card) != None:
                         (name, mana, stats, effect_text) = self.read_card(card)
