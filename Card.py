@@ -70,6 +70,7 @@ class Card():
         self.creatureType = creatureType
         self.effect = effect
         self.manacost = cost
+
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
             if self.effect == False:
@@ -89,11 +90,11 @@ class Card():
 #""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-    def play(self, player, enemy_player, all = None):
+    def play(self, player, enemy_player, all_players = None):
         """
         Put card from hand into field
         """
-        if all == None:
+        if all_players == None:
             if self.cardType == TYPE_CREATURE:
                 player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
                 try:
