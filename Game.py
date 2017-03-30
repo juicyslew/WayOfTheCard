@@ -36,7 +36,7 @@ class Game():
                         player_list.append(Player(name, 4)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
-        player_list.append(Player('Daniel', 4))
+        # player_list.append(Player('Daniel', 4))
         self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
     def play_card(self, player, all_players = None):
