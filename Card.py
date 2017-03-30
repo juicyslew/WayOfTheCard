@@ -90,11 +90,13 @@ class Card():
 #""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
-    def play(self, player, enemy_player, all_players = None):
+    def play(self, player_turn, all_players):
         """
         Put card from hand into field
         """
-        if all_players == None:
+        if len(all_players) == 2:
+            player = all_players[player_turn]
+            enemy_player = all_players[not player_turn]
             if self.cardType == TYPE_CREATURE:
                 player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
                 try:

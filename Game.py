@@ -37,7 +37,7 @@ class Game():
                     break
                 continue #If player doesn't like it, then generate new name
         # player_list.append(Player('Daniel', 4))
-        self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
+        self.game_loop(player_list) #Start Game Loop
 
     def play_card(self, player, all_players = None):
         """
@@ -65,7 +65,7 @@ class Game():
                                 print("That Card Costs Too Much!")
                                 continue #return False #End Function and Return that it failed, and thus should be run again.
                             #print(card)
-                            card.play(player, opp) #If it succeeded, Put the card in the field
+                            card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
                             player.mana -= card.stats[COST] #Subtract from the player's mana
                             player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                             opp.check_dead(player)
@@ -78,6 +78,7 @@ class Game():
                     #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
         else:
             while True:
+                player = all_players[player]
                 print("### %s's Hand ###" % all_players[player].name)
                 print(all_players[player].hand) #Print to be out around 2020, which means he will have been writing the first 5 for 58 yethe player hand
                 print("mana: %i" % all_players[player].mana) #display mana
@@ -96,7 +97,8 @@ class Game():
                                 print("That Card Costs Too Much!")
                                 continue #return False #End Function and Return that it failed, and thus should be run again.
                             #print(card)
-                            card.play(player, opp) #If it succeeded, Put the card in the field
+
+                            card.play(self.player_turn, self.players) #If it succeeded, Put the card in the field
                             all_players[player].mana -= card.stats[COST] #Subtract from the player's mana
                             for peeps in all_players:
                                 peeps.check_dead(peeps, all_players) #Check if anything died after the card play effect, which can happen in card.play()
@@ -211,10 +213,13 @@ class Game():
             pass
 
 
-    def game_loop(self, player1, player2, all_players = None):
+    def game_loop(self, all_players):
+        player1 = all_players[0]
+        player2 = all_players[1]
+        self.player1 = player1
+        self.player2 = player2
         if len(all_players) == 2:
-            self.player1 = player1
-            self.player2 = player2
+
             """
             Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
             """
@@ -341,8 +346,9 @@ class Game():
                 for card in self.players[self.player_turn].cards: #Run through cards on the field
                     try:
                         card.effect.activate(player1, player2, TRIGGER_END, all_players = self.players) # If the cards have a "End Turn" Trigger, then activate effect
-                        player1.check_dead(player2, all_players = self.players) # Check if anything died
-                        player2.check_dead(player1, all_players = self.players)
+                        for i in range(0, len(all_players)):
+                            player1.check_dead(player2, all_players = self.players) # Check if anything died
+                            player2.check_dead(player1, all_players = self.players)
                     # self.update_board()
                     except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
