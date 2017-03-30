@@ -36,7 +36,7 @@ class Game():
                         player_list.append(Player(name, 4)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
-        # player_list.append(Player('Daniel', 4))
+        player_list.append(Player('Daniel', 4))
         self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
     def play_card(self, player, all_players = None):
@@ -78,9 +78,9 @@ class Game():
                     #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
         else:
             while True:
-                print("### %s's Hand ###" % player.name)
-                print(player.hand) #Print the player hand
-                print("mana: %i" % player.mana) #display mana
+                print("### %s's Hand ###" % all_players[player].name)
+                print(all_players[player].hand) #Print to be out around 2020, which means he will have been writing the first 5 for 58 yethe player hand
+                print("mana: %i" % all_players[player].mana) #display mana
                 while True:
                     # self.update_board()
                     i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
@@ -97,9 +97,9 @@ class Game():
                                 continue #return False #End Function and Return that it failed, and thus should be run again.
                             #print(card)
                             card.play(player, opp) #If it succeeded, Put the card in the field
-                            player.mana -= card.stats[COST] #Subtract from the player's mana
-                            player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
-                            opp.check_dead(player)
+                            all_players[player].mana -= card.stats[COST] #Subtract from the player's mana
+                            for peeps in all_players:
+                                peeps.check_dead(peeps, all_players) #Check if anything died after the card play effect, which can happen in card.play()
                             # self.update_board()
                             break
                         except IndexError: # If index is out of range, return an error
@@ -182,7 +182,7 @@ class Game():
         else:
             pass
 
-    def check_game_end(self, player1, player2, all_players = None):
+    def check_game_end(self, player, all_players = None):
         """
         Function for Checking if the game is over.
 
@@ -194,6 +194,8 @@ class Game():
         -- P2 Wins
         -- Tie
         """
+        player1 = all_players[0]
+        player2 = all_players[1]
         if all_players == None or len(all_players) == 2:
             if player1.dead and player2.dead: #If both players died then
                 print("Well Shoot.  A Tie.")
@@ -266,7 +268,7 @@ class Game():
                         self.update_board()
                     except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
-                if self.check_game_end(player1, player2): # if the game ends, end the game_loop
+                if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                     break
                 self.player_turn = not self.player_turn
                 self.update_board()
@@ -300,7 +302,7 @@ class Game():
                     except AttributeError:
                         continue
                 #break # Break out of player2 while loop
-                if self.check_game_end(player1, player2): # if game ends, end game_loop
+                if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                     break
                 self.player_turn = not self.player_turn
                 self.turn += 1 # Increment turn by 1.
@@ -344,7 +346,7 @@ class Game():
                     # self.update_board()
                     except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
-                if self.check_game_end(player1, player2, self.players): # if the game ends, end the game_loop
+                if self.check_game_end(self.player_turn, self.players): # if the game ends, end the game_loop
                     break
                 # self.update_board()
                 self.player_turn += 1

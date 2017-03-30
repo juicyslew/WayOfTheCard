@@ -136,7 +136,7 @@ def generate_numerical_effect(effect_spend, cardType):
     """
     Generates Slightly More Balanced Numerical Effects
     """
-    print(effect_spend)
+    # print(effect_spend)
     min_eff = SORTED_EFFECT_COST[0][1] * SORTED_TRIGGER_COST[0][1] * SORTED_TARGET_COST[0][1] # Minimum Effect Cost
     if min_eff >= effect_spend and not cardType == TYPE_SPELL: # If don't have enough for minimum
         return [None, None, None, 0, 0]
