@@ -268,6 +268,7 @@ class Game():
                         continue
                 if self.check_game_end(player1, player2): # if the game ends, end the game_loop
                     break
+                self.player_turn = not self.player_turn
                 self.update_board()
                 #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
                 pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
