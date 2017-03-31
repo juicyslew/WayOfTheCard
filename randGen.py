@@ -120,7 +120,6 @@ def generate_stats(cost, card_type, leftover):
     if spend == 0:
         spend = max(0, np.random.normal(.5, 1/2)) #This code and these arbitrary values give cost 0 cards a fighting chance, by giving a chance for them to have ok stats
     stat_spend = [spend * i for i in norm_rands] #Give each stat its proportion of the spending
-    print(stat_spend)
     #stat_spend[2] += MIN_EFFECT #constant added to increase spending for effect
     stats = [int(i) for i in stat_spend] # put ATT and DEF into ints and place them in stats
     diff_att = max(0, stats[0] - MAX_ATT) #find how much attack has passed the max
