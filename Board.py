@@ -62,7 +62,7 @@ class Board():
         """
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
-        screen.fill((0, 0, 255))
+        screen.fill((150, 50, 150))
         xhalf = screen.get_size()[0]/2
         yhalf = screen.get_size()[1]/2
         card_y_offset = 30

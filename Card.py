@@ -26,7 +26,7 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100, spell_chance = SPELL_CHANCE): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100, spell_chance = SPELL_CHANCE, active_effects = None): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
         if cardType == None:
             if random() < spell_chance:
@@ -56,9 +56,12 @@ class Card():
                 effect = Effect(self, cost, cardType)
         if stats == None:
             if effect:
-                stats = generate_stats(effect, cost, cardType, effect.leftover) #Generate Stats if None
+                stats = generate_stats(cost, cardType, effect.leftover) #Generate Stats if None
             else:
-                stats = generate_stats(effect, cost, cardType, effect)
+                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH
+                stats = generate_stats(cost, cardType, effect_spend)
+        if active_effects == None:
+            active_effects = INIT_ACTIVE_EFFECT
         #if effect_spend == None: # if effect_spend == None
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         starting_stats = stats #set original stats
@@ -70,14 +73,20 @@ class Card():
         self.creatureType = creatureType
         self.effect = effect
         self.manacost = cost
+        self.active_effects = list(active_effects)
 
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
+            active_strs = []
+            for i in range(len(self.active_effects)):
+                if self.active_effects[i]:
+                    active_strs.append(ACTIVE_EFFECT_DICT[i])
             if self.effect == False:
                 eff_s = ''
             else:
                 eff_s = self.effect
-            s = """@@@ %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], self.stats, eff_s)
+            s = """@@@ %s || %s @@@\n---%s---%s
+%s""" % (self.name, TYPE_DICT[self.cardType], self.stats, eff_s, 'Active Effects: ' + ', '.join(active_strs))
         if self.cardType == TYPE_SPELL:
             s = """@@@ %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], self.stats[0], self.effect)
         #s = """###Card###
@@ -105,7 +114,7 @@ class Card():
                     pass
             if self.cardType == TYPE_SPELL:
                 self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-                player.hand.cards.pop(player.hand.cards.index(self))
+                player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
 
 
         else:       #3+ players
@@ -123,10 +132,22 @@ class Card():
         """
         Attack enemy card with your card
         """
-        self.state = STATE_SLEEP
-        self.stats[DEF] -= opp_card.stats[ATT]
-        opp_card.stats[DEF] -= self.stats[ATT]
+        if self.active_effects[WINDFURY_INDEX]:
+            self.active_effects[WINDFURY_INDEX] = 0
+        else:
+            self.state = STATE_SLEEP
+        self.damage(opp_card.stats[ATT])
+        opp_card.damage(self.stats[ATT])
         print('-----------------------------------')
         print('%s dealt %i damage to %s.  Result Health: %i' % (self.name, self.stats[ATT], opp_card.name, opp_card.stats[DEF]))
         print('%s dealt %i damage to %s.  Result Health: %i' % (opp_card.name, opp_card.stats[ATT], self.name, self.stats[DEF]))
         print('-----------------------------------')
+    def damage(self, damage):
+        """
+        Code for taking damage
+        """
+        if self.active_effects[DIVINE_SHIELD_INDEX]:
+            self.active_effects[DIVINE_SHIELD_INDEX] = 0
+            print("Divine Shield Destroyed")
+        else:
+            self.stats[DEF] -= damage

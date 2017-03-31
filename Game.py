@@ -143,7 +143,7 @@ class Game():
                 taunt = False
                 for card in opp.cards:
                     try:
-                        if card.effect.effect == TAUNT_EFFECT:
+                        if card.active_effects[TAUNT_INDEX]:
                             taunt = True
                             continue
                     except AttributeError:
@@ -157,15 +157,10 @@ class Game():
                     try:
                         if i == 0: #if input is 0 go back to first step
                             continue
-                        defend_card = opp.cards[i-1] #Set defence Card
-                        try:
-                            if taunt and not defend_card.effect.effect is TAUNT_EFFECT:
-                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                                continue
-                        except AttributeError:
-                            if taunt:
-                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                                continue
+                        defend_card = opp.cards[i-1] #Set defense Card
+                        if taunt and not defend_card.active_effects[TAUNT_INDEX]:
+                            print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                            continue
                         attack_card.attack(defend_card) #Run the Attack Function
                     except IndexError: # if index error
                         print("\nThe enemy doesn't have that many cards in field!")
@@ -227,7 +222,7 @@ class Game():
             pygame.display.set_caption(random_game_name())
             #clock = pygame.time.Clock()
             self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
-            self.screen.fill((0, 0, 255))
+            self.screen.fill((150, 50, 150))
             self.board = Board(self.screen)
             self.update_board()
             self.player_turn = False

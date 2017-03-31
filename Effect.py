@@ -9,12 +9,21 @@ import numpy as np
 class Effect():
     def __init__(self, ThisCard, cost, cardType, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None and target == None: #If there is no information about the effect in general Then
-            if cardType == TYPE_SPELL:
-                effect_spend = SPELL_EFFECT_MULTIPLIER * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
-            elif cardType == TYPE_CREATURE:
-                effect_spend = EFFECT_PREF_MULTIPLIER * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Creature multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
-            #print(cost)
-            [effect, trigger, target, numeric, leftover] = generate_numerical_effect(effect_spend, cardType) #Use Effect Spend to Generate Effect
+            #if cardType == TYPE_SPELL:
+            effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+            if cardType == TYPE_CREATURE:
+                actual_spend = effect_spend*EFFECT_PREF/TOT_PREF
+                effect_spend -= actual_spend
+                #elif cardType == TYPE_CREATURE:
+                #    effect_spend = EFFECT_PREF * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Creature multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+                #print(cost)
+                [effect, trigger, target, numeric, leftover] = generate_numerical_effect(actual_spend, cardType) #Use Effect Spend to Generate Effect
+                #print(effect_spend, actual_spend, leftover)
+                effect_spend += leftover
+            elif cardType == TYPE_SPELL:
+                actual_spend = effect_spend * SPELL_EFFECT_MULTIPLIER
+                [effect, trigger, target, numeric, leftover] = generate_numerical_effect(actual_spend, cardType)
+                effect_spend = 0
         else: #Otherwise Generate Effect Normally
             if trigger == None:
                 trigger = choice(TRIGGER_LIST)
@@ -31,7 +40,7 @@ class Effect():
         self.effect = effect
         if self.effect == None:
             self.class_type = CLASS_PLAYER
-            leftover = 0
+            effect_spend = 0
         else:
             self.class_type = EFFECT_CLASS_DICT[self.effect]
         self.trigger = trigger
@@ -52,7 +61,7 @@ class Effect():
             numeric = [r, numeric-r]
         self.numeric = numeric
         self.target = target
-        self.leftover = leftover
+        self.leftover = effect_spend
         self.ThisCard = ThisCard
 
     def __str__(self): # Return Pretty Effect String
@@ -225,6 +234,22 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             print("%s was healed %i health.  Result Health: %i" %(c.name, 1, c.stats[DEF]))
                         i+=1
                     print('-----------------------------------')
+                if self.effect == TAUNT_EFFECT:
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        c.active_effects[TAUNT_INDEX] = 1
+                if self.effect == DIVINE_SHIELD_EFFECT:
+                    self.t = self.determine_target(own_player, enemy_player)
+                    for c in self.t:
+                        c.active_effects[DIVINE_SHIELD_INDEX] = 1
+                if self.effect == CHARGE_EFFECT:
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        c.active_effects[CHARGE_INDEX] = 1
+                if self.effect == WINDFURY_EFFECT:
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        c.active_effects[WINDFURY_INDEX] = 1
         else:
             if time == self.trigger: # If the current timing is the cards effect timing
                 if self.effect == DRAW_EFFECT: # If draw
