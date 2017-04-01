@@ -36,7 +36,7 @@ class Game():
                         player_list.append(Player(name, 4)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
-        player_list.append(Player('Daniel', 4))
+    #   player_list.append(Player('Daniel', 4))
         self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
 
     def play_card(self, player, all_players = None):
@@ -69,7 +69,7 @@ class Game():
                             player.mana -= card.stats[COST] #Subtract from the player's mana
                             player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                             opp.check_dead(player)
-                            self.update_board()
+                            self.update_board(card)
                             break
                         except IndexError: # If index is out of range, return an error
                             print("\nYou don't have that many cards!")
@@ -165,6 +165,10 @@ class Game():
                                 print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
                                 continue
                         attack_card.attack(defend_card) #Run the Attack Function
+                        damage_dealt = attack_card.stats[ATT]
+                        self.board.render_damage(damage_dealt, opp, i - 1)
+                        attacking_index = player.cards.index(attack_card)
+                        self.board.render_damage(damage_dealt, player, attacking_index)
                     except IndexError: # if index error
                         print("\nThe enemy doesn't have that many cards in field!")
                         continue # Start Over
@@ -223,7 +227,7 @@ class Game():
             #clock = pygame.time.Clock()
             self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
             self.screen.fill((0, 0, 255))
-            self.board = Board(self.screen)
+            self.board = Board(self.screen, (player1, player2))
             self.update_board()
             self.player_turn = False
 
@@ -354,9 +358,9 @@ class Game():
                     self.player_turn = 0
                     self.turn += 1 # Increment turn by 1.
 
-    def update_board(self):
+    def update_board(self, card_to_animate = None):
         pygame.display.update()
-        self.board.update_board(self.screen, self.player1, self.player2, all_players = self.players)
+        self.board.update_board(self.screen, self.player1, self.player2, card_to_animate)
 
 if __name__ == "__main__": # If this is the run code (Game.py)
     game = Game() # Create Game
