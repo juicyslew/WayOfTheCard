@@ -14,6 +14,7 @@ class Player_Card(Card):
         self.starting_stats = [0, 0, PLAYER_HEALTH] # Player Base Stats
         self.state = STATE_SLEEP #Player State is Pretty Much Constantly Asleep
         self.effect = False #Player Has No Effects
+        self.active_effects = INIT_ACTIVE_EFFECT
 
     def __str__(self): #When printing the player
         s = """### %s || %s\n""" % (self.name, self.stats) # Return this string
@@ -53,6 +54,8 @@ class Player():
         """
         ls = []
         for card in self.cards:
+            if card.active_effects[CHARGE_INDEX]:
+                card.state = STATE_ACTIVE
             if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
         return ls

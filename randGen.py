@@ -103,7 +103,7 @@ def random_game_name():
     rand2 = random.choice(wordlist)
     return rand1.capitalize() + rand2.capitalize()
 
-def generate_stats(effect, cost, card_type, leftover):
+def generate_stats(cost, card_type, leftover):
     """
     Generates stats ATT, DEF and effect for a card based on COST
     effect is a boolean dictating whether or not there is an effect
@@ -114,8 +114,9 @@ def generate_stats(effect, cost, card_type, leftover):
         return [cost, 0, 0]
     tot = sum(rands) #Sum of randoms
     norm_rands = [r/tot for r in rands] #Normalized Randoms relative importance of ATT DEF and COST while also adding to 1
-    spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * (CARD_STRENGTH) #+ np.random.normal(0, 1/4)) #Determines amount of arbitrary spending money for each stat #Arbitrary values added to nerf higher cost enemies a bit and add some randomness
-    spend += leftover*LEFTOVER_MULTIPLIER
+    #spend = STATS_PREF*(CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * (CARD_STRENGTH) #+ np.random.normal(0, 1/4)) #Determines amount of arbitrary spending money for each stat #Arbitrary values added to nerf higher cost enemies a bit and add some randomness
+    spend = leftover
+    #print(spend)
     if spend == 0:
         spend = max(0, np.random.normal(.5, 1/2)) #This code and these arbitrary values give cost 0 cards a fighting chance, by giving a chance for them to have ok stats
     stat_spend = [spend * i for i in norm_rands] #Give each stat its proportion of the spending
@@ -136,10 +137,6 @@ def generate_numerical_effect(effect_spend, cardType):
     """
     Generates Slightly More Balanced Numerical Effects
     """
-    # print(effect_spend)
-    min_eff = SORTED_EFFECT_COST[0][1] * SORTED_TRIGGER_COST[0][1] * SORTED_TARGET_COST[0][1] # Minimum Effect Cost
-    if min_eff >= effect_spend and not cardType == TYPE_SPELL: # If don't have enough for minimum
-        return [None, None, None, 0, 0]
     #Return none
 
     #trials = [] #Initialize List
@@ -165,12 +162,26 @@ def generate_numerical_effect(effect_spend, cardType):
             #    if eff*targ > 0:
             #        break
             eff = DEAL_EFFECT
-            targ = TARGET_OPPONENT
+            targ = TARGET_CREATURE
             return[eff, TRIGGER_PLAY, targ, 1, 0]
     else:
         valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
     eff, val_trigs_targs = random.choice(valid_combs)
+    if len(val_trigs_targs) == 0:
+        if cardType == TYPE_SPELL:
+            eff = DEAL_EFFECT
+            targ = TARGET_CREATURE
+            return [eff, TRIGGER_PLAY, targ, 1, 0]
+        else:
+            return [None, None, None, 0, 0]
     trig, val_targs = random.choice(val_trigs_targs)
+    if len(val_targs) == 0:
+        if cardType == TYPE_SPELL:
+            eff = DEAL_EFFECT
+            targ = TARGET_CREATURE
+            return [eff, TRIGGER_PLAY, targ, 1, 0]
+        else:
+            return [None, None, None, 0, 0]
     targ, spend_cost = random.choice(val_targs)
     #val = random.choice(valid_combs)
     if eff in STATIC_EFFECT_LIST:

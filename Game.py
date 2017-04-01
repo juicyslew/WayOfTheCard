@@ -36,8 +36,8 @@ class Game():
                         player_list.append(Player(name, 4)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
-    #   player_list.append(Player('Daniel', 4))
-        self.game_loop(player_list[0], player_list[1], player_list) #Start Game Loop
+        # player_list.append(Player('Daniel', 4))
+        self.game_loop(player_list) #Start Game Loop
 
     def play_card(self, player, all_players = None):
         """
@@ -65,7 +65,7 @@ class Game():
                                 print("That Card Costs Too Much!")
                                 continue #return False #End Function and Return that it failed, and thus should be run again.
                             #print(card)
-                            card.play(player, opp) #If it succeeded, Put the card in the field
+                            card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
                             player.mana -= card.stats[COST] #Subtract from the player's mana
                             player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                             opp.check_dead(player)
@@ -78,6 +78,7 @@ class Game():
                     #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
         else:
             while True:
+                player = all_players[player]
                 print("### %s's Hand ###" % all_players[player].name)
                 print(all_players[player].hand) #Print to be out around 2020, which means he will have been writing the first 5 for 58 yethe player hand
                 print("mana: %i" % all_players[player].mana) #display mana
@@ -96,7 +97,8 @@ class Game():
                                 print("That Card Costs Too Much!")
                                 continue #return False #End Function and Return that it failed, and thus should be run again.
                             #print(card)
-                            card.play(player, opp) #If it succeeded, Put the card in the field
+
+                            card.play(self.player_turn, self.players) #If it succeeded, Put the card in the field
                             all_players[player].mana -= card.stats[COST] #Subtract from the player's mana
                             for peeps in all_players:
                                 peeps.check_dead(peeps, all_players) #Check if anything died after the card play effect, which can happen in card.play()
@@ -141,7 +143,7 @@ class Game():
                 taunt = False
                 for card in opp.cards:
                     try:
-                        if card.effect.effect == TAUNT_EFFECT:
+                        if card.active_effects[TAUNT_INDEX]:
                             taunt = True
                             continue
                     except AttributeError:
@@ -155,15 +157,10 @@ class Game():
                     try:
                         if i == 0: #if input is 0 go back to first step
                             continue
-                        defend_card = opp.cards[i-1] #Set defence Card
-                        try:
-                            if taunt and not defend_card.effect.effect is TAUNT_EFFECT:
-                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                                continue
-                        except AttributeError:
-                            if taunt:
-                                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                                continue
+                        defend_card = opp.cards[i-1] #Set defense Card
+                        if taunt and not defend_card.active_effects[TAUNT_INDEX]:
+                            print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                            continue
                         attack_card.attack(defend_card) #Run the Attack Function
                         damage_dealt = attack_card.stats[ATT]
                         self.board.render_damage(damage_dealt, opp, i - 1)
@@ -215,10 +212,13 @@ class Game():
             pass
 
 
-    def game_loop(self, player1, player2, all_players = None):
+    def game_loop(self, all_players):
+        player1 = all_players[0]
+        player2 = all_players[1]
+        self.player1 = player1
+        self.player2 = player2
         if len(all_players) == 2:
-            self.player1 = player1
-            self.player2 = player2
+
             """
             Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
             """
@@ -226,7 +226,7 @@ class Game():
             pygame.display.set_caption(random_game_name())
             #clock = pygame.time.Clock()
             self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
-            self.screen.fill((0, 0, 255))
+            self.screen.fill((150, 50, 150))
             self.board = Board(self.screen, (player1, player2))
             self.update_board()
             self.player_turn = False
@@ -345,8 +345,9 @@ class Game():
                 for card in self.players[self.player_turn].cards: #Run through cards on the field
                     try:
                         card.effect.activate(player1, player2, TRIGGER_END, all_players = self.players) # If the cards have a "End Turn" Trigger, then activate effect
-                        player1.check_dead(player2, all_players = self.players) # Check if anything died
-                        player2.check_dead(player1, all_players = self.players)
+                        for i in range(0, len(all_players)):
+                            player1.check_dead(player2, all_players = self.players) # Check if anything died
+                            player2.check_dead(player1, all_players = self.players)
                     # self.update_board()
                     except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
