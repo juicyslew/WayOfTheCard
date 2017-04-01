@@ -110,14 +110,14 @@ class Card():
                 player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
                 try:
                     self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-                except AttributeError:
+                except AttributeError or TypeError:
                     pass
             if self.cardType == TYPE_SPELL:
                 self.effect.activate(player, enemy_player, TRIGGER_PLAY)
                 player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
 
 
-        else:       #3+ players
+        else:#3+ players
             if self.cardType == TYPE_CREATURE:
                 all[0].cards.append(all[0].hand.cards.pop(all[0].hand.cards.index(self)))
                 try:
@@ -132,8 +132,8 @@ class Card():
         """
         Attack enemy card with your card
         """
-        if self.active_effects[WINDFURY_INDEX]:
-            self.active_effects[WINDFURY_INDEX] = 0
+        if self.active_effects[WINDFURY_INDEX] == 1:
+            self.active_effects[WINDFURY_INDEX] = 2
         else:
             self.state = STATE_SLEEP
         self.damage(opp_card.stats[ATT])

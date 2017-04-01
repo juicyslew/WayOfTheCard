@@ -133,7 +133,7 @@ def generate_stats(cost, card_type, leftover):
 
 #print(generate_stats(True, 10))
 
-def generate_numerical_effect(effect_spend, cardType):
+def generate_numerical_effect(effect_spend, cardType, second = False):
     """
     Generates Slightly More Balanced Numerical Effects
     """
@@ -163,43 +163,59 @@ def generate_numerical_effect(effect_spend, cardType):
             #        break
             eff = DEAL_EFFECT
             targ = TARGET_CREATURE
-            return[eff, TRIGGER_PLAY, targ, 1, 0]
+            return(((eff, TRIGGER_PLAY, targ, 1),), effect_spend - MIN_EFF_COST)
     else:
         valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
-    eff, val_trigs_targs = random.choice(valid_combs)
-    if len(val_trigs_targs) == 0:
-        if cardType == TYPE_SPELL:
+    for i in range(EFFECT_TRY_NUM):
+        success = True
+        eff, val_trigs_targs = random.choice(valid_combs)
+        if len(val_trigs_targs) == 0:
+            del eff, val_trigs_targs
+            success = False
+            continue
+        trig, val_targs = random.choice(val_trigs_targs)
+        if len(val_targs) == 0:
+            del eff, val_trigs_targs, trig, val_targs
+            success = False
+            continue
+        targ, spend_cost = random.choice(val_targs)
+        #success = True
+    if not success:
+        if cardType == TYPE_SPELL or second:
             eff = DEAL_EFFECT
             targ = TARGET_CREATURE
-            return [eff, TRIGGER_PLAY, targ, 1, 0]
+            return (((eff, TRIGGER_PLAY, targ, 1),), effect_spend - MIN_EFF_COST)
         else:
-            return [None, None, None, 0, 0]
-    trig, val_targs = random.choice(val_trigs_targs)
-    if len(val_targs) == 0:
-        if cardType == TYPE_SPELL:
-            eff = DEAL_EFFECT
-            targ = TARGET_CREATURE
-            return [eff, TRIGGER_PLAY, targ, 1, 0]
-        else:
-            return [None, None, None, 0, 0]
-    targ, spend_cost = random.choice(val_targs)
+            return (((None, None, None, 0),), effect_spend)
     #val = random.choice(valid_combs)
+    #^###################^#
+    double = False
+    if DOUBLE_EFFECT_CHANCE > random.random() and not second:
+        double = True
+    print(success)
     if eff in STATIC_EFFECT_LIST:
         numeric = 1
     elif cardType == TYPE_SPELL:
         numeric = int(effect_spend/spend_cost)
-        #print(effect_spend, val[3], numeric)
+        if double:
+            numeric = max(1, random.randint(0, abs(numeric)))
     else:
         numeric_div = max(spend_cost/TARGET_COST_DICT[targ], spend_cost)
         numeric = int(abs(effect_spend/numeric_div)) #Make it so numeric is based on effect_spend and cost, but also allow - costs that get pretty negative
         if numeric < 0:
             numeric = int(random.random()*MAX_NEGATIVE_NUMERIC+1)
+        elif double:
+            numeric = max(1,random.randint(0, numeric))
     leftover = effect_spend - spend_cost * abs(numeric) #val[2] * numeric
     #print(effect_spend, val[3], numeric, leftover)
     #print(val[0])
+    eff_info = (eff, trig, targ, abs(numeric))
     if numeric == 0:
         numeric = 1
-    return eff, trig, targ, abs(numeric), leftover
+    if (double or cardType==TYPE_SPELL) and leftover > MIN_EFF_COST and not second :
+        [eff2_info, leftover] = generate_numerical_effect(leftover, cardType, second = True)
+        return ((eff_info, eff2_info[0]), leftover)
+    return ((eff_info,), leftover)
     #for eff, trig, eff_cost in trial: #For values in the trials list
         #eff_cost = eff_cost_base #* (.4*random.random() + .8) # Cost of the effect #Arbitrary Values create variation in which values are lower and higher, this prevents more costly effects from being too rare
         #trial[2] = eff_cost #add cost of effect to respective list
