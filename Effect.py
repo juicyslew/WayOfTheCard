@@ -76,6 +76,9 @@ class Effect():
     def __str__(self): # Return Pretty Effect String
         s = []
         for i in range(self.eff_len):
+            if type(self.effect) == int:
+                s.append("")
+                continue
             print(self.effect[i])
             if type(self.effect) == int or self.effect[i] == None:
                 s.append("")

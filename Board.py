@@ -89,11 +89,11 @@ class Board():
         if not effect:
             tot_effect_text = ""
         else: # generates card text
-            if type(effect.effect) == 0:
-                a = 0
-            else:
-                a = 1
-            if type(effect.effect) == int and a:
+            #if type(effect.effect) == 0:
+            #    a = 0
+            #else:
+            #    a = 1
+            if not type(effect.effect) == int:
                 for i in range(len(effect.effect)):
                     eff = effect.effect[i]
                     trig = effect.trigger[i]
