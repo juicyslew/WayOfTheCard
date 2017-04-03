@@ -165,7 +165,8 @@ class Game():
                         damage_dealt = attack_card.stats[ATT]
                         self.board.render_damage(damage_dealt, opp, i - 1)
                         attacking_index = player.cards.index(attack_card)
-                        self.board.render_damage(damage_dealt, player, attacking_index)
+                        if i - 1 != 0:
+                            self.board.render_damage(damage_dealt, player, attacking_index)
                     except IndexError: # if index error
                         print("\nThe enemy doesn't have that many cards in field!")
                         continue # Start Over
@@ -228,6 +229,8 @@ class Game():
             self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
             self.screen.fill((150, 50, 150))
             self.board = Board(self.screen, (player1, player2))
+            player1.board = self.board
+            player2.board = self.board
             self.update_board()
             self.player_turn = False
 

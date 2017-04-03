@@ -192,6 +192,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         c.stats[DEF] -= self.numeric
                         print('%i damage dealt to %s.  Result Health: %i' % (self.numeric, c.name, c.stats[DEF]))
                         print('-----------------------------------')
+                        if c in own_player.cards:
+                            own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
+                        elif c in enemy_player.cards:
+                            own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
                 if self.effect == HEAL_EFFECT: # If Heal
                     self.t = self.determine_target(own_player, enemy_player) #Determine Target
                     for c in self.t: # Loop Through Targets
@@ -200,6 +204,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
                         print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
                         print('-----------------------------------')
+                        if c in own_player.cards:
+                            own_player.board.render_heal(self.numeric, own_player, own_player.cards.index(c))
+                        elif c in enemy_player.cards:
+                            own_player.board.render_heal(self.numeric, enemy_player, enemy_player.cards.index(c))
                 if self.effect == SUMMON_EFFECT: # If Summon
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
