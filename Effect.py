@@ -76,6 +76,9 @@ class Effect():
     def __str__(self): # Return Pretty Effect String
         s = []
         for i in range(self.eff_len):
+            if type(self.effect) == int:
+                s.append("")
+                continue
             print(self.effect[i])
             if type(self.effect) == int or self.effect[i] == None:
                 s.append("")
@@ -213,6 +216,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             c.stats[DEF] -= self.numeric
                             print('%i damage dealt to %s.  Result Health: %i' % (self.numeric, c.name, c.stats[DEF]))
                             print('-----------------------------------')
+                            if c in own_player.cards:
+                                own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
+                            elif c in enemy_player.cards:
+                                own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == HEAL_EFFECT: # If Heal
                         self.t = self.determine_target(own_player, enemy_player) #Determine Target
                         for c in self.t: # Loop Through Targets
@@ -221,6 +228,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
                             print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
                             print('-----------------------------------')
+                            if c in own_player.cards:
+                                own_player.board.render_heal(self.numeric, own_player, own_player.cards.index(c))
+                            elif c in enemy_player.cards:
+                                own_player.board.render_heal(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == SUMMON_EFFECT: # If Summon
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets
@@ -230,8 +241,6 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     if self.effect == BUFF_EFFECT: # If Buff
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets
-                            c.starting_stats[ATT] += self.numeric[0]
-                            c.starting_stats[DEF] += self.numeric[1] ## IF BUFFED ITS LIKE CHANGING THE
                             c.stats[ATT] += self.numeric[0]
                             c.stats[DEF] += self.numeric[1]
                             print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))

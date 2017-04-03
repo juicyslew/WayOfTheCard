@@ -170,48 +170,53 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
         success = True
         eff, val_trigs_targs = random.choice(valid_combs)
         if len(val_trigs_targs) == 0:
-            del eff, val_trigs_targs
+            #del eff, val_trigs_targs
             success = False
             continue
         trig, val_targs = random.choice(val_trigs_targs)
         if len(val_targs) == 0:
-            del eff, val_trigs_targs, trig, val_targs
+            #del eff, val_trigs_targs, trig, val_targs
             success = False
             continue
         targ, spend_cost = random.choice(val_targs)
         #success = True
+    double = False
+    if (DOUBLE_EFFECT_CHANCE > random.random()) and not second:
+        double = True
     if not success:
         if cardType == TYPE_SPELL or second:
             eff = DEAL_EFFECT
             targ = TARGET_CREATURE
-            return (((eff, TRIGGER_PLAY, targ, 1),), effect_spend - MIN_EFF_COST)
+            eff_info = (eff, TRIGGER_PLAY, targ, 1)
+            leftover = effect_spend - MIN_EFF_COST
+            if not second:
+                double = True
         else:
             return (((None, None, None, 0),), effect_spend)
     #val = random.choice(valid_combs)
     #^###################^#
-    double = False
-    if DOUBLE_EFFECT_CHANCE > random.random() and not second:
-        double = True
-    print(success)
-    if eff in STATIC_EFFECT_LIST:
-        numeric = 1
-    elif cardType == TYPE_SPELL:
-        numeric = int(effect_spend/spend_cost)
-        if double:
-            numeric = max(1, random.randint(0, abs(numeric)))
     else:
-        numeric_div = max(spend_cost/TARGET_COST_DICT[targ], spend_cost)
-        numeric = int(abs(effect_spend/numeric_div)) #Make it so numeric is based on effect_spend and cost, but also allow - costs that get pretty negative
-        if numeric < 0:
-            numeric = int(random.random()*MAX_NEGATIVE_NUMERIC+1)
-        elif double:
-            numeric = max(1,random.randint(0, numeric))
-    leftover = effect_spend - spend_cost * abs(numeric) #val[2] * numeric
-    #print(effect_spend, val[3], numeric, leftover)
-    #print(val[0])
-    eff_info = (eff, trig, targ, abs(numeric))
-    if numeric == 0:
-        numeric = 1
+        if eff in STATIC_EFFECT_LIST:
+            numeric = 1
+        elif cardType == TYPE_SPELL:
+            numeric = int(effect_spend/spend_cost)
+            if double:
+                numeric = max(1, random.randint(0, abs(numeric)))
+        else:
+            numeric_div = max(spend_cost/TARGET_COST_DICT[targ], spend_cost)
+            numeric = int(abs(effect_spend/numeric_div)) #Make it so numeric is based on effect_spend and cost, but also allow - costs that get pretty negative
+            if numeric < 0:
+                numeric = int(random.random()*MAX_NEGATIVE_NUMERIC+1)
+            elif double:
+                numeric = max(1,random.randint(0, numeric))
+        leftover = effect_spend - spend_cost * abs(numeric) #val[2] * numeric
+        if leftover > effect_spend:
+            leftover += NEGATIVE_ADDER
+        #print(effect_spend, val[3], numeric, leftover)
+        #print(val[0])
+        if numeric == 0:
+            numeric = 1
+        eff_info = (eff, trig, targ, abs(numeric))
     if (double or cardType==TYPE_SPELL) and leftover > MIN_EFF_COST and not second :
         [eff2_info, leftover] = generate_numerical_effect(leftover, cardType, second = True)
         return ((eff_info, eff2_info[0]), leftover)
