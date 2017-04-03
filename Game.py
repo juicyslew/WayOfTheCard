@@ -183,6 +183,9 @@ class Game():
             self.update_board()
         else:
             pass
+        for c in player.cards:
+            if c.active_effects[WINDFURY_INDEX] == 2:
+                c.active_effects[WINDFURY_INDEX] = 1
 
     def check_game_end(self, player, all_players = None):
         """
@@ -258,7 +261,7 @@ class Game():
                 for card in player1.cards: #Run through the player cards on the field
                     try:
                         card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
-                    except AttributeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
+                    except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                         continue
                 #while True: #Start Infinite Loop
                 #    if not self.play_card(player1, player2): #Run play_card until it returns True, then break the loop
@@ -273,7 +276,7 @@ class Game():
                         player1.check_dead(player2) # Check if anything died
                         player2.check_dead(player1)
                         self.update_board()
-                    except AttributeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
                 if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                     break
@@ -289,7 +292,7 @@ class Game():
                 for card in player2.cards: # For card in player2's field
                     try:
                         card.effect.activate(player2, player1, TRIGGER_BEGIN) # If card has beginning trigger, activate effect
-                    except AttributeError:
+                    except AttributeError or TypeError:
                         continue
                 #while True: # Display hand and run play_card until it return's true
                 #    if not self.play_card(player2, player1):
@@ -306,7 +309,7 @@ class Game():
                         player1.check_dead(player2) # Check if anything died.
                         player2.check_dead(player1)
                         self.update_board()
-                    except AttributeError:
+                    except AttributeError or TypeError:
                         continue
                 #break # Break out of player2 while loop
                 if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop

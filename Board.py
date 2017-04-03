@@ -85,35 +85,58 @@ class Board():
         stats = card.stats
         mana = card.manacost
         effect = card.effect
-        effect_text = ""
+        tot_effect_text = ""
         if not effect:
-            effect_text = ""
-        else:                                       # generates card text
-            if card.cardType == TYPE_CREATURE:
-                effect_text = "%s," % (TRIGGER_TEXT_DICT[effect.trigger])
-            if effect.effect == DEAL_EFFECT:
-                effect_text += "deal %s damage to %s." % (effect.numeric, TARGET_TEXT_DICT[effect.target])
-            elif effect.effect == DRAW_EFFECT:
-                effect_text += "%s draws %s cards." % (TARGET_TEXT_DICT[effect.target], effect.numeric)
-            elif effect.effect == HEAL_EFFECT:
-                effect_text += "heal %s for %s damage." % (TARGET_TEXT_DICT[effect.target], effect.numeric)
-            elif effect.effect == SUMMON_EFFECT:
-                effect_text += "%s summons a random %s-mana creature." % (TARGET_TEXT_DICT[effect.target], effect.numeric)
-            elif effect.effect == BUFF_EFFECT:
-                effect_text += "%s gets +%s/+%s." % (TARGET_TEXT_DICT[effect.target], effect.numeric[0], effect.numeric[1])
-            elif effect.effect == SPLIT_DEAL_EFFECT:
-                effect_text += "deal %s damage split randomly between %s." % (effect.numeric, TARGET_TEXT_DICT[effect.target])
-            elif effect.effect == SPLIT_HEAL_EFFECT:
-                effect_text += "heal %s damage split randomly between %s." % (effect.numeric, TARGET_TEXT_DICT[effect.target])
-            effect_text = effect_text.lower().capitalize()
-            char_length = 20         # maximum characters on each line of text
-            while len(effect_text) - effect_text.rfind("\n") > char_length: # arranges effect text into lines
-                index = effect_text.rfind("\n") + char_length
-                while effect_text[index] != " " and index > 0:
-                    index -= 1
-                effect_text = effect_text[0:index + 1] + "\n" + effect_text[index + 1:]
-        effect_text = effect_text.split("\n")
-        return (name, mana, stats, effect_text)
+            tot_effect_text = ""
+        else: # generates card text
+            if type(effect.effect) == 0:
+                a = 0
+            else:
+                a = 1
+            if type(effect.effect) == int and a:
+                for i in range(len(effect.effect)):
+                    eff = effect.effect[i]
+                    trig = effect.trigger[i]
+                    targ = effect.target[i]
+                    num = effect.numeric[i]
+                    if eff == None:
+                        continue
+                    if card.cardType == TYPE_CREATURE:
+                        effect_text = "%s," % (TRIGGER_TEXT_DICT[trig])
+                    if eff == DEAL_EFFECT:
+                        effect_text += "deal %s damage to %s." % (num, TARGET_TEXT_DICT[targ])
+                    elif eff == DRAW_EFFECT:
+                        effect_text += "%s draws %s cards." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == HEAL_EFFECT:
+                        effect_text += "heal %s for %s damage." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == SUMMON_EFFECT:
+                        effect_text += "%s summons a random %s-mana creature." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == BUFF_EFFECT:
+                        effect_text += "%s gets +%s/+%s." % (TARGET_TEXT_DICT[targ], num[0], num[1])
+                    elif eff == SPLIT_DEAL_EFFECT:
+                        effect_text += "deal %s damage split randomly between %s." % (num, TARGET_TEXT_DICT[targ])
+                    elif eff == SPLIT_HEAL_EFFECT:
+                        effect_text += "heal %s damage split randomly between %s." % (num, TARGET_TEXT_DICT[targ])
+                    elif eff == TAUNT_EFFECT:
+                        effect_text += "give taunt to %s." % (TARGET_TEXT_DICT[targ])
+                    elif eff == DIVINE_SHIELD_EFFECT:
+                        effect_text += "give Divine Shield to %s." % (TARGET_TEXT_DICT[targ])
+                    elif eff == CHARGE_EFFECT:
+                        effect_text += "give Charge to %s." % (TARGET_TEXT_DICT[targ])
+                    elif eff == WINDFURY_EFFECT:
+                        effect_text += "give Windfury to %s." % (TARGET_TEXT_DICT[targ])
+                    effect_text = effect_text.lower().capitalize()
+                    tot_effect_text = tot_effect_text + effect_text
+            else:
+                tot_effect_text = tot_effect_text + ''
+        char_length = 20         # maximum characters on each line of text
+        while len(tot_effect_text) - tot_effect_text.rfind("\n") > char_length: # arranges effect text into lines
+            index = tot_effect_text.rfind("\n") + char_length
+            while tot_effect_text[index] != " " and index > 0:
+                index -= 1
+            tot_effect_text = tot_effect_text[0:index + 1] + "\n" + tot_effect_text[index + 1:]
+        tot_effect_text = tot_effect_text.split("\n")
+        return (name, mana, stats, tot_effect_text)
 
     def update_board(self, screen, player1, player2, card_to_animate = None, all_players = None):   #   updates board with current cards in play
         """

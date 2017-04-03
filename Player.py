@@ -76,7 +76,7 @@ class Player():
         for card in ls: #Go back through list and check for any On Death effects
             try:
                 card.effect.activate(self, enemy_player, TRIGGER_DEATH)
-            except AttributeError:
+            except AttributeError or TypeError:
                 pass
             print('~~~~~~ '+card.name + ' Has Died. ~~~~~~')
         return ls # Return Death List
