@@ -192,10 +192,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             trig_ls = self.trigger
             targ_ls = self.target
             num_ls = self.numeric
-            self.effect = self.effect[i]
-            self.trigger = self.trigger[i]
-            self.target = self.target[i]
-            self.numeric = self.numeric[i]
+            self.effect = eff_ls[i]
+            self.trigger = trig_ls[i]
+            self.target = targ_ls[i]
+            self.numeric = num_ls[i]
             if all_players == None:
                 if time == self.trigger: # If the current timing is the cards effect timing
                     if self.effect == DRAW_EFFECT: # If draw

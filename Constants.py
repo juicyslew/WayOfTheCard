@@ -176,7 +176,7 @@ for i in EFFECT_LIST:
     for j in EFFECT_TRIGGER_DICT[i]:
         Targets = []
         for k in EFFECT_TARGET_DICT[i]:
-            if not k in TRIGGER_TARGET_DICT:
+            if not k in TRIGGER_TARGET_DICT[j]:
                 continue
             #if i in STATIC_EFFECT_LIST:
             #    j = TRIGGER_PLAY

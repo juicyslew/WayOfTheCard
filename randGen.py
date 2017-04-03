@@ -167,24 +167,23 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
     else:
         valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
     for i in range(EFFECT_TRY_NUM):
-        success = True
+        success = False
         eff, val_trigs_targs = random.choice(valid_combs)
         if len(val_trigs_targs) == 0:
-            #del eff, val_trigs_targs
-            success = False
+            del eff, val_trigs_targs
             continue
         trig, val_targs = random.choice(val_trigs_targs)
         if len(val_targs) == 0:
-            #del eff, val_trigs_targs, trig, val_targs
-            success = False
+            del eff, val_trigs_targs, trig, val_targs
             continue
         targ, spend_cost = random.choice(val_targs)
-        #success = True
+        success = True
     double = False
     if (DOUBLE_EFFECT_CHANCE > random.random()) and not second:
         double = True
     if not success:
         if cardType == TYPE_SPELL or second:
+            print(effect_spend)
             eff = DEAL_EFFECT
             targ = TARGET_CREATURE
             eff_info = (eff, TRIGGER_PLAY, targ, 1)
@@ -195,7 +194,7 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
             return (((None, None, None, 0),), effect_spend)
     #val = random.choice(valid_combs)
     #^###################^#
-    else:
+    elif not eff is None:
         if eff in STATIC_EFFECT_LIST:
             numeric = 1
         elif cardType == TYPE_SPELL:
