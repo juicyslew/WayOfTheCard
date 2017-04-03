@@ -55,7 +55,7 @@ def adjective():
     return ["forgotten", "ancient", "frozen", "scornful", "vengeful",
     "resilient", "crafty", "colossal", "ice", "fire", "earth", "brutal",
     "wandering", "black", "dark", "virtuous", "unholy", "fungal", "white", "flushed",
-    "red", "deadly"]
+    "red", "deadly", "minor", "major"]
 
 def noun_list():
     """

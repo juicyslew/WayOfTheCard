@@ -22,7 +22,7 @@ class Effect():
                 #print(effect_spend, actual_spend, leftover)
                 effect_spend += leftover
             elif cardType == TYPE_SPELL:
-                actual_spend = effect_spend * SPELL_EFFECT_MULTIPLIER
+                actual_spend = effect_spend * SPELL_EFFECT_MULTIPLIER + SPELL_ADDER
                 [effect_info, leftover] = generate_numerical_effect(actual_spend, cardType)
                 effect_spend = 0
             #^#########################^#
@@ -200,59 +200,77 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 if time == self.trigger: # If the current timing is the cards effect timing
                     if self.effect == DRAW_EFFECT: # If draw
                         self.t = self.determine_target(own_player, enemy_player) # Find Target List
-                        for c in self.t: # For Object in Target List
-                            #Print Nice Strings and Draw Cards
-                            print('-----------------------------------')
-                            print("%s's hand increased from %i cards," %(c.name, len(c.hand.cards)))
-                            c.deck.draw(c.hand, self.numeric)
-                            print("to %i cards" % len(c.hand.cards))
-                            print('-----------------------------------')
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # For Object in Target List
+                                #Print Nice Strings and Draw Cards
+                                print('-----------------------------------')
+                                print("%s's hand increased from %i cards," %(c.name, len(c.hand.cards)))
+                                c.deck.draw(c.hand, self.numeric)
+                                print("to %i cards" % len(c.hand.cards))
+                                print('-----------------------------------')
                     if self.effect == DEAL_EFFECT: # If Deal Damage
                         self.t = self.determine_target(own_player, enemy_player) #Find Target List
-                        print("target number: " + str(len(self.t))) # Print Number Of Targets
-                        for c in self.t: # Loop Through Targets
-                            #Print Pretty String and Deal Damage
-                            print('-----------------------------------')
-                            c.stats[DEF] -= self.numeric
-                            print('%i damage dealt to %s.  Result Health: %i' % (self.numeric, c.name, c.stats[DEF]))
-                            print('-----------------------------------')
-                            if c in own_player.cards:
-                                own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
-                            elif c in enemy_player.cards:
-                                own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
+                        #print("target number: " + str(len(self.t))) # Print Number Of Targets
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                #Print Pretty String and Deal Damage
+                                print('-----------------------------------')
+                                c.stats[DEF] -= self.numeric
+                                print('%i damage dealt to %s.  Result Health: %i' % (self.numeric, c.name, c.stats[DEF]))
+                                print('-----------------------------------')
+                                if c in own_player.cards:
+                                    own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == HEAL_EFFECT: # If Heal
                         self.t = self.determine_target(own_player, enemy_player) #Determine Target
-                        for c in self.t: # Loop Through Targets
-                            #Print Pretty String and Heal
-                            print('-----------------------------------')
-                            c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
-                            print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
-                            print('-----------------------------------')
-                            if c in own_player.cards:
-                                own_player.board.render_heal(self.numeric, own_player, own_player.cards.index(c))
-                            elif c in enemy_player.cards:
-                                own_player.board.render_heal(self.numeric, enemy_player, enemy_player.cards.index(c))
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                #Print Pretty String and Heal
+                                print('-----------------------------------')
+                                c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+self.numeric)
+                                print("%s was healed %i health.  Result Health: %i" %(c.name, self.numeric, c.stats[DEF]))
+                                print('-----------------------------------')
+                                if c in own_player.cards:
+                                    own_player.board.render_heal(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_heal(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == SUMMON_EFFECT: # If Summon
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
-                        for c in self.t: # Loop Through Targets
-                            #Summon Card of Cost Numeric
-                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
-                            print("Creature Summonned for %s" %c.name)
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                #Summon Card of Cost Numeric
+                                c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
+                                print("Creature Summonned for %s" %c.name)
                     if self.effect == BUFF_EFFECT: # If Buff
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
-                        for c in self.t: # Loop Through Targets
-                            c.stats[ATT] += self.numeric[0]
-                            c.stats[DEF] += self.numeric[1]
-                            print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                c.stats[ATT] += self.numeric[0]
+                                c.stats[DEF] += self.numeric[1]
+                                print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
                     if self.effect == SPLIT_DEAL_EFFECT: # If Deal Damage
                         print('-----------------------------------')
                         i = 0
                         while i < self.numeric:
                             self.t = self.determine_target(own_player, enemy_player) #Find Target List
-                            for c in self.t: # Loop Through Targets
-                                #Print Pretty String and Deal Damage
-                                c.stats[DEF] -= 1
-                                print('%i damage dealt to %s.  Result Health: %i' % (1, c.name, c.stats[DEF]))
+                            if len(self.t) == 0:
+                                pass
+                            else:
+                                for c in self.t: # Loop Through Targets
+                                    #Print Pretty String and Deal Damage
+                                    c.stats[DEF] -= 1
+                                    print('%i damage dealt to %s.  Result Health: %i' % (1, c.name, c.stats[DEF]))
                             i+=1
                         print('-----------------------------------')
                     if self.effect == SPLIT_HEAL_EFFECT: # If Heal
@@ -260,28 +278,43 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         i = 0
                         while i < self.numeric:
                             self.t = self.determine_target(own_player, enemy_player) #Determine Target
-                            for c in self.t: # Loop Through Targets
-                                #Print Pretty String and Heal
-                                c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+1)
-                                print("%s was healed %i health.  Result Health: %i" %(c.name, 1, c.stats[DEF]))
+                            if len(self.t) == 0:
+                                pass
+                            else:
+                                for c in self.t: # Loop Through Targets
+                                    #Print Pretty String and Heal
+                                    c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+1)
+                                    print("%s was healed %i health.  Result Health: %i" %(c.name, 1, c.stats[DEF]))
                             i+=1
                         print('-----------------------------------')
                     if self.effect == TAUNT_EFFECT:
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
-                        for c in self.t: # Loop Through Targets
-                            c.active_effects[TAUNT_INDEX] = 1
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                c.active_effects[TAUNT_INDEX] = 1
                     if self.effect == DIVINE_SHIELD_EFFECT:
                         self.t = self.determine_target(own_player, enemy_player)
-                        for c in self.t:
-                            c.active_effects[DIVINE_SHIELD_INDEX] = 1
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t:
+                                c.active_effects[DIVINE_SHIELD_INDEX] = 1
                     if self.effect == CHARGE_EFFECT:
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
-                        for c in self.t: # Loop Through Targets
-                            c.active_effects[CHARGE_INDEX] = 1
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                c.active_effects[CHARGE_INDEX] = 1
                     if self.effect == WINDFURY_EFFECT:
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
-                        for c in self.t: # Loop Through Targets
-                            c.active_effects[WINDFURY_INDEX] = 1
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                c.active_effects[WINDFURY_INDEX] = 1
             else:
                 if time == self.trigger: # If the current timing is the cards effect timing
                     if self.effect == DRAW_EFFECT: # If draw
