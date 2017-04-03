@@ -38,21 +38,21 @@ MANA_CURVE = [i/tot for i in MANA_CURVE]
 
 ATT_PREF_MULTIPLIER = 1 # Set Preference of Attack over Defense
 DEF_PREF_MULTIPLIER = 1 # Set Preference of Defense over Attack
-STATS_PREF = 1.33   #Should be about twice the Effect_Pref # Stats Preference over Other Stuff
-EFFECT_PREF = .66   # Set Preference of Effects over Defense and Attack
+STATS_PREF = 1.1   #Should be about twice the Effect_Pref # Stats Preference over Other Stuff
+EFFECT_PREF = .9   # Set Preference of Effects over Defense and Attack
 TOT_PREF = STATS_PREF+EFFECT_PREF
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER) #Put multipliers in tuple together
 EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.
-CARD_STRENGTH = 1.82 #Overall strength of the generated cards
+CARD_STRENGTH = 1.8 #Overall strength of the generated cards
 CARD_STRENGTH_DROPOFF = 0 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
-CARD_INITIAL_STRENGTH = 1.2 # Effective cost increase for every card
+CARD_INITIAL_STRENGTH = 1.1 # Effective cost increase for every card
 SPELL_EFFECT_MULTIPLIER = .48
 LEFTOVER_MULTIPLIER = .75 #Percent of leftover spending from effect generation that is effective for stats
-EFFECT_CHANCE = 0.75 #Chance that a given card that can have an effect has one.
+EFFECT_CHANCE = 0.7 #Chance that a given card that can have an effect has one.
 DOUBLE_EFFECT_CHANCE = .33
 SPELL_CHANCE = .25
-EFFECT_TRY_NUM = 10
+EFFECT_TRY_NUM = 25
 NEGATIVE_ADDER = 1 #This adds to stats if the effect generated is negative, its like a little sweetener that helps dealing with negative effects on a card
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
 #psum = sum(MANA_SPLIT)
@@ -88,7 +88,7 @@ WINDFURY_EFFECT = 10
 #-----------ORDER MATTERS WITH ALL OF THESE LISTS AND COST DICTIONARIES, THEY NEED TO HAVE THE SAME ORDER--------------#
 EFFECT_LIST = (DRAW_EFFECT, DEAL_EFFECT, HEAL_EFFECT, SUMMON_EFFECT, BUFF_EFFECT, SPLIT_DEAL_EFFECT, SPLIT_HEAL_EFFECT, TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT)
 EFFECT_DICT = {None:"None",DRAW_EFFECT:"Draw Cards", DEAL_EFFECT:"Deal Damage", HEAL_EFFECT:"Heal", SUMMON_EFFECT:"Summon Creature", BUFF_EFFECT:"Buff Card", SPLIT_DEAL_EFFECT:"Split Damage", SPLIT_HEAL_EFFECT:"Split Heal", TAUNT_EFFECT:"Give Taunt", DIVINE_SHIELD_EFFECT:"Give Divine Shield", CHARGE_EFFECT:"Give Charge", WINDFURY_EFFECT:"Give Windfury"}
-EFFECT_COST_DICT = {DRAW_EFFECT:-1.55, DEAL_EFFECT:1, HEAL_EFFECT:-.6, SUMMON_EFFECT:-1.2, BUFF_EFFECT:-.85, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.6, TAUNT_EFFECT:-2, DIVINE_SHIELD_EFFECT:-5, CHARGE_EFFECT:-4, WINDFURY_EFFECT:-5}#Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
+EFFECT_COST_DICT = {DRAW_EFFECT:-1.55, DEAL_EFFECT:.9, HEAL_EFFECT:-.6, SUMMON_EFFECT:-1.1, BUFF_EFFECT:-.95, SPLIT_DEAL_EFFECT:.9, SPLIT_HEAL_EFFECT:-.6, TAUNT_EFFECT:-2, DIVINE_SHIELD_EFFECT:-5, CHARGE_EFFECT:-4, WINDFURY_EFFECT:-5}#Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
 STATIC_EFFECT_LIST = (TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT)
 
 TAUNT_INDEX = 0
@@ -118,7 +118,7 @@ TRIGGER_PLAY = 2
 TRIGGER_DEATH = 3
 TRIGGER_LIST = (TRIGGER_END, TRIGGER_BEGIN, TRIGGER_PLAY, TRIGGER_DEATH)
 TRIGGER_DICT = {TRIGGER_END:"End Turn", TRIGGER_BEGIN:"Begin Turn", TRIGGER_PLAY:"Play", TRIGGER_DEATH:"Death"}
-TRIGGER_COST_DICT = {TRIGGER_END:2.4, TRIGGER_BEGIN:1.5, TRIGGER_PLAY:1, TRIGGER_DEATH:1} # Converts identity of triggers to cost
+TRIGGER_COST_DICT = {TRIGGER_END:2.2, TRIGGER_BEGIN:1.5, TRIGGER_PLAY:1, TRIGGER_DEATH:1} # Converts identity of triggers to cost
 PLAY_TRIGGER_LIST = (TRIGGER_PLAY,)
 
 #Targets, Target Encoder List, and Target Decoder Dictionary

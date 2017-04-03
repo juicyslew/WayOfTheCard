@@ -170,14 +170,15 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
         success = False
         eff, val_trigs_targs = random.choice(valid_combs)
         if len(val_trigs_targs) == 0:
-            del eff, val_trigs_targs
+            #del eff, val_trigs_targs
             continue
         trig, val_targs = random.choice(val_trigs_targs)
         if len(val_targs) == 0:
-            del eff, val_trigs_targs, trig, val_targs
+            #del eff, val_trigs_targs, trig, val_targs
             continue
         targ, spend_cost = random.choice(val_targs)
         success = True
+        break
     double = False
     if (DOUBLE_EFFECT_CHANCE > random.random()) and not second:
         double = True
@@ -209,8 +210,8 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
             elif double:
                 numeric = max(1,random.randint(0, numeric))
         leftover = effect_spend - spend_cost * abs(numeric) #val[2] * numeric
-        if leftover > effect_spend:
-            leftover += NEGATIVE_ADDER
+        #if leftover > effect_spend:
+        #    leftover += NEGATIVE_ADDER
         #print(effect_spend, val[3], numeric, leftover)
         #print(val[0])
         if numeric == 0:
