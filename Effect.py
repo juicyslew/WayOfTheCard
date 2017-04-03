@@ -225,7 +225,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets
                             #Summon Card of Cost Numeric
-                            c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
+                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
                             print("Creature Summonned for %s" %c.name)
                     if self.effect == BUFF_EFFECT: # If Buff
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
@@ -237,7 +237,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
                     if self.effect == SPLIT_DEAL_EFFECT: # If Deal Damage
                         print('-----------------------------------')
-                        i = 0 
+                        i = 0
                         while i < self.numeric:
                             self.t = self.determine_target(own_player, enemy_player) #Find Target List
                             for c in self.t: # Loop Through Targets
@@ -305,7 +305,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets
                             #Summon Card of Cost Numeric
-                            c.cards.append(Card.Card(name = "SUMMONED DUDE", cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
+                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
                             print("Creature Summonned for %s" %c.name)
                     if self.effect == BUFF_EFFECT: # If Buff
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
