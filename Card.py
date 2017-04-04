@@ -108,6 +108,7 @@ class Card():
             enemy_player = all_players[not player_turn]
             if self.cardType == TYPE_CREATURE:
                 player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+                player.board.update_board(player.screen, all_players[0], all_players[1], self)
                 try:
                     self.effect.activate(player, enemy_player, TRIGGER_PLAY)
                 except AttributeError or TypeError:

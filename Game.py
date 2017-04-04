@@ -69,7 +69,7 @@ class Game():
                             player.mana -= card.stats[COST] #Subtract from the player's mana
                             player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
                             opp.check_dead(player)
-                            self.update_board(card)
+                            self.update_board()
                             break
                         except IndexError: # If index is out of range, return an error
                             print("\nYou don't have that many cards!")
@@ -234,6 +234,8 @@ class Game():
             self.board = Board(self.screen, (player1, player2))
             player1.board = self.board
             player2.board = self.board
+            player1.screen = self.screen
+            player2.screen = self.screen
             self.update_board()
             self.player_turn = False
 

@@ -244,6 +244,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             c.stats[ATT] += self.numeric[0]
                             c.stats[DEF] += self.numeric[1]
                             print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
+                            if c in own_player.cards:
+                                own_player.board.render_buff(self.numeric, own_player, own_player.cards.index(c))
+                            elif c in enemy_player.cards:
+                                own_player.board.render_buff(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == SPLIT_DEAL_EFFECT: # If Deal Damage
                         print('-----------------------------------')
                         i = 0
@@ -253,6 +257,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 #Print Pretty String and Deal Damage
                                 c.stats[DEF] -= 1
                                 print('%i damage dealt to %s.  Result Health: %i' % (1, c.name, c.stats[DEF]))
+                                if c in own_player.cards:
+                                    own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
                             i+=1
                         print('-----------------------------------')
                     if self.effect == SPLIT_HEAL_EFFECT: # If Heal
@@ -264,6 +272,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 #Print Pretty String and Heal
                                 c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+1)
                                 print("%s was healed %i health.  Result Health: %i" %(c.name, 1, c.stats[DEF]))
+                                if c in own_player.cards:
+                                    own_player.board.render_heal(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_heal(self.numeric, enemy_player, enemy_player.cards.index(c))
                             i+=1
                         print('-----------------------------------')
                     if self.effect == TAUNT_EFFECT:
@@ -274,6 +286,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         self.t = self.determine_target(own_player, enemy_player)
                         for c in self.t:
                             c.active_effects[DIVINE_SHIELD_INDEX] = 1
+                            if c in own_player.cards:
+                                own_player.board.render_shield(self.numeric, own_player, own_player.cards.index(c))
+                            elif c in enemy_player.cards:
+                                own_player.board.render_shield(self.numeric, enemy_player, enemy_player.cards.index(c))
                     if self.effect == CHARGE_EFFECT:
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets

@@ -18,6 +18,8 @@ class Board():
         self.player2 = players[1]
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
         self.heal = pygame.image.load(os.path.join('heal_icon.png')).convert_alpha()
+        self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
+        self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -138,7 +140,7 @@ class Board():
         tot_effect_text = tot_effect_text.split("\n")
         return (name, mana, stats, tot_effect_text)
 
-    def update_board(self, screen, player1, player2, card_to_animate = None, all_players = None):   #   updates board with current cards in play
+    def update_board(self, screen, player1, player2, card_to_animate = None, card_not_to_render = None, all_players = None):   #   updates board with current cards in play
         """
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
@@ -169,12 +171,14 @@ class Board():
             try:
                 x = player2.cards.index(card)*(self.cardwidth + 20) + 80
                 y = yhalf - 15 - self.cardheight
-                if card is card_to_animate:
+                if card is card_not_to_render:
+                    pass
+                elif card is card_to_animate:
                     card_backlog.append([card, (x, y)])
                     #self.render_card(card, (x, y), True)
                 else:
                     self.render_card(card, (x, y))
-                if self.read_card(card) != None and card is not card_to_animate:
+                if card is not card_to_animate and card is not card_not_to_render:
                     (name, mana, stats, effect_text) = self.read_card(card)
                     name_height = 0
                     for line in name:   #   renders name in individual lines
@@ -195,11 +199,13 @@ class Board():
                 try:
                     x = player1.cards.index(card)*(self.cardwidth + 20) + 80
                     y = yhalf + 15
-                    if card is card_to_animate:
+                    if card is card_not_to_render:
+                        pass
+                    elif card is card_to_animate:
                         self.render_card(card, (x, y), True)
                     else:
                         self.render_card(card, (x, y))
-                    if self.read_card(card) != None:
+                    if card is not card_to_animate and card is not card_not_to_render:
                         (name, mana, stats, effect_text) = self.read_card(card)
                         name_height = 0
                         for line in name:   #   renders name in individual lines
@@ -246,6 +252,7 @@ class Board():
             self.screen.blit(red_flare, flare_rect)
             pygame.display.flip()
             self.clock.tick(50)                     #   run fade animation at 50 fps
+        self.update_board(self.screen, self.player1, self.player2)
 
     def render_heal(self, amount, player, index):   #   fancy heal animations
         initial_size = 40
@@ -273,6 +280,64 @@ class Board():
             self.screen.blit(heal_plus, heal_rect)
             pygame.display.flip()
             self.clock.tick(50)
+        self.update_board(self.screen, self.player1, self.player2)
+
+    def render_buff(self, amount, player, index):   #   fancy heal animations
+        initial_size = 40
+        x = index * (self.cardwidth + 20) + 60
+        yhalf = self.screen.get_size()[1]/2
+        if player is self.player1:
+            y = yhalf + 15
+        elif player is self.player2:
+            y = yhalf - 15 - self.cardheight
+        (x, y) = (x + 50, y + self.cardheight - 40)
+        if index == 0 and player is self.player1:   #   change location of anim if target is player
+            initial_size = 80
+            x = self.screen.get_size()[0]/2 - initial_size/2
+            y = self.screen.get_size()[1] - self.cardheight/2 - 30
+        elif index == 0 and player is self.player2:   #   change location of anim if target is player
+            initial_size = 80
+            x = self.screen.get_size()[0]/2 - initial_size/2
+            y = self.cardheight/2 + 30
+        for i in range(50):
+            self.update_board(self.screen, self.player1, self.player2)
+            buff_shield = pygame.transform.scale(self.buff, (50 + 2*i, 50 + 2*i))
+            self.change_alpha(buff_shield, max(255 - 8 * i, 0))
+            buff_rect = buff_shield.get_rect()
+            buff_rect = buff_rect.move(x - i, y - i)
+            self.screen.blit(buff_shield, buff_rect)
+            pygame.display.flip()
+            self.clock.tick(50)
+        self.update_board(self.screen, self.player1, self.player2)
+
+    def render_shield(self, amount, player, index):
+        initial_size = 70
+        x = index * (self.cardwidth + 20) + 60
+        yhalf = self.screen.get_size()[1]/2
+        if player is self.player1:
+            y = yhalf + 15
+        elif player is self.player2:
+            y = yhalf - 15 - self.cardheight
+        (x, y) = (x + 35, y + self.cardheight - 40)
+        if index == 0 and player is self.player1:   #   change location of anim if target is player
+            initial_size = 80
+            x = self.screen.get_size()[0]/2 - initial_size/2
+            y = self.screen.get_size()[1] - self.cardheight/2 - 30
+        elif index == 0 and player is self.player2:   #   change location of anim if target is player
+            initial_size = 80
+            x = self.screen.get_size()[0]/2 - initial_size/2
+            y = self.cardheight/2 + 30
+        for i in range(50):
+            self.update_board(self.screen, self.player1, self.player2)
+            div_shield = pygame.transform.scale(self.shield, (50 + 2*i, 50 + 2*i))
+            div_shield = pygame.transform.rotate(div_shield, -2*i)
+            self.change_alpha(div_shield, max(255 - 8 * i, 0))
+            div_rect = div_shield.get_rect()
+            div_rect = div_rect.move(x - i, y - i)
+            self.screen.blit(div_shield, div_rect)
+            pygame.display.flip()
+            self.clock.tick(50)
+        self.update_board(self.screen, self.player1, self.player2)
 
     def change_alpha(self, img, alpha=255): #   change opacity of img to alpha
         width,height=img.get_size()
