@@ -1,4 +1,5 @@
 from Constants import *
+from randGen import *
 import pygame
 import os
 
@@ -20,6 +21,10 @@ class Board():
         self.heal = pygame.image.load(os.path.join('heal_icon.png')).convert_alpha()
         self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
+        self.effnames = {WINDFURY_EFFECT: generate_effect_name(WINDFURY_EFFECT),
+        CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
+        DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
+        TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -120,13 +125,15 @@ class Board():
                     elif eff == SPLIT_HEAL_EFFECT:
                         effect_text += "heal %s damage split randomly between %s." % (num, TARGET_TEXT_DICT[targ])
                     elif eff == TAUNT_EFFECT:
-                        effect_text += "give taunt to %s." % (TARGET_TEXT_DICT[targ])
+                        effect_text += "give Taunt to %s." % (TARGET_TEXT_DICT[targ])
                     elif eff == DIVINE_SHIELD_EFFECT:
                         effect_text += "give Divine Shield to %s." % (TARGET_TEXT_DICT[targ])
                     elif eff == CHARGE_EFFECT:
                         effect_text += "give Charge to %s." % (TARGET_TEXT_DICT[targ])
                     elif eff == WINDFURY_EFFECT:
                         effect_text += "give Windfury to %s." % (TARGET_TEXT_DICT[targ])
+                    if targ == TARGET_THIS_CREATURE and eff in [TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, WINDFURY_EFFECT, CHARGE_EFFECT]:
+                        effect_text = self.effnames[eff] + ". "
                     effect_text = effect_text.lower().capitalize()
                     tot_effect_text = tot_effect_text + effect_text
             else:
@@ -311,6 +318,8 @@ class Board():
         self.update_board(self.screen, self.player1, self.player2)
 
     def render_shield(self, amount, player, index):
+        if 1:
+            return True
         initial_size = 70
         x = index * (self.cardwidth + 20) + 60
         yhalf = self.screen.get_size()[1]/2
@@ -330,7 +339,7 @@ class Board():
         for i in range(50):
             self.update_board(self.screen, self.player1, self.player2)
             div_shield = pygame.transform.scale(self.shield, (50 + 2*i, 50 + 2*i))
-            div_shield = pygame.transform.rotate(div_shield, -2*i)
+            #div_shield = pygame.transform.rotate(div_shield, -2*i)
             self.change_alpha(div_shield, max(255 - 8 * i, 0))
             div_rect = div_shield.get_rect()
             div_rect = div_rect.move(x - i, y - i)

@@ -131,7 +131,28 @@ def generate_stats(cost, card_type, leftover):
     #print(stats)
     return stats
 
-#print(generate_stats(True, 10))
+def generate_effect_name(effect):
+    if effect == None:
+        return ""
+    elif effect == WINDFURY_EFFECT:
+        list1 = ["wind", "double", "duplicate", "duo", "back"]
+        list2 = ["fury", "rage", "strike", "slash", "power", "smash"]
+        return random.choice(list1).capitalize() + random.choice(list2).capitalize()
+    elif effect == TAUNT_EFFECT:
+        list1 = ["taunt", "protect", "defend"]
+        list2 = ["er", "ish", ""]
+        return random.choice(list1).capitalize() + random.choice(list2)
+    elif effect == DIVINE_SHIELD_EFFECT:
+        list1 = ["holy", "divine", "power", "golden", "light", "life"]
+        list2 = ["shield", "barrier", "aegis", "aura", "defense"]
+        return random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()
+    elif effect == CHARGE_EFFECT:
+        list1 = ["speed", "fast", "haste", "quick"]
+        list2 = ["charge", "strike", ""]
+        return (random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()).strip()
+
+
+    #print(generate_stats(True, 10))
 
 def generate_numerical_effect(effect_spend, cardType, second = False):
     """
