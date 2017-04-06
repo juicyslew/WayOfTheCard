@@ -137,6 +137,7 @@ class Card():
             self.active_effects[WINDFURY_INDEX] = 2
         else:
             self.state = STATE_SLEEP
+        self.active_effects[CHARGE_INDEX] = 2
         self.damage(opp_card.stats[ATT])
         opp_card.damage(self.stats[ATT])
         print('-----------------------------------')

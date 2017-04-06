@@ -54,7 +54,8 @@ class Player():
         """
         ls = []
         for card in self.cards:
-            if card.active_effects[CHARGE_INDEX]:
+            if card.active_effects[CHARGE_INDEX] == 1:
+                card.active_effects[CHARGE_INDEX] = 2
                 card.state = STATE_ACTIVE
             if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
