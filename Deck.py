@@ -16,10 +16,16 @@ class Deck():
         """ Generate Deck """
         for i in range(DECK_INIT_SIZE):
             self.cards.append(Card(state = STATE_SLEEP, effect = True)) #Using TestCards for now
+
     def shuffle_deck(self):
         """ Shuffle Deck """
         shuffle(self.cards)
+
     def draw(self, hand, num):
         """ Draw "num" Cards into Hand """
         for n in range(num):
-            hand.cards.append(self.cards.pop(0))
+            if len(hand.cards) < HAND_MAX_SIZE:
+                hand.cards.append(self.cards.pop(0))
+            else:
+                print("Genius. The following card was lost: \n" + str(self.cards[0]))
+                self.cards.pop(0)
