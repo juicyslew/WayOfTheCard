@@ -45,9 +45,9 @@ TOT_PREF = STATS_PREF+EFFECT_PREF
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER) #Put multipliers in tuple together
 EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.
-CARD_STRENGTH = 1.8 #Overall strength of the generated cards
+CARD_STRENGTH = 1.7 #Overall strength of the generated cards
 CARD_STRENGTH_DROPOFF = 0 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
-CARD_INITIAL_STRENGTH = 1.1 # Effective cost increase for every card
+CARD_INITIAL_STRENGTH = 1.6 # Effective cost increase for every card
 SPELL_EFFECT_MULTIPLIER = .5
 LEFTOVER_MULTIPLIER = .75 #Percent of leftover spending from effect generation that is effective for stats
 EFFECT_CHANCE = 0.7 #Chance that a given card that can have an effect has one.
@@ -57,7 +57,7 @@ SPELL_ADDER = 1
 EFFECT_TRY_NUM = 25
 #NEGATIVE_ADDER = 1
 ZERO_STRENGTH = 3.5
-ARENA = True
+ARENA = False
 MINCHOICE = 2
 MAXCHOICE = 4
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
@@ -159,7 +159,7 @@ SPELL_TARGET_LIST = (TARGET_RANDOM, TARGET_RANDOM_ENEMY, TARGET_RANDOM_ALLY, TAR
 
 #Texts used in card rendering in Board
 TRIGGER_TEXT_DICT = {TRIGGER_END:"at the end of your turn", TRIGGER_BEGIN:"at the start of your turn", TRIGGER_PLAY:"when you play this card", TRIGGER_DEATH:"when this creature dies"}
-TARGET_TEXT_DICT = {TARGET_BOTH:"both Players", TARGET_ALL:"all creatures and players", TARGET_OWN_PLAYER:"you", TARGET_CREATURE:"target creature", TARGET_OPPONENT:"your opponent", TARGET_PLAYERS:"target player", TARGET_RANDOM:"a random creature or player", TARGET_RANDOM_ENEMY:"a random enemy", TARGET_RANDOM_ALLY:"a random ally", TARGET_RANDOM_CREATURE:"a random creature", TARGET_RANDOM_ENEMY_CREATURE:"a random enemy creature", TARGET_RANDOM_ALLY_CREATURE:"a random ally creature", TARGET_ALL_CREATURE:"all creatures", TARGET_THIS_CREATURE:"this creature"}
+TARGET_TEXT_DICT = {TARGET_BOTH:"both Players", TARGET_ALL:"all creatures and players", TARGET_OWN_PLAYER:"you", TARGET_CREATURE:"target creature", TARGET_OPPONENT:"your opponent", TARGET_PLAYERS:"target player", TARGET_RANDOM:"a random creature or player", TARGET_RANDOM_ENEMY:"a random enemy", TARGET_RANDOM_ALLY:"a random ally", TARGET_RANDOM_CREATURE:"a random creature", TARGET_RANDOM_ENEMY_CREATURE:"a random enemy creature", TARGET_RANDOM_ALLY_CREATURE:"a random ally creature", TARGET_ALL_CREATURE:"all creatures", TARGET_THIS_CREATURE:"this creature", TARGET_ALL_ENEMY_CREATURE:'all enemy creatures', TARGET_ALL_ALLY_CREATURE:'all ally creatures'}
 #NOT_THIS_TARGET_LIST = (TARGET_RANDOM, TARGET_RANDOM_ENEMY, TARGET_RANDOM_ALLY, TARGET_ALL, TARGET_OWN_PLAYER, TARGET_CREATURE, TARGET_OPPONENT, TARGET_PLAYERS, TARGET_BOTH, TARGET_RANDOM_CREATURE, TARGET_RANDOM_ENEMY_CREATURE, TARGET_RANDOM_ALLY_CREATURE, TARGET_ALL_CREATURE)
 
 #Classes, Class Decoder Dictionary
