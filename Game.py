@@ -7,6 +7,7 @@ from Hand import *
 from Player import *
 from randGen import *
 import random
+import numpy as np
 import pygame
 from pygame.locals import *
 from Board import *
@@ -23,6 +24,9 @@ class Game():
         self.players = 2
         self.running = True #Set Running
         player_list = []
+        totrarprobs = sum(RARITY_PROBS)
+        rarities = [np.random.choice(RARITIES, p = RARITY_PROBS) for a in range(DECK_INIT_SIZE)]
+
         for j in range(1, self.players+1):
             print('Player %i:' % j)
             while True: #Create Loop for picking Name
@@ -31,9 +35,9 @@ class Game():
                 i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
                 if i is 'y': #If player liked
                     if j == 1:
-                        player_list.append(Player(name, 3)) #Save Player Name
+                        player_list.append(Player(name, 3, rarities)) #Save Player Name
                     else:
-                        player_list.append(Player(name, 4)) #Save Player Name
+                        player_list.append(Player(name, 4, rarities)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
         # player_list.append(Player('Daniel', 4))

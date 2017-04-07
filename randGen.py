@@ -135,7 +135,7 @@ def generate_effect_name(effect):
     if effect == None:
         return ""
     elif effect == WINDFURY_EFFECT:
-        list1 = ["wind", "double", "duplicate", "duo", "back"]
+        list1 = ["wind", "double", "duplicate", "duo", "back"] #Why "back"?
         list2 = ["fury", "rage", "strike", "slash", "power", "smash"]
         return random.choice(list1).capitalize() + random.choice(list2).capitalize()
     elif effect == TAUNT_EFFECT:

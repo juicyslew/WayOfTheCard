@@ -21,6 +21,19 @@ TYPE_SPELL = 1
 TYPE_LIST = (TYPE_CREATURE, TYPE_SPELL)
 TYPE_DICT = {None:"None",TYPE_CREATURE:"Creature", TYPE_SPELL:"Spell"}
 
+COMMON = 0
+UNCOMMON = 1
+RARE = 2
+EPIC = 3
+LEGENDARY = 4
+RARITIES = (COMMON, UNCOMMON, RARE, EPIC, LEGENDARY) #IN ORDER COMPARED TO RARITY
+RARITY_DICT = {COMMON:'Common', UNCOMMON:'Uncommon', RARE:'Rare', EPIC:'Epic', LEGENDARY:'Legendary'}
+POWER_DICT = {COMMON:(1.55, .4), UNCOMMON:(1.65,.45), RARE:(1.75,.5), EPIC:(1.85,.55), LEGENDARY:(2,.65)}
+#EFFECT_DICT = {COMMON:1.55, UNCOMMON:1.65, RARE:1.75, EPIC:1.85, LEGENDARY:2}
+INPUT_RARITY = [.375, .325, .2, .1, .05]
+totrarprobs = sum(INPUT_RARITY)
+RARITY_PROBS = [i/totrarprobs for i in INPUT_RARITY]
+DEFAULT_RARITY = RARE
 
 PLAYER_HEALTH = 30 #Player Health
 
@@ -39,9 +52,9 @@ MANA_CURVE = [i/tot for i in MANA_CURVE]
 
 ATT_PREF_MULTIPLIER = 1 # Set Preference of Attack over Defense
 DEF_PREF_MULTIPLIER = 1 # Set Preference of Defense over Attack
-STATS_PREF = 1.1   #Should be about twice the Effect_Pref # Stats Preference over Other Stuff
-EFFECT_PREF = .9   # Set Preference of Effects over Defense and Attack
-TOT_PREF = STATS_PREF+EFFECT_PREF
+#STATS_PREF = 1.1   #Should be about twice the Effect_Pref # Stats Preference over Other Stuff
+#EFFECT_PREF = .9   # Set Preference of Effects over Defense and Attack
+#TOT_PREF = STATS_PREF+EFFECT_PREF
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER) #Put multipliers in tuple together
 EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.

@@ -26,8 +26,12 @@ class Card():
     Effect: Effects Class, Handles the special effects of the card.
     EFFECT CLASS
     """
-    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None, effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100, spell_chance = SPELL_CHANCE, active_effects = None): #Replace eventually with no init variables and just random generation.
+    def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None,
+                 effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100,
+                 spell_chance = SPELL_CHANCE, active_effects = None, rarity = None): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
+        if rarity == None:
+            rarity = DEFAULT_RARITY
         if cardType == None:
             if random() < spell_chance:
                 cardType = TYPE_SPELL
@@ -48,12 +52,10 @@ class Card():
             else:
                 effect = False
         if effect: #If effect is true then
+            effect = Effect(self, cost, cardType, rarity)
             if cardType == TYPE_CREATURE:
-                effect = Effect(self, cost, cardType) #Generate an effect with the effect spend
                 if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
                     effect = False
-            elif cardType == TYPE_SPELL:
-                effect = Effect(self, cost, cardType)
         if stats == None:
             if effect:
                 stats = generate_stats(cost, cardType, effect.leftover) #Generate Stats if None
@@ -74,6 +76,7 @@ class Card():
         self.effect = effect
         self.manacost = cost
         self.active_effects = list(active_effects)
+        self.rarity = rarity
 
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
@@ -85,10 +88,10 @@ class Card():
                 eff_s = ''
             else:
                 eff_s = self.effect
-            s = """@@@ %s || %s @@@\n---%s---%s
-%s""" % (self.name, TYPE_DICT[self.cardType], self.stats, eff_s, 'Active Effects: ' + ', '.join(active_strs))
+            s = """@@@ %s || %s || %s @@@\n---%s---%s
+%s""" % (self.name, TYPE_DICT[self.cardType], RARITY_DICT[self.rarity], self.stats, eff_s, 'Active Effects: ' + ', '.join(active_strs))
         if self.cardType == TYPE_SPELL:
-            s = """@@@ %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], self.stats[0], self.effect)
+            s = """@@@ %s || %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], RARITY_DICT[self.rarity], self.stats[0], self.effect)
         #s = """###Card###
 #name: %s
 #Card Type: %s

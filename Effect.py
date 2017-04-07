@@ -7,15 +7,18 @@ import math
 import numpy as np
 
 class Effect():
-    def __init__(self, ThisCard, cost, cardType, trigger = None, target = None, effect = None, numeric = None):
+    def __init__(self, ThisCard, cost, cardType, rarity, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None and target == None: #If there is no information about the effect in general Then
             #if cardType == TYPE_SPELL:
+            powerinfo = POWER_DICT[rarity]
+            power = powerinfo[0]
+            eff_pref = powerinfo[1]
             if cost == 0:
-                effect_spend = ZERO_STRENGTH
+                effect_spend = ZERO_STRENGTH*power
             else:
-                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * power  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
             if cardType == TYPE_CREATURE:
-                actual_spend = effect_spend*EFFECT_PREF/TOT_PREF
+                actual_spend = effect_spend*eff_pref
                 effect_spend -= actual_spend
                 #elif cardType == TYPE_CREATURE:
                 #    effect_spend = EFFECT_PREF * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Creature multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
