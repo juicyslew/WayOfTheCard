@@ -70,7 +70,15 @@ SPELL_ADDER = 1
 EFFECT_TRY_NUM = 25
 #NEGATIVE_ADDER = 1
 ZERO_STRENGTH = 3.5
-ARENA = True
+while True:
+    ans = input('Arena Mode? (y/n): ')
+    if ans == 'y':
+        ARENA = True
+    elif ans == 'n':
+        ARENA = False
+    else:
+        continue
+    break
 MINCHOICE = 2
 MAXCHOICE = 4
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
