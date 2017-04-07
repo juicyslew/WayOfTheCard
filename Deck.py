@@ -14,9 +14,37 @@ class Deck():
 
     def init_deck(self):
         """ Generate Deck """
+<<<<<<< HEAD
         for i in range(DECK_INIT_SIZE):
             self.cards.append(Card(state = STATE_SLEEP, effect = True)) #Using TestCards for now
 
+=======
+        if ARENA:
+            for a in range(DECK_INIT_SIZE):
+                chooseCards = []
+                for k in range(randint(MINCHOICE,MAXCHOICE)):
+                    chooseCards.append(Card(state = STATE_SLEEP, effect = True))
+                print('\n\n ~~~ CARD %i ~~~' % a)
+                for j in range(len(chooseCards)):
+                    print('\n%i)  %s'%(j, chooseCards[j]))
+                while True:
+                    i = input('Choose Your Card Index: ') # Get input of which creature to attack with.
+                    try:
+                        i = int(i) #check that input is a number
+                        try:
+                            self.cards.append(chooseCards[i])
+                        except IndexError: # if index error
+                            print("\nNot that many cards to choose from!")
+                            continue #start over
+                    except ValueError: # if value error (input isn't an integer)
+                        print('\nInput a Number!')
+                        continue #start over
+                    break
+        else:
+            for i in range(DECK_INIT_SIZE):
+                self.cards.append(Card(state = STATE_SLEEP, effect = True)) #Using TestCards for now
+        self.shuffle_deck()
+>>>>>>> a0db5a837f3ffcaa8a8a4e9b910fc07016d861fb
     def shuffle_deck(self):
         """ Shuffle Deck """
         shuffle(self.cards)

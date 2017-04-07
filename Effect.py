@@ -10,7 +10,10 @@ class Effect():
     def __init__(self, ThisCard, cost, cardType, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None and target == None: #If there is no information about the effect in general Then
             #if cardType == TYPE_SPELL:
-            effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+            if cost == 0:
+                effect_spend = ZERO_STRENGTH
+            else:
+                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
             if cardType == TYPE_CREATURE:
                 actual_spend = effect_spend*EFFECT_PREF/TOT_PREF
                 effect_spend -= actual_spend
@@ -79,7 +82,6 @@ class Effect():
             if type(self.effect) == int:
                 s.append("")
                 continue
-            print(self.effect[i])
             if type(self.effect) == int or self.effect[i] == None:
                 s.append("")
             else:
