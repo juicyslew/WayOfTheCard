@@ -11,6 +11,7 @@ MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
 MAX_NEGATIVE_NUMERIC = 5
 HAND_INIT_SIZE = 4 # Initial Hand Size
 HAND_MAX_SIZE = 10 # Maximum Hand Size, Need To Actually Impliment
+CARDS_DRAWN_PER_TURN = 1
 
 #NAME_LIST = ["Bird", "Robot Doctor", "Magic Stones", "Test Card", "JEREMEEEEE"]
 
