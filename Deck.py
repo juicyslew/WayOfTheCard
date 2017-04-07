@@ -18,11 +18,6 @@ class Deck():
 
     def init_deck(self):
         """ Generate Deck """
-<<<<<<< HEAD
-        for i in range(DECK_INIT_SIZE):
-            self.cards.append(Card(state = STATE_SLEEP, effect = True)) #Using TestCards for now
-
-=======
         if ARENA:
             for a in range(DECK_INIT_SIZE):
                 chooseCards = []
@@ -48,7 +43,6 @@ class Deck():
             for i in range(DECK_INIT_SIZE):
                 self.cards.append(Card(state = STATE_SLEEP, effect = True, rarity = self.rarities[i])) #Using TestCards for now
         self.shuffle_deck()
->>>>>>> a0db5a837f3ffcaa8a8a4e9b910fc07016d861fb
     def shuffle_deck(self):
         """ Shuffle Deck """
         shuffle(self.cards)
