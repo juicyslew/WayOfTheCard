@@ -28,9 +28,9 @@ EPIC = 3
 LEGENDARY = 4
 RARITIES = (COMMON, UNCOMMON, RARE, EPIC, LEGENDARY) #IN ORDER COMPARED TO RARITY
 RARITY_DICT = {COMMON:'Common', UNCOMMON:'Uncommon', RARE:'Rare', EPIC:'Epic', LEGENDARY:'Legendary'}
-POWER_DICT = {COMMON:(1.55, .4), UNCOMMON:(1.65,.45), RARE:(1.75,.5), EPIC:(1.85,.55), LEGENDARY:(2,.65)}
+POWER_DICT = {COMMON:(1.8, .3, 1.3), UNCOMMON:(1.85,.45, 1.55), RARE:(1.85,.55,1.8), EPIC:(1.85,.65,2.2), LEGENDARY:(1.85,.8, 2.8)}
 #EFFECT_DICT = {COMMON:1.55, UNCOMMON:1.65, RARE:1.75, EPIC:1.85, LEGENDARY:2}
-INPUT_RARITY = [.375, .325, .2, .1, .05]
+INPUT_RARITY = [0, 0, 0, 0, 1] #[.375, .325, .2, .1, .05]
 totrarprobs = sum(INPUT_RARITY)
 RARITY_PROBS = [i/totrarprobs for i in INPUT_RARITY]
 DEFAULT_RARITY = RARE
@@ -56,20 +56,20 @@ DEF_PREF_MULTIPLIER = 1 # Set Preference of Defense over Attack
 #EFFECT_PREF = .9   # Set Preference of Effects over Defense and Attack
 #TOT_PREF = STATS_PREF+EFFECT_PREF
 PREF_MULTIPLIERS = (ATT_PREF_MULTIPLIER, DEF_PREF_MULTIPLIER) #Put multipliers in tuple together
-EFFECT_THRESHOLD = .5 #(Outdated) Maximum wasted effect potential when generating effect for card
+EFFECT_THRESHOLD = 2.2 #Maximum wasted effect potential when generating effect for card (used to make spells spend all their effect juice)
 MIN_EFFECT = .5 #if an object is supposed to have an effect, this gives the initial value that it has to be at least.
 CARD_STRENGTH = 1.7 #Overall strength of the generated cards
 CARD_STRENGTH_DROPOFF = 0 #Amount of lost potential in higher cost cards (the larger this is, the less op high mana cards are relative to lower cost cards)
-CARD_INITIAL_STRENGTH = 1.6 # Effective cost increase for every card
-SPELL_EFFECT_MULTIPLIER = .5
+CARD_INITIAL_STRENGTH = .8 # Effective cost increase for every card
+SPELL_EFFECT_MULTIPLIER = .4
 LEFTOVER_MULTIPLIER = .75 #Percent of leftover spending from effect generation that is effective for stats
 EFFECT_CHANCE = 0.7 #Chance that a given card that can have an effect has one.
 DOUBLE_EFFECT_CHANCE = .33
 SPELL_CHANCE = .25
 SPELL_ADDER = 1
-EFFECT_TRY_NUM = 25
+EFFECT_TRY_NUM = 40
 #NEGATIVE_ADDER = 1
-ZERO_STRENGTH = 3.5
+#ZERO_STRENGTH = 1.5
 while True:
     ans = input('Arena Mode? (y/n): ')
     if ans == 'y':
@@ -115,7 +115,7 @@ WINDFURY_EFFECT = 10
 #-----------ORDER MATTERS WITH ALL OF THESE LISTS AND COST DICTIONARIES, THEY NEED TO HAVE THE SAME ORDER--------------#
 EFFECT_LIST = (DRAW_EFFECT, DEAL_EFFECT, HEAL_EFFECT, SUMMON_EFFECT, BUFF_EFFECT, SPLIT_DEAL_EFFECT, SPLIT_HEAL_EFFECT, TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT)
 EFFECT_DICT = {None:"None",DRAW_EFFECT:"Draw Cards", DEAL_EFFECT:"Deal Damage", HEAL_EFFECT:"Heal", SUMMON_EFFECT:"Summon Creature", BUFF_EFFECT:"Buff Card", SPLIT_DEAL_EFFECT:"Split Damage", SPLIT_HEAL_EFFECT:"Split Heal", TAUNT_EFFECT:"Give Taunt", DIVINE_SHIELD_EFFECT:"Give Divine Shield", CHARGE_EFFECT:"Give Charge", WINDFURY_EFFECT:"Give Windfury"}
-EFFECT_COST_DICT = {DRAW_EFFECT:-1.65, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-.9, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5}#Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
+EFFECT_COST_DICT = {DRAW_EFFECT:-1.7, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-.9, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5}#Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
 STATIC_EFFECT_LIST = (TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT)
 
 TAUNT_INDEX = 0

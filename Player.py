@@ -61,6 +61,12 @@ class Player():
                 ls.append(card)
         return ls
 
+    def check_hand(self):
+        if len(self.hand.cards) > HAND_MAX_SIZE:
+            for i in range(len(self.hand.cards)-HAND_MAX_SIZE):
+                print("\n\n!!! Card Lost: \n" + str(self.hand.cards[HAND_MAX_SIZE]))
+                self.discard.cards.append(self.hand.cards.pop(HAND_MAX_SIZE))
+
     def check_dead(self, enemy_player, all_players = None):
         """
         Function for Checking if anything has died

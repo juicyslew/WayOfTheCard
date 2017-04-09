@@ -276,6 +276,7 @@ class Game():
                 self.play_card(0 ,all_players) #Need to unhardcode
                 self.use_cards(self.player_turn, all_players) # Run Use Cards Script
                 player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
+                player1.check_hand()
                 for card in player1.cards: #Run through cards on the field
                     try:
                         card.effect.activate(player1, player2, TRIGGER_END) # If the cards have a "End Turn" Trigger, then activate effect
@@ -309,6 +310,7 @@ class Game():
                 self.use_cards(self.player_turn, all_players) # Run Use Function
                 #NEED TO UPDATE ^ TO ACCOUNT FOR MANY OPPONENTS
                 player2.deck.draw(player2.hand, 1) # Draw one
+                player2.check_hand()
                 for card in player2.cards: # For Card in player2.cards:
                     try:
                         card.effect.activate(player2, player1, TRIGGER_END) # if card has end trigger, activate effect.

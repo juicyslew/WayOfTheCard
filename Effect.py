@@ -13,10 +13,11 @@ class Effect():
             powerinfo = POWER_DICT[rarity]
             power = powerinfo[0]
             eff_pref = powerinfo[1]
+            init_pow = powerinfo[2]
             if cost == 0:
-                effect_spend = ZERO_STRENGTH*power
+                effect_spend = (init_pow + 1) * power
             else:
-                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * power  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+                effect_spend = (init_pow + cost) * power  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
             if cardType == TYPE_CREATURE:
                 actual_spend = effect_spend*eff_pref
                 effect_spend -= actual_spend

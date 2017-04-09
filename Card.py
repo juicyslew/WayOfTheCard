@@ -60,7 +60,14 @@ class Card():
             if effect:
                 stats = generate_stats(cost, cardType, effect.leftover) #Generate Stats if None
             else:
-                effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH
+                powerinfo = POWER_DICT[rarity]
+                power = powerinfo[0]
+                eff_pref = powerinfo[1]
+                init_pow = powerinfo[2]
+                if cost == 0:
+                    effect_spend = (init_pow + 1) * power
+                else:
+                    effect_spend = (init_pow + cost) * power
                 stats = generate_stats(cost, cardType, effect_spend)
         if active_effects == None:
             active_effects = INIT_ACTIVE_EFFECT
