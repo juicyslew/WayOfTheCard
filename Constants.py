@@ -9,7 +9,7 @@ WINDOW_HEIGHT = 1020
 DECK_INIT_SIZE = 30 #Initial Deck Size
 MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
 MAX_NEGATIVE_NUMERIC = 5
-HAND_INIT_SIZE = 4 # Initial Hand Size
+HAND_INIT_SIZE = 3 # Initial Hand Size
 HAND_MAX_SIZE = 10 # Maximum Hand Size, Need To Actually Impliment
 CARDS_DRAWN_PER_TURN = 1
 
@@ -36,6 +36,7 @@ RARITY_PROBS = [i/totrarprobs for i in INPUT_RARITY]
 DEFAULT_RARITY = RARE
 
 PLAYER_HEALTH = 30 #Player Health
+PLAYER_ATTACK = 0
 
 COST = 0 #Cost index in stats
 ATT = 1 #Attack index in stats
@@ -253,3 +254,14 @@ MANA_COST_FONT_SIZE = 40
 CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
+
+"""TODO CONSTANTS:
+
+MAX_BOARD_SIZE = 7
+COIN = True #True = given to opponent, False = no coin given
+FIRST_PLAYER = True #True means the first player created goes first
+
+
+
+
+"""
