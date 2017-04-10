@@ -135,7 +135,7 @@ def generate_effect_name(effect, reminder_text = True):
     if effect == None:
         return ""
     elif effect == WINDFURY_EFFECT:
-        list1 = ["wind", "double", "duplicate", "duo", "back"]
+        list1 = ["wind", "double", "duplicate", "duo", "back"] #Why "back"?
         list2 = ["fury", "rage", "strike", "slash", "power", "smash"]
         text = random.choice(list1).capitalize() + random.choice(list2).capitalize()
         if reminder_text:
@@ -184,7 +184,10 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
     if cardType == TYPE_SPELL:
         #varied_costs = [(i, TRIGGER_PLAY, i[2], EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY * TARGET_COST_DICT[i[2]])
         #                for i in EFFECT_POSSIBILITIES if not i in STATIC_EFFECT_LIST for j in EFFECT_POSSIBILITIES[i] for k, eff_cost in EFFECT_POSSIBILITIES[i][j]] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
-        valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES] #if effect_spend > i[3] and i[3] > 0]
+        if second:
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend - k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES]
+        else:
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES] #if effect_spend > i[3] and i[3] > 0]
         ## Effect Choice
         if len(valid_combs) == 0:
             #while True:

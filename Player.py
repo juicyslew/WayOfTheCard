@@ -24,11 +24,11 @@ class Player():
     """
     Player class: Acts as a Hub for most Player specific actions and code (Which is allot)
     """
-    def __init__(self, name, handstart):
+    def __init__(self, name, handstart, rarities):
         self.name = name #Player Name
         self.player = Player_Card(name) #Player Card
         self.cards = [self.player] # Player Field
-        self.deck = Deck() # Initialize Player Deck
+        self.deck = Deck(rare_ls = rarities) # Initialize Player Deck
         self.deck.init_deck()
         self.handstart = handstart
         self.hand = Hand(self.deck, self.handstart) # Initialize Player Hand
@@ -54,11 +54,18 @@ class Player():
         """
         ls = []
         for card in self.cards:
-            if card.active_effects[CHARGE_INDEX]:
+            if card.active_effects[CHARGE_INDEX] == 1:
+                card.active_effects[CHARGE_INDEX] = 2
                 card.state = STATE_ACTIVE
             if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
         return ls
+
+    def check_hand(self):
+        if len(self.hand.cards) > HAND_MAX_SIZE:
+            for i in range(len(self.hand.cards)-HAND_MAX_SIZE):
+                print("\n\n!!! Card Lost: \n" + str(self.hand.cards[HAND_MAX_SIZE]))
+                self.discard.cards.append(self.hand.cards.pop(HAND_MAX_SIZE))
 
     def check_dead(self, enemy_player, all_players = None):
         """

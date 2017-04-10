@@ -7,12 +7,19 @@ import math
 import numpy as np
 
 class Effect():
-    def __init__(self, ThisCard, cost, cardType, trigger = None, target = None, effect = None, numeric = None):
+    def __init__(self, ThisCard, cost, cardType, rarity, trigger = None, target = None, effect = None, numeric = None):
         if trigger == None and effect == None and numeric == None and target == None: #If there is no information about the effect in general Then
             #if cardType == TYPE_SPELL:
-            effect_spend = (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
+            powerinfo = POWER_DICT[rarity]
+            power = powerinfo[0]
+            eff_pref = powerinfo[1]
+            init_pow = powerinfo[2]
+            if cost == 0:
+                effect_spend = (init_pow + 1) * power
+            else:
+                effect_spend = (init_pow + cost) * power  # Multiply Spell multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
             if cardType == TYPE_CREATURE:
-                actual_spend = effect_spend*EFFECT_PREF/TOT_PREF
+                actual_spend = effect_spend*eff_pref
                 effect_spend -= actual_spend
                 #elif cardType == TYPE_CREATURE:
                 #    effect_spend = EFFECT_PREF * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Creature multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
@@ -79,7 +86,6 @@ class Effect():
             if type(self.effect) == int:
                 s.append("")
                 continue
-            print(self.effect[i])
             if type(self.effect) == int or self.effect[i] == None:
                 s.append("")
             else:
