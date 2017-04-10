@@ -71,7 +71,7 @@ class Effect():
             #Set leftover self values
             if cardType == TYPE_SPELL and numeric[i] == 0:
                 numeric[i] = 1
-            if self.effect[i] == BUFF_EFFECT:
+            if self.effect[i] == BUFF_EFFECT or self.effect[i] == DEBUFF_EFFECT:
                 r = randint(0, numeric[i])
                 numeric[i] = [r, numeric[i]-r]
         self.numeric = numeric
@@ -271,7 +271,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             for c in self.t: # Loop Through Targets
                                 c.stats[ATT] += self.numeric[0]
                                 c.stats[DEF] += self.numeric[1]
-                                print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
+                                print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[1], c.stats[2]))
                                 if c in own_player.cards:
                                     own_player.board.render_buff(self.numeric, own_player, own_player.cards.index(c))
                                 elif c in enemy_player.cards:
@@ -351,6 +351,32 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         else:
                             for c in self.t: # Loop Through Targets
                                 c.active_effects[WINDFURY_INDEX] = 1
+                    if self.effect == DEBUFF_EFFECT: # If Buff
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t: # Loop Through Targets
+                                c.stats[ATT] -= self.numeric[0]
+                                c.stats[DEF] -= self.numeric[1]
+                                print("%s was buffed -%i/-%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[1], c.stats[2]))
+                                if c in own_player.cards:
+                                    own_player.board.render_buff(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_buff(self.numeric, enemy_player, enemy_player.cards.index(c))
+                    if self.effect == DESTROY_EFFECT:
+                        self.t = self.determine_target(own_player, enemy_player)
+                        if len(self.t) == 0:
+                            pass
+                        else:
+                            for c in self.t:
+                                c.stats[DEF] = 0
+                                print("%s was destroyed" % (c.name))
+                                if c in own_player.cards:
+                                    own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
+                                elif c in enemy_player.cards:
+                                    own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
+
             else:
                 if time == self.trigger: # If the current timing is the cards effect timing
                     if self.effect == DRAW_EFFECT: # If draw
@@ -390,7 +416,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         for c in self.t: # Loop Through Targets
                             c.stats[ATT] += self.numeric[0]
                             c.stats[DEF] += self.numeric[1]
-                            print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[0], c.stats[1]))
+                            print("%s was buffed +%i/+%i to %i/%i" %(c.name, self.numeric[0], self.numeric[1], c.stats[1], c.stats[2]))
                     if self.effect == SPLIT_DEAL_EFFECT: # If Deal Damage
                         print('-----------------------------------')
                         i = 0

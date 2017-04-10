@@ -232,7 +232,7 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
     #val = random.choice(valid_combs)
     #^###################^#
     elif not eff is None:
-        if eff in STATIC_EFFECT_LIST:
+        if eff in STATIC_EFFECT_LIST or eff in ONE_DO_EFFECTS:
             numeric = 1
         elif cardType == TYPE_SPELL:
             numeric = int(effect_spend/spend_cost)
