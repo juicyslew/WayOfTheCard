@@ -131,25 +131,37 @@ def generate_stats(cost, card_type, leftover):
     #print(stats)
     return stats
 
-def generate_effect_name(effect):
+def generate_effect_name(effect, reminder_text = True):
     if effect == None:
         return ""
     elif effect == WINDFURY_EFFECT:
         list1 = ["wind", "double", "duplicate", "duo", "back"]
         list2 = ["fury", "rage", "strike", "slash", "power", "smash"]
-        return random.choice(list1).capitalize() + random.choice(list2).capitalize()
+        text = random.choice(list1).capitalize() + random.choice(list2).capitalize()
+        if reminder_text:
+            text = text + " (this creature can attack twice per turn)"
+        return text
     elif effect == TAUNT_EFFECT:
         list1 = ["taunt", "protect", "defend"]
         list2 = ["er", "ish", ""]
-        return random.choice(list1).capitalize() + random.choice(list2)
+        text = random.choice(list1).capitalize() + random.choice(list2)
+        if reminder_text:
+            text = text + " (enemy creatures can only attack creatures with %s)" % text
+        return text
     elif effect == DIVINE_SHIELD_EFFECT:
         list1 = ["holy", "divine", "power", "golden", "light", "life"]
         list2 = ["shield", "barrier", "aegis", "aura", "defense"]
-        return random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()
+        text = random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()
+        if reminder_text:
+            text = text + " (the next damage to this card is prevented)"
+        return text
     elif effect == CHARGE_EFFECT:
         list1 = ["speed", "fast", "haste", "quick"]
         list2 = ["charge", "strike", ""]
-        return (random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()).strip()
+        text = (random.choice(list1).capitalize() + " " + random.choice(list2).capitalize()).strip()
+        if reminder_text:
+            text = text + " (this creature can attack the turn it is played)"
+        return text
 
 
     #print(generate_stats(True, 10))

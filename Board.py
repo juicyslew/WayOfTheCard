@@ -7,12 +7,13 @@ class Board():
     def __init__(self, screen, players):
         self.clock = pygame.time.Clock()
         self.screen = screen
-        self.card_name_font = pygame.font.SysFont("arial narrow", 25)   #   sets card fonts
-        self.hero_name_font = pygame.font.SysFont("arial narrow", PLAYER_CARD_FONT_SIZE)
-        self.card_text_font = pygame.font.SysFont("arial narrow", CREATURE_CARD_FONT_SIZE)
-        self.mana_font = pygame.font.SysFont("arial narrow", MANA_COST_FONT_SIZE)
-        self.stats_font = pygame.font.SysFont("arial narrow", CREATURE_STATS_FONT_SIZE)
-        self.health_font = pygame.font.SysFont("arial narrow", PLAYER_HEALTH_FONT_SIZE)
+        typeface = "myriad pro cond"
+        self.card_name_font = pygame.font.SysFont(typeface, 19)   #   sets card fonts
+        self.hero_name_font = pygame.font.SysFont(typeface, PLAYER_CARD_FONT_SIZE)
+        self.card_text_font = pygame.font.SysFont(typeface, CREATURE_CARD_FONT_SIZE)
+        self.mana_font = pygame.font.SysFont(typeface, MANA_COST_FONT_SIZE)
+        self.stats_font = pygame.font.SysFont(typeface, CREATURE_STATS_FONT_SIZE)
+        self.health_font = pygame.font.SysFont(typeface, PLAYER_HEALTH_FONT_SIZE)
         self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]
@@ -21,6 +22,9 @@ class Board():
         self.heal = pygame.image.load(os.path.join('heal_icon.png')).convert_alpha()
         self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
+        self.effect_spacing = 10
+        self.name_spacing = 15
+        self.char_length = 24
         self.effnames = {WINDFURY_EFFECT: generate_effect_name(WINDFURY_EFFECT),
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
@@ -61,7 +65,7 @@ class Board():
                 for line in name:   #   renders name in individual lines
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
-                    name_height += 20
+                    name_height += self.name_spacing
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
                 stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -70,7 +74,7 @@ class Board():
                 for line in effect_text:    #   renders effect text in individual lines
                     effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                     card.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
-                    effect_height += 15
+                    effect_height += self.effect_spacing
                 #card.set_alpha(50)
                 card.set_alpha(10 * alpha)
                 self.screen.blit(card, (position[0], position[1]))
@@ -102,13 +106,21 @@ class Board():
             #    a = 1
             if not type(effect.effect) == int:
                 for i in range(len(effect.effect)):
+                    try:
+                        additive = (trig == effect.trigger[i] and not keyword)  #   determines whether effect trigger is the same as last effect
+                    except UnboundLocalError:
+                        additive = 0
                     eff = effect.effect[i]
                     trig = effect.trigger[i]
                     targ = effect.target[i]
                     num = effect.numeric[i]
+                    keyword = False
                     if eff == None:
                         continue
-                    if card.cardType == TYPE_CREATURE:
+                    if additive:
+                        tot_effect_text = tot_effect_text[0:-2]
+                        effect_text = ", then "     #   if trigger is same as last effect, make text in one sentence
+                    elif card.cardType == TYPE_CREATURE:
                         effect_text = "%s," % (TRIGGER_TEXT_DICT[trig])
                     if eff == DEAL_EFFECT:
                         effect_text += "deal %s damage to %s." % (num, TARGET_TEXT_DICT[targ])
@@ -134,13 +146,13 @@ class Board():
                         effect_text += "give Windfury to %s." % (TARGET_TEXT_DICT[targ])
                     if targ == TARGET_THIS_CREATURE and eff in [TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, WINDFURY_EFFECT, CHARGE_EFFECT]:
                         effect_text = self.effnames[eff] + ". "
+                        keyword = True
                     effect_text = effect_text.lower().capitalize()
                     tot_effect_text = tot_effect_text + effect_text
             else:
-                tot_effect_text = tot_effect_text + ''
-        char_length = 20         # maximum characters on each line of text
-        while len(tot_effect_text) - tot_effect_text.rfind("\n") > char_length: # arranges effect text into lines
-            index = tot_effect_text.rfind("\n") + char_length
+                tot_effect_text = tot_effect_text + ''        # maximum characters on each line of text
+        while len(tot_effect_text) - tot_effect_text.rfind("\n") > self.char_length: # arranges effect text into lines
+            index = tot_effect_text.rfind("\n") + self.char_length
             while tot_effect_text[index] != " " and index > 0:
                 index -= 1
             tot_effect_text = tot_effect_text[0:index + 1] + "\n" + tot_effect_text[index + 1:]
@@ -179,7 +191,7 @@ class Board():
                 x = player2.cards.index(card)*(self.cardwidth + 20) + 80
                 y = yhalf - 15 - self.cardheight
                 if card is card_not_to_render:
-                    pass
+                    continue
                 elif card is card_to_animate:
                     card_backlog.append([card, (x, y)])
                     #self.render_card(card, (x, y), True)
@@ -191,7 +203,7 @@ class Board():
                     for line in name:   #   renders name in individual lines
                         name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                         screen.blit(name_render, (x + 15, y + name_height + 15))
-                        name_height += 20
+                        name_height += self.name_spacing
                     mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                     screen.blit(mana_render, (x + self.cardwidth - 20, y))
                     stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -200,14 +212,14 @@ class Board():
                     for line in effect_text:    #   renders effect text in individual lines
                         effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                         screen.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
-                        effect_height += 15
+                        effect_height += self.effect_spacing
 
             except ValueError:
                 try:
                     x = player1.cards.index(card)*(self.cardwidth + 20) + 80
                     y = yhalf + 15
                     if card is card_not_to_render:
-                        pass
+                        continue
                     elif card is card_to_animate:
                         self.render_card(card, (x, y), True)
                     else:
@@ -218,7 +230,7 @@ class Board():
                         for line in name:   #   renders name in individual lines
                             name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                             screen.blit(name_render, (x + 15, y + name_height + 15))
-                            name_height += 20
+                            name_height += self.name_spacing
                         mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                         screen.blit(mana_render, (x + self.cardwidth - 20, y))
                         stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -227,7 +239,7 @@ class Board():
                         for line in effect_text:    #   renders effect text in individual lines
                             effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                             screen.blit(effect_render, (x + 15, y + self.cardheight/2 + height))
-                            height += 15
+                            height += self.effect_spacing
                 except ValueError:
                     pass
         for card in card_backlog:

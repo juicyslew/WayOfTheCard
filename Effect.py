@@ -117,10 +117,16 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         elif self.target == TARGET_RANDOM_ALLY:
             return [choice(own_player.cards)]
         elif self.target == TARGET_RANDOM_CREATURE:
+            if len(own_player.cards[1:]) + len(enemy_player.cards[1:]) == 0:
+                return []
             return [choice(own_player.cards[1:] + enemy_player.cards[1:])]
         elif self.target == TARGET_RANDOM_ALLY_CREATURE:
+            if len(own_player.cards[1:]) == 0:
+                return []
             return [choice(own_player.cards[1:])]
         elif self.target == TARGET_RANDOM_ENEMY_CREATURE:
+            if len(enemy_player.cards[1:]) == 0:
+                return []
             return [choice(enemy_player.cards[1:])]
         elif self.target == TARGET_ALL_CREATURE:
             return own_player.cards[1:] + enemy_player.cards[1:]
