@@ -89,7 +89,7 @@ class Card():
         if self.cardType == TYPE_CREATURE:
             active_strs = []
             for i in range(len(self.active_effects)):
-                if self.active_effects[i]:
+                if self.active_effects[i] == 1:
                     active_strs.append(ACTIVE_EFFECT_DICT[i])
             if self.effect == False:
                 eff_s = ''

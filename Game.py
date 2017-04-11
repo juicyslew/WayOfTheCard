@@ -190,6 +190,8 @@ class Game():
         for c in player.cards:
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
+            if c.active_effects[FROZEN_INDEX] == 1:
+                c.active_effects[FROZEN_INDEX] = 0 
 
     def check_game_end(self, player, all_players = None):
         """
