@@ -19,6 +19,9 @@ class Board():
         self.player1 = players[0]
         self.player2 = players[1]
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
+        self.axe = pygame.image.load(os.path.join('axe.png')).convert_alpha()
+        self.bear = pygame.image.load(os.path.join('bear.png')).convert_alpha()
+        self.damage = [self.boom, self.axe, self.bear]
         self.heal = pygame.image.load(os.path.join('heal_icon.png')).convert_alpha()
         self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
@@ -246,6 +249,7 @@ class Board():
             self.render_card(card_backlog[0][0], card_backlog[0][1], True)
 
     def render_damage(self, damage, player, index): #   fancy damage animation
+        image = random.choice(self.damage)
         initial_size = 40
         x = index * (self.cardwidth + 20) + 60
         yhalf = self.screen.get_size()[1]/2
@@ -264,7 +268,7 @@ class Board():
             y = self.cardheight/2 + 30
         for i in range(50):
             self.update_board(self.screen, self.player1, self.player2)
-            red_flare = pygame.transform.scale(self.boom, (initial_size + 2*i, initial_size + 2*i))
+            red_flare = pygame.transform.scale(image, (initial_size + 2*i, initial_size + 2*i))
             self.change_alpha(red_flare, max(255 - 8 * i, 0))
             flare_rect = red_flare.get_rect()
             flare_rect = flare_rect.move(x - i, y - i)
@@ -292,7 +296,7 @@ class Board():
             y = self.cardheight/2 + 30
         for i in range(50):
             self.update_board(self.screen, self.player1, self.player2)
-            heal_plus = pygame.transform.scale(self.heal, (50 + 2*i, 50 + 2*i))
+            heal_plus = pygame.transform.scale(self.heal, (initial_size + 2*i, initial_size + 2*i))
             self.change_alpha(heal_plus, max(255 - 8 * i, 0))
             heal_rect = heal_plus.get_rect()
             heal_rect = heal_rect.move(x - i, y - i)
