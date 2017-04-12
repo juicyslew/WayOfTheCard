@@ -185,7 +185,7 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
         #varied_costs = [(i, TRIGGER_PLAY, i[2], EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY * TARGET_COST_DICT[i[2]])
         #                for i in EFFECT_POSSIBILITIES if not i in STATIC_EFFECT_LIST for j in EFFECT_POSSIBILITIES[i] for k, eff_cost in EFFECT_POSSIBILITIES[i][j]] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
         if second:
-            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend - k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES]
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend % k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES]
         else:
             valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES] #if effect_spend > i[3] and i[3] > 0]
         ## Effect Choice
@@ -232,7 +232,7 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
     #val = random.choice(valid_combs)
     #^###################^#
     elif not eff is None:
-        if eff in STATIC_EFFECT_LIST:
+        if eff in STATIC_EFFECT_LIST or eff in ONE_DO_EFFECTS:
             numeric = 1
         elif cardType == TYPE_SPELL:
             numeric = int(effect_spend/spend_cost)

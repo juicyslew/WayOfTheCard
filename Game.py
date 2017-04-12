@@ -35,9 +35,9 @@ class Game():
                 i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
                 if i is 'y': #If player liked
                     if j == 1:
-                        player_list.append(Player(name, 3, rarities)) #Save Player Name
+                        player_list.append(Player(name, HAND_INIT_SIZE, rarities)) #Save Player Name
                     else:
-                        player_list.append(Player(name, 4, rarities)) #Save Player Name
+                        player_list.append(Player(name, HAND_INIT_SIZE+1, rarities)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
         # player_list.append(Player('Daniel', 4))
@@ -190,6 +190,8 @@ class Game():
         for c in player.cards:
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
+            if c.active_effects[FROZEN_INDEX] == 1:
+                c.active_effects[FROZEN_INDEX] = 0 
 
     def check_game_end(self, player, all_players = None):
         """
@@ -309,7 +311,7 @@ class Game():
                 #print(player2) # display player 2 cards in field.
                 self.use_cards(self.player_turn, all_players) # Run Use Function
                 #NEED TO UPDATE ^ TO ACCOUNT FOR MANY OPPONENTS
-                player2.deck.draw(player2.hand, 1) # Draw one
+                player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw one
                 player2.check_hand()
                 for card in player2.cards: # For Card in player2.cards:
                     try:

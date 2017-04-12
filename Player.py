@@ -10,8 +10,8 @@ class Player_Card(Card):
     """
     def __init__(self, name):
         self.name = name #Player Name
-        self.stats = [0, 0, PLAYER_HEALTH] #Player Stats
-        self.starting_stats = [0, 0, PLAYER_HEALTH] # Player Base Stats
+        self.stats = [0, PLAYER_ATTACK, PLAYER_HEALTH] #Player Stats
+        self.starting_stats = [0, PLAYER_ATTACK, PLAYER_HEALTH] # Player Base Stats
         self.state = STATE_SLEEP #Player State is Pretty Much Constantly Asleep
         self.effect = False #Player Has No Effects
         self.active_effects = INIT_ACTIVE_EFFECT
@@ -57,6 +57,8 @@ class Player():
             if card.active_effects[CHARGE_INDEX] == 1:
                 card.active_effects[CHARGE_INDEX] = 2
                 card.state = STATE_ACTIVE
+            if card.active_effects[FROZEN_INDEX] == 1:
+                card.state = STATE_SLEEP
             if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
         return ls
