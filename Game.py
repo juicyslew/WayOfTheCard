@@ -190,6 +190,8 @@ class Game():
         for c in player.cards:
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
+            if c.active_effects[FROZEN_INDEX] == 1:
+                c.active_effects[FROZEN_INDEX] = 0 
 
     def check_game_end(self, player, all_players = None):
         """
@@ -329,6 +331,7 @@ class Game():
     def update_board(self, card_to_animate = None):
         pygame.display.update()
         self.board.update_board(self.screen, self.player1, self.player2, card_to_animate)
+        pygame.display.flip()
 
 if __name__ == "__main__": # If this is the run code (Game.py)
     game = Game() # Create Game

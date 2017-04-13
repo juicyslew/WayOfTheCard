@@ -57,6 +57,8 @@ class Player():
             if card.active_effects[CHARGE_INDEX] == 1:
                 card.active_effects[CHARGE_INDEX] = 2
                 card.state = STATE_ACTIVE
+            if card.active_effects[FROZEN_INDEX] == 1:
+                card.state = STATE_SLEEP
             if card.state == STATE_ACTIVE:# and not card is self.player:
                 ls.append(card)
         return ls
