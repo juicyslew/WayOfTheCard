@@ -55,9 +55,9 @@ class Board():
     #         effect_height += 15
     #     return surface
 
-    def render_card(self, card_obj, position, is_animated = False):  #   display card on screen
+    def render_card(self, card_obj, position, is_animated = False, is_dash = False):  #   display card on screen
         card = pygame.Surface((self.cardwidth, self.cardheight))
-        if is_animated:
+        if is_animated or is_dash:
             for alpha in range(30):
                 card.fill((255, 255, 255))
                 # text_surface = self.render_text(card_obj, position)
@@ -80,12 +80,17 @@ class Board():
                     effect_height += self.effect_spacing
                 #card.set_alpha(50)
                 card.set_alpha(10 * alpha)
+                if not is_animated:
+                    card.set_alpha(255)
                 self.screen.blit(card, (position[0], position[1]))
                 pygame.display.flip()
+                if not is_animated:
+                    break
                 self.clock.tick(20)
         else:
-            card.fill((255, 255, 255))
-        self.screen.blit(card, (position[0], position[1]))
+                card.fill((255, 255, 255))
+                self.screen.blit(card, (position[0], position[1]))
+
 
     def read_card(self, card):  #   turns card object into easily read tuple
         name = card.name
@@ -248,6 +253,34 @@ class Board():
         for card in card_backlog:
             self.render_card(card_backlog[0][0], card_backlog[0][1], True)
 
+    def card_dash(self, atk_card_cat, def_card_cat):
+        #   Give atk_card_cat and def_card_cat as lists, where the first item
+        #   is the player and the second is the card index.
+        atk_player = atk_card_cat[0]
+        def_player = def_card_cat[0]
+        atk_index = atk_card_cat[1]
+        def_index = def_card_cat[1]
+        atk_card = atk_player.cards[atk_index]
+        apos = self.get_card_xy(atk_player, atk_index)
+        dpos = self.get_card_xy(def_player, def_index)
+        dx = (dpos[0] - apos[0])/3
+        dy = (dpos[1] - apos[1])/3
+        frames = 10
+        for i in range(0, frames):
+            prop_there = (i/frames)**3
+            self.update_board(self.screen, self.player1, self.player2, None, atk_card)
+            pos = (apos[0] + prop_there * dx, apos[1] + prop_there * dy)
+            self.render_card(atk_card, pos, False, True)
+            self.clock.tick(50)
+            pygame.display.flip()
+        for i in range(0, frames):
+            prop_there = ((frames - i)/frames)**3
+            self.update_board(self.screen, self.player1, self.player2, None, atk_card)
+            pos = (apos[0] + prop_there * dx, apos[1] + prop_there * dy)
+            self.render_card(atk_card, pos, False, True)
+            self.clock.tick(50)
+            pygame.display.flip()
+
     def render_damage(self, damage, player, index): #   fancy damage animation
         image = random.choice(self.damage)
         initial_size = 40
@@ -371,3 +404,18 @@ class Board():
                 r,g,b,old_alpha=img.get_at((x,y))
                 if old_alpha>0:
                     img.set_at((x,y),(r,g,b,alpha))
+
+    def get_card_xy(self, player, index):
+        x = index * (self.cardwidth + 20) + 80
+        yhalf = self.screen.get_size()[1]/2
+        if player is self.player2:
+            y = yhalf - 15 - self.cardheight
+        elif player is self.player1:
+            y = yhalf + 15
+        if index == 0 and player is self.player1:
+            x = self.screen.get_size()[0]/2
+            y = self.screen.get_size()[1] - self.cardheight/2
+        elif index == 0 and player is self.player2:
+            x = self.screen.get_size()[0]/2
+            y = self.cardheight/2
+        return (x, y)

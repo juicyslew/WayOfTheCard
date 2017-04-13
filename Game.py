@@ -167,8 +167,9 @@ class Game():
                             continue
                         attack_card.attack(defend_card) #Run the Attack Function
                         damage_dealt = attack_card.stats[ATT]
-                        self.board.render_damage(damage_dealt, opp, i - 1)
                         attacking_index = player.cards.index(attack_card)
+                        self.board.card_dash((player, attacking_index), (opp, i - 1))
+                        self.board.render_damage(damage_dealt, opp, i - 1)
                         if i - 1 != 0:
                             self.board.render_damage(damage_dealt, player, attacking_index)
                     except IndexError: # if index error
@@ -191,7 +192,7 @@ class Game():
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
             if c.active_effects[FROZEN_INDEX] == 1:
-                c.active_effects[FROZEN_INDEX] = 0 
+                c.active_effects[FROZEN_INDEX] = 0
 
     def check_game_end(self, player, all_players = None):
         """
