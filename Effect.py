@@ -112,7 +112,6 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
             return (b,)
         elif self.target == TARGET_ALL: # If Target is All Cards, set and return
-            print(own_player.cards + enemy_player.cards)
             return tuple(own_player.cards + enemy_player.cards)
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
             return (a, b)
@@ -412,7 +411,30 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         else:
                             for c in self.t: # Loop Through Targets
                                 c.active_effects[FROZEN_INDEX] = 1
-
+                    if self.effect == DEVOLVE_EFFECT: # If Devolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Devolve Card with cost minus Numeric
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost-self.numeric)
+                            print("Creature Devolved to %s cost" %c.stats[0])
+                        print('-----------------------------------')
+                    if self.effect == REVOLVE_EFFECT: # If Revolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Revolve card with same cost
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost)
+                            print("Creature Revolved to %s cost" %c.stats[0])
+                        print('-----------------------------------')
+                    if self.effect == EVOLVE_EFFECT: # If Evolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Evolve Card with cost plus Numeric
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost+self.numeric)
+                            print("Creature Evolved to %s cost" %c.stats[0])
+                        print('-----------------------------------')
             else:
                 if time == self.trigger: # If the current timing is the cards effect timing
                     if self.effect == DRAW_EFFECT: # If draw
@@ -444,7 +466,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
                         for c in self.t: # Loop Through Targets
                             #Summon Card of Cost Numeric
-                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
+                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, cost = self.numeric))
                             print("Creature Summonned for %s" %c.name)
                     if self.effect == BUFF_EFFECT: # If Buff
                         self.t = self.determine_target(own_player, enemy_player) # Determine Target
@@ -473,6 +495,30 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 c.stats[DEF] = min(c.starting_stats[DEF], c.stats[DEF]+1)
                                 print("%s was healed %i health.  Result Health: %i" %(c.name, 1, c.stats[DEF]))
                             i+=1
+                        print('-----------------------------------')
+                    if self.effect == DEVOLVE_EFFECT: # If Devolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Devolve Card with cost minus Numeric
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost-self.numeric)
+                            print("Creature Devolved to %s cost" %c.cost)
+                        print('-----------------------------------')
+                    if self.effect == REVOLVE_EFFECT: # If Revolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Revolve card with same cost
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost)
+                            print("Creature Revolved to %s cost" %c.cost)
+                        print('-----------------------------------')
+                    if self.effect == EVOLVE_EFFECT: # If Evolve
+                        print('-----------------------------------')
+                        self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                        for c in self.t: # Loop Through Targets
+                            #Evolve Card with cost plus Numeric
+                            c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.cost+self.numeric)
+                            print("Creature Evolved to %s cost" %c.cost)
                         print('-----------------------------------')
             self.effect = eff_ls
             self.trigger = trig_ls
