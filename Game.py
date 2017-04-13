@@ -17,7 +17,6 @@ class Game():
         #Rule Generation
         self.turn = 0 #Initialize Turns
         self.init_game() #Initialize Game
-        self.players = 2
         self.player_turn = 0
 
     def init_game(self):
@@ -42,6 +41,7 @@ class Game():
                 continue #If player doesn't like it, then generate new name
         # player_list.append(Player('Daniel', 4))
         self.game_loop(player_list) #Start Game Loop
+
 
     def play_card(self, player, all_players = None):
         """

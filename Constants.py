@@ -2,6 +2,7 @@
 Python File to contain Constants for Card Game
 """
 import operator
+import random
 
 WINDOW_WIDTH = 1850
 WINDOW_HEIGHT = 1020
@@ -258,10 +259,33 @@ CARD_HEIGHT = CARD_SCALE * 7
 """TODO CONSTANTS:
 
 MAX_BOARD_SIZE = 7
+MAX_BOARD_SIZE = random.randint(5, 10)
+
 COIN = True #True = given to opponent, False = no coin given
+COIN = random.choice([True, False])
+
 FIRST_PLAYER = True #True means the first player created goes first
+FIRST_PLAYER = random.choice([True, False])
 
-
-
-
+PERM_MANA = False
+PERM_MANA = random.choice(0, 1)
 """
+
+### RANDOMIZATION PART ###
+yup = input("do watn radnokm? (y/n): ")
+if yup == "y":
+    PLAYER_HEALTH = random.randint(20, 50)
+    DECK_INIT_SIZE = random.randint(20, 50)
+    HAND_MAX_SIZE = random.randint(7, 12)
+    HAND_INIT_SIZE = random.randint(2, HAND_MAX_SIZE-4)
+    CARDS_DRAWN_PER_TURN = random.randint(1, 2)
+    MANA_PER_TURN = random.randint(1,2)
+
+### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
+print("""\n \n RULES: \n \n
+Player starting health: %d
+Deck start size: %d
+Hand start size: %d
+Hand max size: %d
+Cards drawn per turn: %d
+Mana gained per turn: %d""" % (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN))
