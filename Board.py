@@ -263,8 +263,8 @@ class Board():
         atk_card = atk_player.cards[atk_index]
         apos = self.get_card_xy(atk_player, atk_index)
         dpos = self.get_card_xy(def_player, def_index)
-        dx = (dpos[0] - apos[0])/3
-        dy = (dpos[1] - apos[1])/3
+        dx = (dpos[0] - apos[0])/1.5
+        dy = (dpos[1] - apos[1])/1.5
         frames = 10
         for i in range(0, frames):
             prop_there = (i/frames)**3
