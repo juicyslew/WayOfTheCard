@@ -13,6 +13,7 @@ MAX_NEGATIVE_NUMERIC = 5
 HAND_INIT_SIZE = 3 # Initial Hand Size
 HAND_MAX_SIZE = 10 # Maximum Hand Size, Need To Actually Impliment
 CARDS_DRAWN_PER_TURN = 1
+SECOND_PLAYER_CARD_BONUS = 1
 
 #NAME_LIST = ["Bird", "Robot Doctor", "Magic Stones", "Test Card", "JEREMEEEEE"]
 
@@ -72,6 +73,7 @@ SPELL_ADDER = 1
 EFFECT_TRY_NUM = 40
 #NEGATIVE_ADDER = 1
 #ZERO_STRENGTH = 1.5
+ARENA = False
 while True:
     ans = input('Arena Mode? (y/n): ')
     if ans == 'y':
@@ -294,6 +296,7 @@ if yup == "y":
     HAND_INIT_SIZE = random.randint(2, HAND_MAX_SIZE-4)
     CARDS_DRAWN_PER_TURN = random.randint(1, 2)
     MANA_PER_TURN = random.randint(1,2)
+    SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n \n
@@ -302,4 +305,6 @@ Deck start size: %d
 Hand start size: %d
 Hand max size: %d
 Cards drawn per turn: %d
-Mana gained per turn: %d""" % (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN))
+Mana gained per turn: %d
+Second turn card bonus: %d"""
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS))

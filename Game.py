@@ -36,7 +36,7 @@ class Game():
                     if j == 1:
                         player_list.append(Player(name, HAND_INIT_SIZE, rarities)) #Save Player Name
                     else:
-                        player_list.append(Player(name, HAND_INIT_SIZE+1, rarities)) #Save Player Name
+                        player_list.append(Player(name, HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
                     break
                 continue #If player doesn't like it, then generate new name
         # player_list.append(Player('Daniel', 4))
@@ -292,6 +292,13 @@ class Game():
                 if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                     break
                 self.player_turn = not self.player_turn
+
+                for card in player1.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
                 self.update_board()
                 #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
                 pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
@@ -311,8 +318,7 @@ class Game():
                 #    break
                 self.play_card(1, all_players)
                 #print(player2) # display player 2 cards in field.
-                self.use_cards(self.player_turn, all_players) # Run Use Function
-                #NEED TO UPDATE ^ TO ACCOUNT FOR MANY OPPONENTS
+                self.use_cards(self.player_turn, all_players)
                 player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw one
                 player2.check_hand()
                 for card in player2.cards: # For Card in player2.cards:

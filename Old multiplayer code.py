@@ -44,3 +44,15 @@ else: #Screw Pygame for now; I refuse to have it implemented.
         if self.player_turn >= len(self.players):
             self.player_turn = 0
             self.turn += 1 # Increment turn by 1.
+
+(Card.py)
+        else:#3+ players
+            if self.cardType == TYPE_CREATURE:
+                all[0].cards.append(all[0].hand.cards.pop(all[0].hand.cards.index(self)))
+                try:
+                    self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                except AttributeError:
+                    pass
+            if self.cardType == TYPE_SPELL:
+                self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                all[0].hand.cards.pop(all[0].hand.cards.index(self))

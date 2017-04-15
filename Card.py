@@ -128,16 +128,6 @@ class Card():
                 player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
 
 
-        else:#3+ players
-            if self.cardType == TYPE_CREATURE:
-                all[0].cards.append(all[0].hand.cards.pop(all[0].hand.cards.index(self)))
-                try:
-                    self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
-                except AttributeError:
-                    pass
-            if self.cardType == TYPE_SPELL:
-                self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
-                all[0].hand.cards.pop(all[0].hand.cards.index(self))
 
     def attack(self, opp_card):
         """
@@ -154,6 +144,7 @@ class Card():
         print('%s dealt %i damage to %s.  Result Health: %i' % (self.name, self.stats[ATT], opp_card.name, opp_card.stats[DEF]))
         print('%s dealt %i damage to %s.  Result Health: %i' % (opp_card.name, opp_card.stats[ATT], self.name, self.stats[DEF]))
         print('-----------------------------------')
+
     def damage(self, damage):
         """
         Code for taking damage
@@ -163,3 +154,6 @@ class Card():
             print("Divine Shield Destroyed")
         else:
             self.stats[DEF] -= damage
+
+    def heal(self):
+        self.stats[DEF] = self.starting_stats[DEF]
