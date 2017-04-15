@@ -18,6 +18,7 @@ class Board():
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]
         self.player2 = players[1]
+        self.backdrop = pygame.image.load(os.path.join('BackgroundImage.jpg')).convert_alpha()
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
         self.axe = pygame.image.load(os.path.join('axe.png')).convert_alpha()
         self.bear = pygame.image.load(os.path.join('bear.png')).convert_alpha()
@@ -25,6 +26,7 @@ class Board():
         self.heal = pygame.image.load(os.path.join('heal_icon.png')).convert_alpha()
         self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
+        self.ice = pygame.image.load(os.path.join('ice.jpg')).convert_alpha()
         self.effect_spacing = 10
         self.name_spacing = 15
         self.char_length = 24
@@ -145,18 +147,31 @@ class Board():
                     elif eff == SPLIT_HEAL_EFFECT:
                         effect_text += "heal %s damage split randomly between %s." % (num, TARGET_TEXT_DICT[targ])
                     elif eff == TAUNT_EFFECT:
-                        effect_text += "give Taunt to %s." % (TARGET_TEXT_DICT[targ])
+                        effect_text += "give %s to %s." % (self.effnames[TAUNT_EFFECT], TARGET_TEXT_DICT[targ])
                     elif eff == DIVINE_SHIELD_EFFECT:
-                        effect_text += "give Divine Shield to %s." % (TARGET_TEXT_DICT[targ])
+                        effect_text += "give %s to %s." % (self.effnames[DIVINE_SHIELD_EFFECT], TARGET_TEXT_DICT[targ])
                     elif eff == CHARGE_EFFECT:
-                        effect_text += "give Charge to %s." % (TARGET_TEXT_DICT[targ])
+                        effect_text += "give %s to %s." % (self.effnames[CHARGE_EFFECT], TARGET_TEXT_DICT[targ])
                     elif eff == WINDFURY_EFFECT:
-                        effect_text += "give Windfury to %s." % (TARGET_TEXT_DICT[targ])
+                        effect_text += "give %s to %s." % (self.effnames[DIVINE_SHIELD_EFFECT], TARGET_TEXT_DICT[targ])
+                    elif eff == DEBUFF_EFFECT:
+                        effect_text += "%s gets -%s/-%s." % (TARGET_TEXT_DICT[targ], num[0], num[1])
+                    elif eff == DEVOLVE_EFFECT:
+                        effect_text += "devolve %s by %s." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == REVOLVE_EFFECT:
+                        effect_text += "revolve %s." % (TARGET_TEXT_DICT[targ])
+                    elif eff == EVOLVE_EFFECT:
+                        effect_text += "evolve %s by %s." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == DESTROY_EFFECT:
+                        effect_text += "destroy %s." % (TARGET_TEXT_DICT[targ])
+                    elif eff == FREEZE_EFFECT:
+                        effect_text += "freeze %s for %s turns." % (TARGET_TEXT_DICT[targ], num)
                     if targ == TARGET_THIS_CREATURE and eff in [TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, WINDFURY_EFFECT, CHARGE_EFFECT]:
                         effect_text = self.effnames[eff] + ". "
                         keyword = True
                     effect_text = effect_text.lower().capitalize()
-                    tot_effect_text = tot_effect_text + effect_text
+                    if effect_text != tot_effect_text:
+                        tot_effect_text = tot_effect_text + effect_text
             else:
                 tot_effect_text = tot_effect_text + ''        # maximum characters on each line of text
         while len(tot_effect_text) - tot_effect_text.rfind("\n") > self.char_length: # arranges effect text into lines
@@ -171,7 +186,10 @@ class Board():
         """
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
-        screen.fill((150, 50, 150))
+        screen.fill((200, 100, 200))
+        bkgd = pygame.transform.scale(self.backdrop, (WINDOW_WIDTH, WINDOW_HEIGHT))
+        bkgd_rect = bkgd.get_rect()
+        #self.screen.blit(bkgd, bkgd_rect)
         xhalf = screen.get_size()[0]/2
         yhalf = screen.get_size()[1]/2
         card_y_offset = 30
@@ -221,6 +239,13 @@ class Board():
                         effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                         screen.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
                         effect_height += self.effect_spacing
+                    if card.active_effects[FROZEN_INDEX] == 1:
+                        ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
+                        ice_rect = ice.get_rect()
+                        self.change_alpha(ice, 110)
+                        ice_rect = ice_rect.move(x, y)
+                        self.screen.blit(ice, ice_rect)
+
 
             except ValueError:
                 try:
@@ -248,6 +273,12 @@ class Board():
                             effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                             screen.blit(effect_render, (x + 15, y + self.cardheight/2 + height))
                             height += self.effect_spacing
+                        if card.active_effects[FROZEN_INDEX] == 1:
+                            ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
+                            ice_rect = ice.get_rect()
+                            self.change_alpha(ice, 110)
+                            ice_rect = ice_rect.move(x, y)
+                            self.screen.blit(ice, ice_rect)
                 except ValueError:
                     pass
         for card in card_backlog:
@@ -263,9 +294,9 @@ class Board():
         atk_card = atk_player.cards[atk_index]
         apos = self.get_card_xy(atk_player, atk_index)
         dpos = self.get_card_xy(def_player, def_index)
-        dx = (dpos[0] - apos[0])/1.5
-        dy = (dpos[1] - apos[1])/1.5
-        frames = 10
+        dx = (dpos[0] - apos[0])/1.8
+        dy = (dpos[1] - apos[1])/1.8
+        frames = 15
         for i in range(0, frames):
             prop_there = (i/frames)**3
             self.update_board(self.screen, self.player1, self.player2, None, atk_card)

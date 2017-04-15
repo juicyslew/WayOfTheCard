@@ -194,6 +194,7 @@ class Game():
             if c.active_effects[FROZEN_INDEX] == 1:
                 c.active_effects[FROZEN_INDEX] = 0
 
+
     def check_game_end(self, player, all_players = None):
         """
         Function for Checking if the game is over.
