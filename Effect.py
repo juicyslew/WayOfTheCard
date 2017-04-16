@@ -293,8 +293,11 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     else:
                         for c in self.t: # Loop Through Targets
                             #Summon Card of Cost Numeric
-                            c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
-                            print("Creature Summonned for %s" %c.name)
+                            if len(c.cards) < MAX_BOARD_SIZE:
+                                c.cards.append(Card.Card(cardType = TYPE_CREATURE, state = STATE_SLEEP, effect = True, effect_chance = 0.2, cost = self.numeric))
+                                print("Creature Summonned for %s" %c.name)
+                            else:
+                                print("Too many creatures on board! No creature summoned.")
                 if self.effect == BUFF_EFFECT: # If Buff
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
 
