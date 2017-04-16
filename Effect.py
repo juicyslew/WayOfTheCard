@@ -426,7 +426,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     print('-----------------------------------')
                 if self.effect == REVOLVE_EFFECT: # If Revolve
                     print('-----------------------------------')
-                    self.t = self.determine_target(own_playcoster, enemy_player) # Determine Target
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Revolve card with same cost
                         c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)

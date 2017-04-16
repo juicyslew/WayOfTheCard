@@ -1,3 +1,37 @@
+        else:
+            while True:
+                player = all_players[player]
+                print("### %s's Hand ###" % all_players[player].name)
+                print(all_players[player].hand) #Print to be out around 2020, which means he will have been writing the first 5 for 58 yethe player hand
+                print("mana: %i" % all_players[player].mana) #display mana
+                while True:
+                    # self.update_board()
+                    i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
+                    if i == '0': #if 0 then end function, showing that the player is done with their turn.
+                        return True
+                    elif i == '-1':
+                        return
+                    try:
+                        i = int(i) #set input to integer
+                        try:
+                            card = player.hand.cards[i-1] #pull the card from hand
+                            if card.stats[COST] > player.mana: #if player can't pay for card
+                                print("That Card Costs Too Much!")
+                                continue #return False #End Function and Return that it failed, and thus should be run again.
+                            #print(card)
+
+                            card.play(self.player_turn, self.players) #If it succeeded, Put the card in the field
+                            all_players[player].mana -= card.stats[COST] #Subtract from the player's mana
+                            for peeps in all_players:
+                                peeps.check_dead(peeps, all_players) #Check if anything died after the card play effect, which can happen in card.play()
+                            # self.update_board()
+                            break
+                        except IndexError: # If index is out of range, return an error
+                            print("\nYou don't have that many cards!")
+                    except ValueError: # if value converting to int is not possible, return error
+                        print('\nInput a Number!')
+                    #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
+
 #Game.py
 else: #Screw Pygame for now; I refuse to have it implemented.
     self.players = all_players

@@ -113,20 +113,18 @@ class Card():
         """
         Put card from hand into field
         """
-        if len(all_players) == 2:
-            player = all_players[player_turn]
-            enemy_player = all_players[not player_turn]
-            if self.cardType == TYPE_CREATURE:
-                player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-                player.board.update_board(player.screen, all_players[0], all_players[1], self)
-                try:
-                    self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-                except AttributeError or TypeError:
-                    pass
-            if self.cardType == TYPE_SPELL:
+        player = all_players[player_turn]
+        enemy_player = all_players[not player_turn]
+        if self.cardType == TYPE_CREATURE:
+            player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+            player.board.update_board(player.screen, all_players[0], all_players[1], self)
+            try:
                 self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-                player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-
+            except AttributeError or TypeError:
+                pass
+        if self.cardType == TYPE_SPELL:
+            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+            player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
 
 
     def attack(self, opp_card):

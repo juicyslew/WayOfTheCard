@@ -14,6 +14,7 @@ HAND_INIT_SIZE = 3 # Initial Hand Size
 HAND_MAX_SIZE = 10 # Maximum Hand Size, Need To Actually Impliment
 CARDS_DRAWN_PER_TURN = 1
 SECOND_PLAYER_CARD_BONUS = 1
+MAX_BOARD_SIZE = 7
 
 #NAME_LIST = ["Bird", "Robot Doctor", "Magic Stones", "Test Card", "JEREMEEEEE"]
 
@@ -274,9 +275,6 @@ CARD_HEIGHT = CARD_SCALE * 7
 
 """TODO CONSTANTS:
 
-MAX_BOARD_SIZE = 7
-MAX_BOARD_SIZE = random.randint(5, 10)
-
 COIN = True #True = given to opponent, False = no coin given
 COIN = random.choice([True, False])
 
@@ -297,6 +295,7 @@ if yup == "y":
     CARDS_DRAWN_PER_TURN = random.randint(1, 2)
     MANA_PER_TURN = random.randint(1,2)
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
+    MAX_BOARD_SIZE = random.randint(5, 10)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n \n
@@ -304,7 +303,8 @@ Player starting health: %d
 Deck start size: %d
 Hand start size: %d
 Hand max size: %d
+Max field size: %d
 Cards drawn per turn: %d
 Mana gained per turn: %d
 Second turn card bonus: %d"""
-% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS))
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS))
