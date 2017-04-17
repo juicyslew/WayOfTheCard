@@ -27,6 +27,7 @@ class Board():
         self.buff = pygame.image.load(os.path.join('buff_icon.png')).convert_alpha()
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
         self.ice = pygame.image.load(os.path.join('ice.jpg')).convert_alpha()
+        self.glow = pygame.image.load(os.path.join('glow.jpg')).convert_alpha()
         self.effect_spacing = 10
         self.name_spacing = 15
         self.char_length = 24
@@ -34,6 +35,7 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
+        self.anim_speed = 20
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -224,6 +226,12 @@ class Board():
                 else:
                     self.render_card(card, (x, y))
                 if card is not card_to_animate and card is not card_not_to_render:
+                    if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
+                        glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
+                        glow_rect = glow.get_rect()
+                        self.change_alpha(glow, 100)
+                        glow_rect = glow_rect.move(x, y)
+                        self.screen.blit(glow, glow_rect)
                     (name, mana, stats, effect_text) = self.read_card(card)
                     name_height = 0
                     for line in name:   #   renders name in individual lines
@@ -242,7 +250,7 @@ class Board():
                     if card.active_effects[FROZEN_INDEX] == 1:
                         ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
                         ice_rect = ice.get_rect()
-                        self.change_alpha(ice, 110)
+                        self.change_alpha(ice, 180)
                         ice_rect = ice_rect.move(x, y)
                         self.screen.blit(ice, ice_rect)
 
@@ -258,6 +266,12 @@ class Board():
                     else:
                         self.render_card(card, (x, y))
                     if card is not card_to_animate and card is not card_not_to_render:
+                        if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
+                            glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
+                            glow_rect = glow.get_rect()
+                            self.change_alpha(glow, 100)
+                            glow_rect = glow_rect.move(x, y)
+                            self.screen.blit(glow, glow_rect)
                         (name, mana, stats, effect_text) = self.read_card(card)
                         name_height = 0
                         for line in name:   #   renders name in individual lines
@@ -276,7 +290,7 @@ class Board():
                         if card.active_effects[FROZEN_INDEX] == 1:
                             ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
                             ice_rect = ice.get_rect()
-                            self.change_alpha(ice, 110)
+                            self.change_alpha(ice, 180)
                             ice_rect = ice_rect.move(x, y)
                             self.screen.blit(ice, ice_rect)
                 except ValueError:
@@ -296,20 +310,20 @@ class Board():
         dpos = self.get_card_xy(def_player, def_index)
         dx = (dpos[0] - apos[0])/1.8
         dy = (dpos[1] - apos[1])/1.8
-        frames = 15
+        frames = int(0.3 * self.anim_speed)
         for i in range(0, frames):
             prop_there = (i/frames)**3
             self.update_board(self.screen, self.player1, self.player2, None, atk_card)
             pos = (apos[0] + prop_there * dx, apos[1] + prop_there * dy)
             self.render_card(atk_card, pos, False, True)
-            self.clock.tick(50)
+            self.clock.tick(self.anim_speed)
             pygame.display.flip()
         for i in range(0, frames):
             prop_there = ((frames - i)/frames)**3
             self.update_board(self.screen, self.player1, self.player2, None, atk_card)
             pos = (apos[0] + prop_there * dx, apos[1] + prop_there * dy)
             self.render_card(atk_card, pos, False, True)
-            self.clock.tick(50)
+            self.clock.tick(self.anim_speed)
             pygame.display.flip()
 
     def render_damage(self, damage, player, index): #   fancy damage animation
@@ -330,15 +344,16 @@ class Board():
             initial_size = 80
             x = self.screen.get_size()[0]/2 - initial_size/2
             y = self.cardheight/2 + 30
-        for i in range(50):
+        frames = self.anim_speed
+        for i in range(frames):
             self.update_board(self.screen, self.player1, self.player2)
-            red_flare = pygame.transform.scale(image, (initial_size + 2*i, initial_size + 2*i))
-            self.change_alpha(red_flare, max(255 - 8 * i, 0))
+            red_flare = pygame.transform.scale(image, (int(initial_size + i*100/self.anim_speed), int(initial_size + i*100/self.anim_speed)))
+            self.change_alpha(red_flare, max(255 - i*400/self.anim_speed, 0))
             flare_rect = red_flare.get_rect()
-            flare_rect = flare_rect.move(x - i, y - i)
+            flare_rect = flare_rect.move(x - i * 50/self.anim_speed, y - i * 50/self.anim_speed)
             self.screen.blit(red_flare, flare_rect)
             pygame.display.flip()
-            self.clock.tick(50)                     #   run fade animation at 50 fps
+            self.clock.tick(self.anim_speed)      #   run fade animation at 50 fps
         self.update_board(self.screen, self.player1, self.player2)
 
     def render_heal(self, amount, player, index):   #   fancy heal animations
@@ -358,15 +373,16 @@ class Board():
             initial_size = 80
             x = self.screen.get_size()[0]/2 - initial_size/2
             y = self.cardheight/2 + 30
-        for i in range(50):
+        frames = self.anim_speed
+        for i in range(frames):
             self.update_board(self.screen, self.player1, self.player2)
-            heal_plus = pygame.transform.scale(self.heal, (initial_size + 2*i, initial_size + 2*i))
-            self.change_alpha(heal_plus, max(255 - 8 * i, 0))
+            heal_plus = pygame.transform.scale(self.heal, (int(initial_size + i*100/self.anim_speed), int(initial_size + i*100/self.anim_speed)))
+            self.change_alpha(heal_plus, max(255 - i*400/self.anim_speed, 0))
             heal_rect = heal_plus.get_rect()
-            heal_rect = heal_rect.move(x - i, y - i)
+            heal_rect = heal_rect.move(x - i * 50/self.anim_speed, y - i * 50/self.anim_speed)
             self.screen.blit(heal_plus, heal_rect)
             pygame.display.flip()
-            self.clock.tick(50)
+            self.clock.tick(self.anim_speed)
         self.update_board(self.screen, self.player1, self.player2)
 
     def render_buff(self, amount, player, index):   #   fancy heal animations
@@ -386,15 +402,16 @@ class Board():
             initial_size = 80
             x = self.screen.get_size()[0]/2 - initial_size/2
             y = self.cardheight/2 + 30
-        for i in range(50):
+        frames = self.anim_speed
+        for i in range(frames):
             self.update_board(self.screen, self.player1, self.player2)
-            buff_shield = pygame.transform.scale(self.buff, (50 + 2*i, 50 + 2*i))
-            self.change_alpha(buff_shield, max(255 - 8 * i, 0))
+            buff_shield = pygame.transform.scale(self.buff, (int(initial_size + i*100/self.anim_speed), int(initial_size + i*100/self.anim_speed)))
+            self.change_alpha(buff_shield, max(255 - i*400/self.anim_speed, 0))
             buff_rect = buff_shield.get_rect()
-            buff_rect = buff_rect.move(x - i, y - i)
+            buff_rect = buff_rect.move(x - i * 50/self.anim_speed, y - i * 50/self.anim_speed)
             self.screen.blit(buff_shield, buff_rect)
             pygame.display.flip()
-            self.clock.tick(50)
+            self.clock.tick(self.anim_speed)
         self.update_board(self.screen, self.player1, self.player2)
 
     def render_shield(self, amount, player, index):
