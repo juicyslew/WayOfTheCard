@@ -195,7 +195,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         if self.i == 0:
                             continue
                         elif self.i != 1:
-                            return targ.cards[self.i-1]
+                            return [targ.cards[self.i-1]]
                         else:
                             print("\nMust target Creature")
                             continue

@@ -73,12 +73,10 @@ class Card():
             active_effects = INIT_ACTIVE_EFFECT
         #if effect_spend == None: # if effect_spend == None
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
-        starting_stats = stats #set original stats
+        self.starting_stats = stats #set original stats
         self.name = name
         self.cardType = cardType
         self.stats = stats
-        self.starting_stats = starting_stats
-        self.real_start_stats = starting_stats
         self.state = state
         self.creatureType = creatureType
         self.effect = effect
@@ -156,9 +154,6 @@ class Card():
 
     def heal(self):
         print("starting_stat: %d" % self.starting_stats[DEF])
-        print("real_start_stats: %d" % self.real_start_stats[DEF])
         self.stats[DEF] = self.starting_stats[DEF]
-        print(self.stats[DEF])
-        self.stats[DEF] = self.real_start_stats[DEF]
         print(self.stats[DEF])
         print("Here now")
