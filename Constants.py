@@ -304,7 +304,7 @@ if yup == "y":
     MANA_PER_TURN = random.randint(1,2)
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
     MAX_BOARD_SIZE = random.randint(5, 10)
-    TEMP_MANA = random.choice(0, 1)
+    TEMP_MANA = random.randint(0, 1)
     MANA_LIMIT = random.randint(1, 4)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
