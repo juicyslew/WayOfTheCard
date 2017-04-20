@@ -272,14 +272,14 @@ class Game():
                     break
                 self.player_turn = not self.player_turn
 
-                for card in player1.cards[1:]: #Run through cards on the field
+                for card in player1.cards[0:]: #Run through cards on the field
                     try:
                         card.heal()
                         self.update_board()
                         print("heal1-1!")
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
-                for card in player2.cards[1:]: #Run through cards on the field
+                for card in player2.cards[0:]: #Run through cards on the field
                     try:
                         card.heal()
                         self.update_board()

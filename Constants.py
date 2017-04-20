@@ -47,6 +47,8 @@ DEF = 2 #Defense index in stats
 
 MAX_MANA = 10 #Maximum Mana in a Turn
 MANA_PER_TURN = 1 #Mana gain per turn
+TEMP_MANA = False #Whether or not you have temporary mana
+MANA_LIMIT = 2*MAX_MANA #The max mana for when you have permament mana
 
 #Mana curve for card cost generation: Pre-generated List of probabilities.
 MANA_CURVE = [0.04973162330165214, 0.11935589592396513, 0.18898016854627814, 0.18898016854627814, 0.15914119456528683, 0.11559168664589639, 0.065624272622313, 0.037758460971486926, 0.023838973980991283, 0.015398532937511128, 0.010599021958340752]
@@ -273,9 +275,6 @@ CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
-TEMP_MANA = True
-MANA_LIMIT = 2*MAX_MANA
-
 """TODO CONSTANTS:
 
 #Need to code in mana-giving
@@ -305,7 +304,7 @@ if yup == "y":
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
-    MANA_LIMIT = random.randint(1, 4)
+    MANA_LIMIT = random.randint(10, 40)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n \n
