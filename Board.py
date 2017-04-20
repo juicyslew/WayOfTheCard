@@ -18,8 +18,10 @@ class Board():
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]
         self.player2 = players[1]
-        backgrounds = ['BackgroundImage.jpg', 'bk2.jpg', 'bk3.jpg', 'bk4.jpg', 'bk5.jpg']
+        backgrounds = ['BackgroundImage.jpg', 'bk2.jpg', 'bk3.jpg', 'bk4.jpg', 'bk5.jpg', 'bk6.jpg', 'bk7.jpg']
         self.backdrop = pygame.image.load(os.path.join(random.choice(backgrounds))).convert_alpha()
+        self.backdrop = pygame.transform.scale(self.backdrop, (int(WINDOW_WIDTH/2), int(WINDOW_HEIGHT/2)))
+        self.change_brightness(self.backdrop, 0.75)
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
         self.axe = pygame.image.load(os.path.join('axe.png')).convert_alpha()
         self.bear = pygame.image.load(os.path.join('bear.png')).convert_alpha()
@@ -473,6 +475,13 @@ class Board():
                 r,g,b,old_alpha=img.get_at((x,y))
                 if old_alpha>0:
                     img.set_at((x,y),(r,g,b,alpha))
+
+    def change_brightness(self, img, f = 0.75):
+        width, height = img.get_size()
+        for x in range(0, width):
+            for y in range(0, height):
+                r, g, b, alpha = img.get_at((x, y))
+                img.set_at((x, y), (r*f, g*f, b*f, alpha))
 
     def get_card_xy(self, player, index):
         x = index * (self.cardwidth + 20) + 80
