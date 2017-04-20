@@ -18,7 +18,8 @@ class Board():
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]
         self.player2 = players[1]
-        self.backdrop = pygame.image.load(os.path.join('BackgroundImage.jpg')).convert_alpha()
+        backgrounds = ['BackgroundImage.jpg', 'bk2.jpg', 'bk3.jpg', 'bk4.jpg', 'bk5.jpg']
+        self.backdrop = pygame.image.load(os.path.join(random.choice(backgrounds))).convert_alpha()
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
         self.axe = pygame.image.load(os.path.join('axe.png')).convert_alpha()
         self.bear = pygame.image.load(os.path.join('bear.png')).convert_alpha()
@@ -28,6 +29,7 @@ class Board():
         self.shield = pygame.image.load(os.path.join('div_shield_icon.png')).convert_alpha()
         self.ice = pygame.image.load(os.path.join('ice.jpg')).convert_alpha()
         self.glow = pygame.image.load(os.path.join('glow.jpg')).convert_alpha()
+        self.double_sword = pygame.image.load(os.path.join('crossedswords.png')).convert_alpha()
         self.effect_spacing = 10
         self.name_spacing = 15
         self.char_length = 24
@@ -35,7 +37,7 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = 20
+        self.anim_speed = 30
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -83,6 +85,12 @@ class Board():
                     card.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
                     effect_height += self.effect_spacing
                 #card.set_alpha(50)
+                if card_obj.active_effects[WINDFURY_INDEX] == 1:
+                    swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
+                    swords_rect = swords.get_rect()
+                    self.change_alpha(swords, 180)
+                    swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
+                    card.blit(swords, swords_rect)
                 card.set_alpha(10 * alpha)
                 if not is_animated:
                     card.set_alpha(255)
@@ -155,7 +163,7 @@ class Board():
                     elif eff == CHARGE_EFFECT:
                         effect_text += "give %s to %s." % (self.effnames[CHARGE_EFFECT], TARGET_TEXT_DICT[targ])
                     elif eff == WINDFURY_EFFECT:
-                        effect_text += "give %s to %s." % (self.effnames[DIVINE_SHIELD_EFFECT], TARGET_TEXT_DICT[targ])
+                        effect_text += "give %s to %s." % (self.effnames[WINDFURY_EFFECT], TARGET_TEXT_DICT[targ])
                     elif eff == DEBUFF_EFFECT:
                         effect_text += "%s gets -%s/-%s." % (TARGET_TEXT_DICT[targ], num[0], num[1])
                     elif eff == DEVOLVE_EFFECT:
@@ -191,7 +199,7 @@ class Board():
         screen.fill((200, 100, 200))
         bkgd = pygame.transform.scale(self.backdrop, (WINDOW_WIDTH, WINDOW_HEIGHT))
         bkgd_rect = bkgd.get_rect()
-        #self.screen.blit(bkgd, bkgd_rect)
+        self.screen.blit(bkgd, bkgd_rect)
         xhalf = screen.get_size()[0]/2
         yhalf = screen.get_size()[1]/2
         card_y_offset = 30
@@ -247,6 +255,12 @@ class Board():
                         effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                         screen.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
                         effect_height += self.effect_spacing
+                    if card.active_effects[WINDFURY_INDEX] == 1:
+                        swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
+                        swords_rect = swords.get_rect()
+                        self.change_alpha(swords, 180)
+                        swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
+                        self.screen.blit(swords, swords_rect)
                     if card.active_effects[FROZEN_INDEX] == 1:
                         ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
                         ice_rect = ice.get_rect()
@@ -287,6 +301,12 @@ class Board():
                             effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
                             screen.blit(effect_render, (x + 15, y + self.cardheight/2 + height))
                             height += self.effect_spacing
+                        if card.active_effects[WINDFURY_INDEX] == 1:
+                            swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
+                            swords_rect = swords.get_rect()
+                            self.change_alpha(swords, 180)
+                            swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
+                            self.screen.blit(swords, swords_rect)
                         if card.active_effects[FROZEN_INDEX] == 1:
                             ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
                             ice_rect = ice.get_rect()
@@ -433,16 +453,17 @@ class Board():
             initial_size = 80
             x = self.screen.get_size()[0]/2 - initial_size/2
             y = self.cardheight/2 + 30
-        for i in range(50):
+        frames = self.anim_speed
+        for i in range(frames):
             self.update_board(self.screen, self.player1, self.player2)
-            div_shield = pygame.transform.scale(self.shield, (50 + 2*i, 50 + 2*i))
+            div_shield = pygame.transform.scale(self.shield, (int(initial_size + i*100/self.anim_speed), int(initial_size + i*100/self.anim_speed)))
             #div_shield = pygame.transform.rotate(div_shield, -2*i)
-            self.change_alpha(div_shield, max(255 - 8 * i, 0))
+            self.change_alpha(div_shield, max(255 - i*400/self.anim_speed, 0))
             div_rect = div_shield.get_rect()
-            div_rect = div_rect.move(x - i, y - i)
+            div_rect = div_rect.move(x - i * 50/self.anim_speed, y - i * 50/self.anim_speed)
             self.screen.blit(div_shield, div_rect)
             pygame.display.flip()
-            self.clock.tick(50)
+            self.clock.tick(self.anim_speed)
         self.update_board(self.screen, self.player1, self.player2)
 
     def change_alpha(self, img, alpha=255): #   change opacity of img to alpha
