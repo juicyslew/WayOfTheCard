@@ -144,7 +144,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             return (choice(enemy_player.cards[1:]),)
         elif self.target == TARGET_ALL_CREATURE:
             targs = []
-            if len(own_player.cards) - 1 == 0:
+            for ca in own_player.cards[1:] + enemy_player.cards[1:]:
+                targs.append(ca)
+            return targs
+            '''if len(own_player.cards) - 1 == 0:
                 pass
             else:
                 targs + own_player.cards[1:]
@@ -153,8 +156,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             else:
                 targs + enemy_player.cards[1:]
             if len(targs) == 0:
-                return ()
-            return tuple(targs)
+                return ()'''
         elif self.target == TARGET_THIS_CREATURE:
             return (self.ThisCard,)
         elif self.target == TARGET_ALL_ENEMY_CREATURE:
@@ -449,7 +451,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         if c in own_player.cards:
                             own_player.cards[own_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
                         else:
-                            enemy_player.cards[dnemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
+                            enemy_player.cards[enemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
                         print("Creature Evolved to %s cost" %c.stats[0])
                     print('-----------------------------------')
             self.effect = eff_ls
