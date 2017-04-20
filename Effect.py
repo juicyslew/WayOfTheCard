@@ -108,65 +108,47 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         except TypeError:
             print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
         if self.target == TARGET_OWN_PLAYER: # If Target Is Own Player, Return
-            return (a,)
+            return [a]
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
-            return (b,)
+            return [b]
         elif self.target == TARGET_ALL: # If Target is All Cards, set and return
-            return tuple(own_player.cards + enemy_player.cards)
+            return own_player.cards + enemy_player.cards
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
-            return (a, b)
+            return [a, b]
         elif self.target == TARGET_RANDOM:
-            return (choice(own_player.cards + enemy_player.cards),)
+            return [choice(own_player.cards + enemy_player.cards)]
         elif self.target == TARGET_RANDOM_ENEMY:
-            return (choice(enemy_player.cards),)
+            return [choice(enemy_player.cards)]
         elif self.target == TARGET_RANDOM_ALLY:
-            return (choice(own_player.cards),)
+            return [choice(own_player.cards)]
         elif self.target == TARGET_RANDOM_CREATURE:
             targs = []
-            if len(own_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + own_player.cards[1:]
-            if len(enemy_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + enemy_player.cards[1:]
-            if len(targs) == 0:
-                return ()
-            return (choice(targs),)
+            for ca in own_player.cards[1:] + enemy_player.cards[1:]:
+                targs.append(ca)
+            return [choice(targs)]
         elif self.target == TARGET_RANDOM_ALLY_CREATURE:
             if len(own_player.cards) - 1 == 0:
-                return ()
+                return []
             return [choice(own_player.cards[1:])]
         elif self.target == TARGET_RANDOM_ENEMY_CREATURE:
             if len(enemy_player.cards) - 1 == 0:
-                return ()
-            return (choice(enemy_player.cards[1:]),)
+                return []
+            return [choice(enemy_player.cards[1:])]
         elif self.target == TARGET_ALL_CREATURE:
             targs = []
             for ca in own_player.cards[1:] + enemy_player.cards[1:]:
                 targs.append(ca)
             return targs
-            '''if len(own_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + own_player.cards[1:]
-            if len(enemy_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + enemy_player.cards[1:]
-            if len(targs) == 0:
-                return ()'''
         elif self.target == TARGET_THIS_CREATURE:
-            return (self.ThisCard,)
+            return [self.ThisCard]
         elif self.target == TARGET_ALL_ENEMY_CREATURE:
             if len(enemy_player.cards) - 1 == 0:
-                return ()
-            return tuple(enemy_player.cards[1:])
+                return []
+            return enemy_player.cards[1:]
         elif self.target == TARGET_ALL_ALLY_CREATURE:
             if len(own_player.cards) - 1 == 0:
-                return ()
-            return tuple(own_player.cards[1:])
+                return []
+            return own_player.cards[1:]
         elif self.target == TARGET_PLAYERS: # If Target is Player of Choice
             while True:
                 print("Your Health: %i\nEnemy Health: %i" % (own_player.cards[0].stats[DEF], enemy_player.cards[0].stats[DEF]))
@@ -175,9 +157,9 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     self.i = int(self.i) # Check that it is an int
                     #Return player based on player input
                     if self.i == 1:
-                        return (a,)
+                        return [a]
                     elif self.i == 2:
-                        return (b,)
+                        return [b]
                     else:
                         print('Input a Number Between 1 and 2!')
                 except ValueError:
@@ -213,7 +195,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         if self.i == 0:
                             continue
                         elif self.i != 1:
-                            return (targ.cards[self.i-1],)
+                            return targ.cards[self.i-1]
                         else:
                             print("\nMust target Creature")
                             continue
