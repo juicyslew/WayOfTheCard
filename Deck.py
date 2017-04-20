@@ -50,4 +50,10 @@ class Deck():
     def draw(self, hand, num):
         """ Draw "num" Cards into Hand """
         for n in range(num):
-            hand.cards.append(self.cards.pop(0))
+            if(FATIGUE):
+                try:
+                    hand.cards.append(self.cards.pop(0))
+                except IndexError:
+                    print("You're out of cards fool!")
+            else:
+                hand.cards.append(self.cards.pop(0))

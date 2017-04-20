@@ -155,8 +155,8 @@ class Card():
             self.stats[DEF] -= damage
 
     def heal(self):
-        print("starting_stat: %d" % self.starting_stat)
-        print("real_start_stats: %d" % self.real_start_stats)
+        print("starting_stat: %d" % self.starting_stats[DEF])
+        print("real_start_stats: %d" % self.real_start_stats[DEF])
         self.stats[DEF] = self.starting_stats[DEF]
         print(self.stats[DEF])
         self.stats[DEF] = self.real_start_stats[DEF]
