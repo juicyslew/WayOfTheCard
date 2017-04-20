@@ -238,7 +238,12 @@ class Game():
                     #             pass
 
                 pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
-                player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) #Update player mana for the turn based on which turn it is.
+                if TEMP_MANA:
+                    player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
+                else:
+                    player1.mana += min((self.turn+1) * MANA_PER_TURN, MAX_MANA)
+                    if player1.mana >= MANA_LIMIT:
+                        player1.mana = MANA_LIMIT
                 player1.activate_cards() #Activate cards in the field for usage
                 print("\n\n\n\n### %s || %ls ###" % (player1.name, player1.cards[0].stats)) # Print player for turn and Stats
                 #print() # Print Player Stats
@@ -271,12 +276,26 @@ class Game():
                     try:
                         card.heal()
                         self.update_board()
+                        print("heal1-1!")
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
+                for card in player2.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                        print("heal2-1!")
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
+
                 self.update_board()
                 #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
                 pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
-                player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
+                if TEMP_MANA:
+                    player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
+                else:
+                    player2.mana += min((self.turn+1) * MANA_PER_TURN, MAX_MANA)
+                    if player2.mana >= MANA_LIMIT:
+                        player2.mana = MANA_LIMIT
                 print(player2.mana) # display mana
                 player2.activate_cards() # activate cards in field (wake them from sleep)
                 print("\n\n\n\n### %s || %ls ###" % (player2.name, player2.cards[0].stats)) # Print Player
@@ -306,6 +325,20 @@ class Game():
                 #break # Break out of player2 while loop
                 if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                     break
+                for card in player1.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                        print("heal1-2!")
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
+                for card in player2.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                        print("heal2-2!")
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
                 self.player_turn = not self.player_turn
                 self.turn += 1 # Increment turn by 1.
 

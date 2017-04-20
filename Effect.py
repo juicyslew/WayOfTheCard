@@ -241,7 +241,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 self.target = targ_ls[i]
                 self.numeric = num_ls[i]
             except AttributeError or TypeError:
-                continue
+                return
             if time == self.trigger: # If the current timing is the cards effect timing
                 if self.effect == DRAW_EFFECT: # If draw
                     self.t = self.determine_target(own_player, enemy_player) # Find Target List

@@ -273,16 +273,24 @@ CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
+TEMP_MANA = True
+MANA_LIMIT = 2*MAX_MANA
+
 """TODO CONSTANTS:
 
+#Need to code in mana-giving
 COIN = True #True = given to opponent, False = no coin given
 COIN = random.choice([True, False])
 
+#I think this is kinda useless? Players can decide who goes first before they start playing?
 FIRST_PLAYER = True #True means the first player created goes first
 FIRST_PLAYER = random.choice([True, False])
 
-PERM_MANA = False
-PERM_MANA = random.choice(0, 1)
+FATIGUE = False
+FATIGUE = random.choice(0, 1)
+
+MINION_RECOVER = False
+MINION_RECOVER = random.choice(0,1)
 """
 
 ### RANDOMIZATION PART ###
@@ -296,6 +304,8 @@ if yup == "y":
     MANA_PER_TURN = random.randint(1,2)
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
     MAX_BOARD_SIZE = random.randint(5, 10)
+    TEMP_MANA = random.choice(0, 1)
+    MANA_LIMIT = random.randint(1, 4)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n \n
@@ -306,5 +316,7 @@ Hand max size: %d
 Max field size: %d
 Cards drawn per turn: %d
 Mana gained per turn: %d
-Second turn card bonus: %d"""
-% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS))
+Second turn card bonus: %d
+Temporary Mana: %d
+Max Temp Mana: %d"""
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS, TEMP_MANA, MANA_LIMIT))
