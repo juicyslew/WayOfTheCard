@@ -1,0 +1,43 @@
+The purpose of this document is to provide a road map/architectural schematic for
+our project currently titles WayOfTheCard.
+
+Files:
+
+Card.py
+    Purpose: Contains Card Class.
+    Dependant Scripts: Constants.py, Effect.py
+    Children: Deck.py, Effect.py
+    About: Contains the card class which keeps track of every card. It's attributes
+    are: Name(string for name of card), Card Type(Dudes vs Dos, (INT)),
+    Stats(Cost, Offense, Defense,(LIST OF INTS)),State (Asleep vs Active vs Dead vs In Hand,(
+      INT)), Creature Type(INT/STRING),Effect(Effects Class, Handles the special effects of the card.
+      EFFECT CLASS)
+
+Constants.py
+    Purpose: Hold all of our constants in a convenient location.
+    Dependant Scripts: None
+    Children: Deck.py
+    About: Contains alot of common variables like PLAYER_HEALTH
+
+  Deck.py
+    Purpose: Contains the Deck Class.
+    Dependant Scripts: Cards.py, Constants.py
+    Children:
+    About: It contains the deck class. The deck class contains a list of the players cards (list),
+    It can also shuffle and Draw cards.
+
+  Discard.py
+    Purpose: Currently contains the discard class.
+    Dependant Scripts: ???
+    Children:???
+    About: ???
+
+  Effect.py
+    Purpose: Contains the Effect Class.
+    Dependant Scripts: Constants.py, Cards.py
+    Children:
+    About: This script contains the effect class. The effect class takes the card
+    and looks at its attributes based on those attributes it activates the effect.
+    The effects have a trigger, a target, a potancy (numeric), a time(ie. on death ect.)
+
+  
