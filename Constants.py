@@ -6,6 +6,7 @@ import random
 
 WINDOW_WIDTH = 1850
 WINDOW_HEIGHT = 1020
+FRAME_RATE = 20
 
 DECK_INIT_SIZE = 30 #Initial Deck Size
 MAX_NUMERIC = 3 #(Outdated?) Maximum Numerical Value On Effects
