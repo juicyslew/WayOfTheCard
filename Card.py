@@ -1,8 +1,10 @@
 from Constants import *
 from Effect import *
 from random import choice, random, randint
-from randGen import generate, generate_stats
+from randGen import generate, generate_stats, name_list
 import numpy as np
+import sys
+from ImageStuff.imagegen import *
 
 class Card():
     """
@@ -33,7 +35,7 @@ class Card():
         if rarity == None:
             rarity = DEFAULT_RARITY
         if cardType == None:
-            if random() < spell_chance:
+            if random.random() < spell_chance:
                 cardType = TYPE_SPELL
             else:
                 cardType = TYPE_CREATURE
@@ -47,7 +49,7 @@ class Card():
             if cost == None: #If cost not specified generate it
                 cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
         if effect == True: #If effect equals True
-            if random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
+            if random.random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
                 effect = True
             else:
                 effect = False
@@ -75,6 +77,13 @@ class Card():
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         starting_stats = stats #set original stats
         self.name = name
+        if cardType == TYPE_CREATURE:
+            noun = name.split()[-1]
+            adj1 = name.split()[0]
+            if adj1 not in name_list:
+                adj1 = 'NONE'
+            self.art = genimage_dudes(adj1, 'NONE', noun)
+            self.art_path = "ImageStuff/finimages/%s%s.jpg" % (noun, adj1)
         self.cardType = cardType
         self.stats = stats
         self.starting_stats = starting_stats

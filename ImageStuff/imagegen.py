@@ -84,7 +84,7 @@ def fix_image(filename,name):
             - use image paste to paste image onto a resized version of of the image.
     """
     image = Image.open(filename)
-    image.save("untouched/"+name+ ".jpg")
+    image.save("ImageStuff/untouched/"+name.lower()+ ".jpg")
     size = image.size
     if name in dict_paded.keys():
         #checking to see if I need to pad the image instead of cropping it.
@@ -141,15 +141,15 @@ def fix_image(filename,name):
             fin = image_paste.resize((480,270))
             fin.save(filename)
         elif name == "siren":
-            newheight = 9*size[0]/16
+            newheight = int(9*size[0]/16)
             cropped = image.crop((0,0,size[0],((newheight))))
-            fin = cropped.resize((480,270))
+            fin = cropped.resize((480, 270))
             fin.save(filename)
 
     else:
-        newheight = 9*size[0]/16
+        newheight = int(9*size[0]/16)
         cropped = image.crop((0,((size[1]-newheight)//2),size[0],size[1]-((size[1]-newheight)//2)))
-        fin = cropped.resize((480,270))
+        fin = cropped.resize((480, 270))
         fin.save(filename)
     return fin
 
@@ -160,8 +160,8 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
     adj_s are the adjictives in ajictive list"""
     #try:
     blendy = (0.4,0.25)
-    noun_name  ="imagelib/"+ noun + ".jpg"
-    adj_name ="imagelib/"+adj + ".jpg"
+    noun_name  ="ImageStuff/imagelib/"+ noun.lower() + ".jpg"
+    adj_name ="ImageStuff/imagelib/"+adj.lower() + ".jpg"
     adj1_i =  Image.open(adj_name)
     noun_image = Image.open(noun_name)
     nam_3 = ""
@@ -183,6 +183,8 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
         nam2 = ""
     if noun_name in blend_back or noun_name == "acid":
         blendy = (blendy[0],0.99)
+    noun_image = noun_image.convert('RGBA')
+    effect_image = effect_image.convert('RGBA')
     final =Image.blend(noun_image,effect_image,blendy[1])
     pix = final.load()
     size = (480,270)
@@ -217,7 +219,7 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
             #        if origional != (255,255,255):
             #            pix[i,j]= (origional)
 
-    final.save("finimages/"+noun+adj+nam2+".jpg")
+    final.save("ImageStuff/finimages/"+noun+adj+nam2+".jpg")
         #final.save("")
     #except:
         #genimage_dudes(random.choice(name_list), adj2 = random.choice([random.choice(name_list),'NONE']),adj_s = random.choice([random.choice(adj_s),'NONE','NONE','NONE','NONE','NONE','NONE']))

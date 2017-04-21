@@ -8,7 +8,7 @@ class Board():
         self.clock = pygame.time.Clock()
         self.screen = screen
         typeface = "myriad pro cond"
-        self.card_name_font = pygame.font.SysFont(typeface, 19)   #   sets card fonts
+        self.card_name_font = pygame.font.SysFont(typeface, 17)   #   sets card fonts
         self.hero_name_font = pygame.font.SysFont(typeface, PLAYER_CARD_FONT_SIZE)
         self.card_text_font = pygame.font.SysFont(typeface, CREATURE_CARD_FONT_SIZE)
         self.mana_font = pygame.font.SysFont(typeface, MANA_COST_FONT_SIZE)
@@ -65,6 +65,13 @@ class Board():
 
     def render_card(self, card_obj, position, is_animated = False, is_dash = False):  #   display card on screen
         card = pygame.Surface((self.cardwidth, self.cardheight))
+        try:
+            art = pygame.image.load(card_obj.art_path).convert_alpha()
+
+        except:
+            art = self.bear
+        art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+
         if is_animated or is_dash:
             for alpha in range(30):
                 card.fill((255, 255, 255))
@@ -77,6 +84,7 @@ class Board():
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
                     name_height += self.name_spacing
+                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
                 stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -108,7 +116,7 @@ class Board():
 
     def read_card(self, card):  #   turns card object into easily read tuple
         name = card.name
-        name_length = 12
+        name_length = 20
         while len(name) - name.rfind("\n") > name_length: # arranges name into lines of length <= name_length
             index = name.rfind("\n") + name_length
             while name[index] != " " and index > 0:
@@ -226,6 +234,12 @@ class Board():
 
         for card in player2.cards[1:] + player1.cards[1:]:
             try:
+                art = pygame.image.load(card.art_path).convert_alpha()
+
+            except:
+                art = self.bear
+            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+            try:
                 x = player2.cards.index(card)*(self.cardwidth + 20) + 80
                 y = yhalf - 15 - self.cardheight
                 if card is card_not_to_render:
@@ -236,6 +250,7 @@ class Board():
                 else:
                     self.render_card(card, (x, y))
                 if card is not card_to_animate and card is not card_not_to_render:
+                    screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                         glow_rect = glow.get_rect()
@@ -273,6 +288,12 @@ class Board():
 
             except ValueError:
                 try:
+                    art = pygame.image.load(card.art_path).convert_alpha()
+
+                except:
+                    art = self.bear
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                try:
                     x = player1.cards.index(card)*(self.cardwidth + 20) + 80
                     y = yhalf + 15
                     if card is card_not_to_render:
@@ -282,6 +303,7 @@ class Board():
                     else:
                         self.render_card(card, (x, y))
                     if card is not card_to_animate and card is not card_not_to_render:
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                         if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                             glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                             glow_rect = glow.get_rect()
