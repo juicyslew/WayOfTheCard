@@ -275,6 +275,8 @@ CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
+FATIGUE = True
+
 """TODO CONSTANTS:
 
 #Need to code in mana-giving
