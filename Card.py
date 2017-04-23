@@ -1,10 +1,10 @@
 from Constants import *
 from Effect import *
 from random import choice, random, randint
-from randGen import generate, generate_stats, name_list
+from randGen import generate, generate_stats, name_list,adjective,noun_list
 import numpy as np
 import sys
-from ImageStuff.imagegen import *
+from imagegen import *
 
 class Card():
     """
@@ -78,12 +78,35 @@ class Card():
         self.starting_stats = stats #set original stats
         self.name = name
         if cardType == TYPE_CREATURE:
-            noun = name.split()[-1]
-            adj1 = name.split()[0]
-            if adj1 not in name_list:
-                adj1 = 'NONE'
-            self.art = genimage_dudes(adj1, 'NONE', noun)
-            self.art_path = "ImageStuff/finimages/%s%s.jpg" % (noun, adj1)
+            namelist = name.split()
+            adj1 = 'NONE'
+            adj2 = 'NONE'
+            adj_s = 'NONE'
+            noun = 'NONE'
+            for i in namelist:
+                if i.lower() in noun_list:
+                    noun = i.lower()
+                elif i.lower() in name_list:
+                    if adj1 =='NONE':
+                        adj1 = i.lower()
+                    else:
+                        adj2 = i.lower()
+                elif i.lower() in special_adj:
+                    adj_s = i.lower()
+            #noun = name.split()[-1]
+            #adj1 = name.split()[0]
+            #if adj1.lower() not in name_list:
+            #    adj1 = 'NONE'
+            self.art = genimage_dudes(adj1, adj2=adj2, noun = noun, adj_s = adj_s)
+            if adj2 == "NONE":
+                adj2n = ""
+            else:
+                adj2n = adj2
+            if adj_s == "NONE":
+                adj_sn = ""
+            else:
+                adj_sn = adj_s
+            self.art_path = "ImageStuff/finimages/%s%s%s%s.jpg" % (noun, adj1, adj2n,adj_sn)
         self.cardType = cardType
         self.stats = stats
         self.state = state

@@ -22,11 +22,13 @@ def generate(cardType = TYPE_CREATURE):
         i += 1
         name.append(random.choice(name_list()))
     if cardType == TYPE_CREATURE:
-        if random.random() < 0.35:
+        if random.random() < 0.5:
+            #.35
             name = []
             name.append(random_name())
             name.append("the")
-            if random.random() < 0.4:
+            if random.random() < 0.9:
+                #.4
                 name.append(random.choice(adjective()))
         name.append(random.choice(noun_list()))
     string = ""
@@ -64,7 +66,7 @@ def noun_list():
     return ["cat", "mage", "horror", "bear", "warrior", "soldier",
     "shade", "angel", "demon", "elf", "elemental", "phoenix", "hero",
     "wizard", "dragon", "fairy", "hellkite", "horse", "leech", "troll",
-    "giant", "griffin", "person", "golem", "shaman", "prophet", "siren",
+    "giant", "griffen", "person", "golem", "shaman", "prophet", "siren",
     "succubis", "hydra", "basilisk", "satyr", "minotaur", "fish",
     "gargoyle", "wolf", "ooze", "protector", "goblin", "destroyer", "ape",
     "roc", "beast", "colossus", "titan", "dwarf", "sphinx", "ravager",
