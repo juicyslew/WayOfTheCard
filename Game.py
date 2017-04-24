@@ -61,7 +61,7 @@ class Game():
         Function for putting cards into the field at the beginning of a player's turn
         """
         player = all_players[player]
-        opp = # BUG: all_players[not self.player_turn]
+        opp = all_players[not self.player_turn]
         while True: #Yes, it's bad. Will come back to to see necessity of this.
             print("### %s's Hand ###" % player.name)
             print(player.hand) #Print the player hand
