@@ -11,6 +11,7 @@ import numpy as np
 import pygame
 from pygame.locals import *
 from Board import *
+from os import path
 
 class Game():
     def __init__(self):
@@ -20,6 +21,18 @@ class Game():
         self.player_turn = 0
 
     def init_game(self):
+        folder = 'ImageStuff/finimages'
+        if not path.isdir(folder):
+            os.makedirs(folder)
+        else:
+            for the_file in os.listdir(folder):
+                file_path = os.path.join(folder, the_file)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                    #elif os.path.isdir(file_path): shutil.rmtree(file_path)
+                except Exception as e:
+                    print(e)
         self.players = 2
         self.running = True #Set Running
         player_list = []
