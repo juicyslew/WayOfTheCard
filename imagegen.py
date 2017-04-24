@@ -262,7 +262,5 @@ def wipe_folder():
     pass
 
 if __name__ == '__main__':
-    genimage_dudes("cloud",noun = "acid", adj2 = "charm", adj_s="deadly")
-    for n in noun_list:
-        genimage_dudes("fire", noun = n, adj2 = "sword")
-    genimage_dudes("cloud",noun = "acid", adj2 = "charm", adj_s="deadly")
+    for n in range(50):
+        genimage_dudes(random.choice(name_list), adj2 = random.choice(name_list),noun = random.choice(noun_list),adj_s = random.choice([random.choice(special_adj),"NONE","NONE"]))

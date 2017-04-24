@@ -22,12 +22,12 @@ def generate(cardType = TYPE_CREATURE):
         i += 1
         name.append(random.choice(name_list()))
     if cardType == TYPE_CREATURE:
-        if random.random() < 0.5:
+        if random.random() < 0.35:
             #.35
             name = []
             name.append(random_name())
             name.append("the")
-            if random.random() < 0.9:
+            if random.random() < 0.4:
                 #.4
                 name.append(random.choice(adjective()))
         name.append(random.choice(noun_list()))
