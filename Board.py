@@ -39,7 +39,7 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = FRAME_RATE
+        self.anim_speed = 30
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -73,20 +73,18 @@ class Board():
         art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
 
         if is_animated or is_dash:
-            for alpha in range(int(self.anim_speed * 1.5)):
-                max_range = int(self.anim_speed * 1.5)
-                prop_done = alpha/max_range
+            for alpha in range(30):
                 card.fill((255, 255, 255))
                 # text_surface = self.render_text(card_obj, position)
                 x = 0
                 y = 0
                 (name, mana, stats, effect_text) = self.read_card(card_obj)
                 name_height = 0
-                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 for line in name:   #   renders name in individual lines
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
                     name_height += self.name_spacing
+                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
                 stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -103,14 +101,14 @@ class Board():
                     self.change_alpha(swords, 180)
                     swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
                     card.blit(swords, swords_rect)
-                card.set_alpha(int(prop_done * 255))
+                card.set_alpha(10 * alpha)
                 if not is_animated:
                     card.set_alpha(255)
                 self.screen.blit(card, (position[0], position[1]))
                 pygame.display.flip()
                 if not is_animated:
                     break
-                self.clock.tick(self.anim_speed)
+                self.clock.tick(20)
         else:
                 card.fill((255, 255, 255))
                 self.screen.blit(card, (position[0], position[1]))
