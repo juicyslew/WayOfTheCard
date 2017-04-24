@@ -75,7 +75,6 @@ class Card():
             active_effects = INIT_ACTIVE_EFFECT
         #if effect_spend == None: # if effect_spend == None
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
-        self.starting_stats = stats #set original stats
         self.name = name
         if cardType == TYPE_CREATURE:
             namelist = name.split()
@@ -110,11 +109,13 @@ class Card():
         self.cardType = cardType
         self.stats = stats
         self.state = state
+        print(stats)
         self.creatureType = creatureType
         self.effect = effect
         self.manacost = cost
         self.active_effects = list(active_effects)
         self.rarity = rarity
+        self.starting_stats = self.stats.copy() #set original stats
 
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
@@ -178,10 +179,10 @@ class Card():
         """
         Code for taking damage
         """
-        if self.active_effects[DIVINE_SHIELD_INDEX]:
+        if self.active_effects[DIVINE_SHIELD_INDEX] and damage != 0:
             self.active_effects[DIVINE_SHIELD_INDEX] = 0
             print("Divine Shield Destroyed")
-        else:
+        elif damage != 0:
             self.stats[DEF] -= damage
 
     def heal(self):

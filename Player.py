@@ -82,6 +82,9 @@ class Player():
                 ls.append(card) # Add to list of cards that died
                 self.discard.cards.append(self.cards.pop(self.cards.index(card))) #Remove from Player Field, Add to Discard Pile
 
+        """
+        doing the activating the cards that died on ones field before killing the enemies cards. causes some weird issues.
+        """
         for card in ls: #Go back through list and check for any On Death effects
             try:
                 card.effect.activate(self, enemy_player, TRIGGER_DEATH)
