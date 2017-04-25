@@ -277,6 +277,8 @@ CARD_HEIGHT = CARD_SCALE * 7
 
 FATIGUE = True
 
+MINION_RECOVER = False
+
 """TODO CONSTANTS:
 
 #Need to code in mana-giving
@@ -290,12 +292,10 @@ FIRST_PLAYER = random.choice([True, False])
 FATIGUE = False
 FATIGUE = random.choice(0, 1)
 
-MINION_RECOVER = False
-MINION_RECOVER = random.choice(0,1)
 """
 
 ### RANDOMIZATION PART ###
-yup = input("do watn radnokm? (y/n): ")
+yup = input("do watn radnokm? (y/n): ").lower()
 if yup == "y":
     PLAYER_HEALTH = random.randint(20, 50)
     DECK_INIT_SIZE = random.randint(20, 50)
@@ -307,17 +307,18 @@ if yup == "y":
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
     MANA_LIMIT = random.randint(10, 40)
+    MINION_RECOVER = random.choice(0,1)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
-print("""\n \n RULES: \n \n
-Player starting health: %d
-Deck start size: %d
-Hand start size: %d
-Hand max size: %d
-Max field size: %d
-Cards drawn per turn: %d
-Mana gained per turn: %d
-Second turn card bonus: %d
-Temporary Mana: %d
-Max Temp Mana: %d"""
-% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS, TEMP_MANA, MANA_LIMIT))
+print("""\n \n RULES: \n
+Player starting health: %s
+Deck start size: %s
+Hand start size: %s
+Hand max size: %s
+Max field size: %s
+Cards drawn per turn: %s
+Mana gained per turn: %s
+Second turn card bonus: %s
+Temporary Mana: %s%s
+Minion Recovery: %s \n \n"""
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("Yes" if TEMP_MANA else "No"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("Yes" if MINION_RECOVER else "No")))

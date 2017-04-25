@@ -282,17 +282,19 @@ class Game():
             if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                 break
             self.player_turn = not self.player_turn
-
-            for card in player1.cards[1:]: #Run through cards on the field
-                card.heal()
-                self.update_board()
-                print("heal1-1!")
-
-            for card in player2.cards[1:]: #Run through cards on the field
-                card.heal()
-                self.update_board()
-                print("heal2-1!")
-
+            if MINION_RECOVER:
+                for card in player1.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
+                for card in player2.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
             self.update_board()
             #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
             pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
@@ -331,20 +333,19 @@ class Game():
             #break # Break out of player2 while loop
             if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                 break
-            for card in player1.cards[1:]: #Run through cards on the field
-                try:
-                    card.heal()
-                    self.update_board()
-                    print("heal1-2!")
-                except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
-                    continue
-            for card in player2.cards[1:]: #Run through cards on the field
-                try:
-                    card.heal()
-                    self.update_board()
-                    print("heal2-2!")
-                except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
-                    continue
+            if MINION_RECOVER:
+                for card in player1.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
+                for card in player2.cards[1:]: #Run through cards on the field
+                    try:
+                        card.heal()
+                        self.update_board()
+                    except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
+                        continue
             self.player_turn = not self.player_turn
             self.turn += 1 # Increment turn by 1.
 
