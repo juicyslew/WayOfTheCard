@@ -1,14 +1,10 @@
 from Constants import *
-from Effect import *
+from testEffect import *
 from random import choice, random, randint
-from randGen import generate, generate_stats, name_list,adjective,noun_list
+from randGen import generate, generate_stats
 import numpy as np
-import sys
-from imagegen import *
-import pygame
-import os
 
-class Card():
+class testCard():
     """
     This is the class for Cards.  This contains all the important information about the card and what it does.
 
@@ -32,13 +28,12 @@ class Card():
     """
     def __init__(self, name=None, cardType=None, stats=None, state = None, creatureType = None,
                  effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100,
-                 spell_chance = SPELL_CHANCE, active_effects = None, rarity = None): #Replace eventually with no init variables and just random generation.
+                 spell_chance = SPELL_CHANCE, active_effects = None, rarity = None, cardinfo = [0,0,0,0,0]): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
-        self.art = 1
         if rarity == None:
             rarity = DEFAULT_RARITY
         if cardType == None:
-            if random.random() < spell_chance:
+            if random() < spell_chance:
                 cardType = TYPE_SPELL
             else:
                 cardType = TYPE_CREATURE
@@ -52,12 +47,12 @@ class Card():
             if cost == None: #If cost not specified generate it
                 cost = np.random.choice(range(0, MAX_COST+1), p = MANA_CURVE)
         if effect == True: #If effect equals True
-            if random.random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
+            if random() < effect_chance or cardType == TYPE_SPELL: #Chance of having an effect
                 effect = True
             else:
                 effect = False
         if effect: #If effect is true then
-            effect = Effect(self, cost, cardType, rarity)
+            effect = testEffect(self, cost, cardType, rarity, cardinfo)
             if cardType == TYPE_CREATURE:
                 if effect.effect == None: #If the effect generator didn't have enough effect spend, then set effect false
                     effect = False
@@ -78,47 +73,18 @@ class Card():
             active_effects = INIT_ACTIVE_EFFECT
         #if effect_spend == None: # if effect_spend == None
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
+        starting_stats = stats #set original stats
         self.name = name
-        if cardType == TYPE_CREATURE:
-            namelist = name.split()
-            adj1 = 'NONE'
-            adj2 = 'NONE'
-            adj_s = 'NONE'
-            noun = 'NONE'
-            for i in namelist:
-                if i.lower() in noun_list:
-                    noun = i.lower()
-                elif i.lower() in name_list:
-                    if adj1 =='NONE':
-                        adj1 = i.lower()
-                    else:
-                        adj2 = i.lower()
-                elif i.lower() in special_adj:
-                    adj_s = i.lower()
-            #noun = name.split()[-1]
-            #adj1 = name.split()[0]
-            #if adj1.lower() not in name_list:
-            #    adj1 = 'NONE'
-            self.art = genimage_dudes(adj1, adj2=adj2, noun = noun, adj_s = adj_s)
-            if adj2 == "NONE":
-                adj2n = ""
-            else:
-                adj2n = adj2
-            if adj_s == "NONE":
-                adj_sn = ""
-            else:
-                adj_sn = adj_s
-            self.art_path = "ImageStuff/finimages/%s%s%s%s.jpg" % (noun, adj1, adj2n,adj_sn)
         self.cardType = cardType
         self.stats = stats
+        self.starting_stats = starting_stats
         self.state = state
-        print(stats)
         self.creatureType = creatureType
         self.effect = effect
         self.manacost = cost
         self.active_effects = list(active_effects)
         self.rarity = rarity
-        self.starting_stats = self.stats.copy() #set original stats
+        self.cardinfo = cardinfo
 
     def __str__(self): # Pret Pretty Strings
         if self.cardType == TYPE_CREATURE:
@@ -148,24 +114,31 @@ class Card():
         """
         Put card from hand into field
         """
-        try:
-            self.art = pygame.image.load(self.art_path).convert_alpha()
-            self.art = pygame.transform.scaleNone(self.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
-        except:
-            self.art = pygame.image.load(os.path.join('bear.png')).convert_alpha()
-        player = all_players[player_turn]
-        enemy_player = all_players[not player_turn]
-        if self.cardType == TYPE_CREATURE:
-            player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
-            player.board.update_board(player.screen, all_players[0], all_players[1], self)
-            try:
+        if len(all_players) == 2:
+            player = all_players[player_turn]
+            enemy_player = all_players[not player_turn]
+            if self.cardType == TYPE_CREATURE:
+                player.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+                player.board.update_board(player.screen, all_players[0], all_players[1], self)
+                try:
+                    self.effect.activate(player, enemy_player, TRIGGER_PLAY)
+                except AttributeError or TypeError:
+                    pass
+            if self.cardType == TYPE_SPELL:
                 self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-            except AttributeError or TypeError:
-                pass
-        if self.cardType == TYPE_SPELL:
-            self.effect.activate(player, enemy_player, TRIGGER_PLAY)
-            player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
+                player.discard.cards.append(player.hand.cards.pop(player.hand.cards.index(self)))
 
+
+        else:#3+ players
+            if self.cardType == TYPE_CREATURE:
+                all[0].cards.append(all[0].hand.cards.pop(all[0].hand.cards.index(self)))
+                try:
+                    self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                except AttributeError:
+                    pass
+            if self.cardType == TYPE_SPELL:
+                self.effect.activate(all[0], all[1:], TRIGGER_PLAY)
+                all[0].hand.cards.pop(all[0].hand.cards.index(self))
 
     def attack(self, opp_card):
         """
@@ -182,16 +155,12 @@ class Card():
         print('%s dealt %i damage to %s.  Result Health: %i' % (self.name, self.stats[ATT], opp_card.name, opp_card.stats[DEF]))
         print('%s dealt %i damage to %s.  Result Health: %i' % (opp_card.name, opp_card.stats[ATT], self.name, self.stats[DEF]))
         print('-----------------------------------')
-
     def damage(self, damage):
         """
         Code for taking damage
         """
-        if self.active_effects[DIVINE_SHIELD_INDEX] and damage != 0:
+        if self.active_effects[DIVINE_SHIELD_INDEX]:
             self.active_effects[DIVINE_SHIELD_INDEX] = 0
             print("Divine Shield Destroyed")
-        elif damage != 0:
+        else:
             self.stats[DEF] -= damage
-
-    def heal(self):
-        self.stats[DEF] = self.starting_stats[DEF]

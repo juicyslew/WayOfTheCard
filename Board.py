@@ -232,6 +232,16 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
+        for cardindex in range(len(player1.hand.cards)):
+            cardsurface = pygame.Surface((50, 50))
+            cardsurface.fill((255, 255, 255))
+            screen.blit(cardsurface, (100 * cardindex, 600))
+
+        for cardindex in range(len(player2.hand.cards)):
+            cardsurface = pygame.Surface((50, 50))
+            cardsurface.fill((255, 255, 255))
+            screen.blit(cardsurface, (100 * cardindex, 100))
+
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         for card in player2.cards[1:] + player1.cards[1:]:

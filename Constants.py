@@ -131,7 +131,7 @@ EVOLVE_EFFECT = 18
 #-----------ORDER MATTERS WITH ALL OF THESE LISTS AND COST DICTIONARIES, THEY NEED TO HAVE THE SAME ORDER--------------#
 EFFECT_LIST = (DRAW_EFFECT, DEAL_EFFECT, HEAL_EFFECT, SUMMON_EFFECT, BUFF_EFFECT, SPLIT_DEAL_EFFECT, SPLIT_HEAL_EFFECT, TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT, DEBUFF_EFFECT, DESTROY_EFFECT, FREEZE_EFFECT, DEVOLVE_EFFECT, REVOLVE_EFFECT, EVOLVE_EFFECT)
 EFFECT_DICT = {None:"None",DRAW_EFFECT:"Draw Cards", DEAL_EFFECT:"Deal Damage", HEAL_EFFECT:"Heal", SUMMON_EFFECT:"Summon Creature", BUFF_EFFECT:"Buff Card", SPLIT_DEAL_EFFECT:"Split Damage", SPLIT_HEAL_EFFECT:"Split Heal", TAUNT_EFFECT:"Give Taunt", DIVINE_SHIELD_EFFECT:"Give Divine Shield", CHARGE_EFFECT:"Give Charge", WINDFURY_EFFECT:"Give Windfury", DEBUFF_EFFECT:"Give Debuff", DESTROY_EFFECT:"Destroy Creature", FREEZE_EFFECT:"Freeze Creature", DEVOLVE_EFFECT:"Devolve", REVOLVE_EFFECT:"Revolve", EVOLVE_EFFECT:"Evolve"}
-EFFECT_COST_DICT = {DRAW_EFFECT:-1.7, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-1, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5, DEBUFF_EFFECT:1.35, DESTROY_EFFECT:4.5, FREEZE_EFFECT:2.25, DEVOLVE_EFFECT:-2, REVOLVE_EFFECT:-1, EVOLVE_EFFECT:2} #Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
+EFFECT_COST_DICT = {DRAW_EFFECT:-1.7, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-1, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5, DEBUFF_EFFECT:1.35, DESTROY_EFFECT:4.5, FREEZE_EFFECT:2.25, DEVOLVE_EFFECT:2, REVOLVE_EFFECT:1, EVOLVE_EFFECT:-2} #Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
 STATIC_EFFECT_LIST = (TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT, FREEZE_EFFECT, DEVOLVE_EFFECT, REVOLVE_EFFECT, EVOLVE_EFFECT)
 
 TAUNT_INDEX = 0
@@ -277,6 +277,8 @@ CARD_HEIGHT = CARD_SCALE * 7
 
 FATIGUE = True
 
+MINION_RECOVER = False
+
 """TODO CONSTANTS:
 
 #Need to code in mana-giving
@@ -290,12 +292,10 @@ FIRST_PLAYER = random.choice([True, False])
 FATIGUE = False
 FATIGUE = random.choice(0, 1)
 
-MINION_RECOVER = False
-MINION_RECOVER = random.choice(0,1)
 """
 
 ### RANDOMIZATION PART ###
-yup = input("do watn radnokm? (y/n): ")
+yup = input("do watn radnokm? (y/n): ").lower()
 if yup == "y":
     PLAYER_HEALTH = random.randint(20, 50)
     DECK_INIT_SIZE = random.randint(20, 50)
@@ -307,17 +307,18 @@ if yup == "y":
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
     MANA_LIMIT = random.randint(10, 40)
+    MINION_RECOVER = random.choice(0,1)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
-print("""\n \n RULES: \n \n
-Player starting health: %d
-Deck start size: %d
-Hand start size: %d
-Hand max size: %d
-Max field size: %d
-Cards drawn per turn: %d
-Mana gained per turn: %d
-Second turn card bonus: %d
-Temporary Mana: %d
-Max Temp Mana: %d"""
-% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, SECOND_PLAYER_CARD_BONUS, TEMP_MANA, MANA_LIMIT))
+print("""\n \n RULES: \n
+Player starting health: %s
+Deck start size: %s
+Hand start size: %s
+Hand max size: %s
+Max field size: %s
+Cards drawn per turn: %sArilock
+Mana gained per turn: %s
+Second turn card bonus: %s
+Temporary Mana: %s%s
+Minion Recovery: %s \n \n"""
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("Yes" if TEMP_MANA else "No"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("Yes" if MINION_RECOVER else "No")))
