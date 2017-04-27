@@ -307,7 +307,7 @@ if yup == "y":
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
     MANA_LIMIT = random.randint(10, 40)
-    MINION_RECOVER = random.choice(0,1)
+    MINION_RECOVER = random.randint(0,1)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n
@@ -316,7 +316,7 @@ Deck start size: %s
 Hand start size: %s
 Hand max size: %s
 Max field size: %s
-Cards drawn per turn: %sArilock
+Cards drawn per turn: %s
 Mana gained per turn: %s
 Second turn card bonus: %s
 Temporary Mana: %s%s
