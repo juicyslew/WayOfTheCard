@@ -38,18 +38,18 @@ Required Software:
 	5. Download Github
 
 ### How to Install in Ubuntu ###
-	1. In command line type
-	 * sudo pip3 install Pillow
-	 * sudo apt-get build-dep python-pygame
-	 * sudo apt-get install python-dev
-	 * sudo pip3 install pygame
-	 * sudo pip3 install numpy
-	2. Download Github: https://help.ubuntu.com/lts/serverguide/git.html	.
-			sudo apt install git
-	3. clone repository
-				git clone https://github.com/juicyslew/WayOfTheCard.git
+1. In command line type
+ * `sudo pip3 install Pillow`
+ * `sudo apt-get build-dep python-pygame`
+ * `sudo apt-get install python-dev`
+ * `sudo pip3 install pygame`
+ * `sudo pip3 install numpy`
+2. Download Github: https://help.ubuntu.com/lts/serverguide/git.html	.
+	* `sudo apt install git`
+3. Clone repository
+				`git clone https://github.com/juicyslew/WayOfTheCard.git`
 	4. find the way of the card folder in your computer
-	5. In the command line type: python3 Game.py
+	5. In the command line type: `python3 Game.py`
 	6. Enjoy!
 
 ### How to Install in Windows ###
