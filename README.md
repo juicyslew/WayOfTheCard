@@ -53,35 +53,35 @@ Required Software:
 	6. Enjoy!
 
 ### How to Install in Windows ###
-	1. Register for Github
-	2. Click the green 'Clone or Download' button in the GitHub repository.
-	3. Click 'Download ZIP'
-	4.	Right click on the downloaded zipped folder and click 'Extract All'
-	5. Select an easily accessible location to extract the files to, and confirm the extraction (Remember this location!)
-	6. Install Python 3 by downloading and running the Windows Executable Installer (Under Files in https://www.python.org/downloads/release/python-361/).
-		* Make sure to check the  box that says 'Add Path' in the Installer.
-	9. Open the terminal by clicking on the Windows button in the bottom left corner, typing 'Command Prompt', right clicking on it and hitting 'Run as Administrator'
-	10. If you checked the 'Add Path' box in the installer, 'python' will be your file path. If not, find the location of your Python 3 install and copy the location of 'python.exe'
-	11. Paste this file path into the terminal (should look something like this 'C:\Python36\python.exe')
-  12.	Add a space and type '-m pip install Pillow' after the file path. Press Enter
-	13. Repeat steps 7-9, however replace 'Pillow' with 'pygame'
-	14. Repeat step 13 but replace 'pygame' with 'numpy'
-	15. Again repeat steps 7 and 8, and add a space after the Python file path
-	16. Find the location of your WayOfTheCard install and copy the location of 'Game.py'
-	17. Paste this file path into the terminal after your Python file path
-	18. Should look something like this: 'C:\Python36\python.exe C:\Users\Nate\Desktop\WayOfTheCard\Game.py'
-	19. Press Enter to Launch the Game
-	20. Enjoy!
+1. Register for Github
+2. Click the green 'Clone or Download' button in the GitHub repository.
+3. Click 'Download ZIP'
+4.	Right click on the downloaded zipped folder and click 'Extract All'
+5. Select an easily accessible location to extract the files to, and confirm the extraction (Remember this location!)
+6. Install Python 3 by downloading and running the Windows Executable Installer (Under Files in https://www.python.org/downloads/release/python-361/).
+	* Make sure to check the  box that says 'Add Path' in the Installer.
+9. Open the terminal by clicking on the Windows button in the bottom left corner, typing 'Command Prompt', right clicking on it and hitting 'Run as Administrator'
+10. If you checked the 'Add Path' box in the installer, 'python' will be your file path. If not, find the location of your Python 3 install and copy the location of 'python.exe'
+11. Paste this file path into the terminal (should look something like this 'C:\Python36\python.exe'
+12.	Add a space and type '-m pip install Pillow' after the file path. Press Enter
+13. Repeat steps 7-9, however replace 'Pillow' with 'pygame'
+14. Repeat step 13 but replace 'pygame' with 'numpy'
+15. Again repeat steps 7 and 8, and add a space after the Python file path
+16. Find the location of your WayOfTheCard install and copy the location of 'Game.py'
+17. Paste this file path into the terminal after your Python file path
+18. Should look something like this: 'C:\Python36\python.exe C:\Users\Nate\Desktop\WayOfTheCard\Game.py'
+19. Press Enter to Launch the Game
+20. Enjoy!
 
 
 
 ## Usage ##
-	1. Run Game.py in the command line
-	2. Options for Arena mode and Random rule generation will appear
-	3. It will ask to confirm randomly generated player names.
-	4. The Game field will appear in a separate window.
-	5. go through your turns in the command line to move the cards around the field
-	6. to close, press control+c in the command line.
+1. Run Game.py in the command line
+2. Options for Arena mode and Random rule generation will appear
+3. It will ask to confirm randomly generated player names.
+4. The Game field will appear in a separate window.
+5. go through your turns in the command line to move the cards around the field
+6. to close, press control+c in the command line.
 
 
 
