@@ -220,7 +220,6 @@ class Game():
         Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
         """
         pygame.display.set_caption(random_game_name())
-        #clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
         self.screen.fill((150, 50, 150))
         self.board = Board(self.screen, (player1, player2))
@@ -233,19 +232,6 @@ class Game():
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
-                # #clock.tick(60)
-                # screen.fill((0, 0, 255))
-                #
-                # pygame.draw.rect(screen, [255, 255, 255], (64, 100, 32, 32))
-                #
-                # for card in player1.cards + player2.cards:
-                #     try:
-                #         self.board.render_card(screen, (player1.cards.index(card)*64, 100))
-                #     except ValueError:
-                #         try:
-                #             self.board.render_card(screen, (player2.cards.index(card)*64, 200))
-                #         except ValueError:
-                #             pass
 
             pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
             if TEMP_MANA:
