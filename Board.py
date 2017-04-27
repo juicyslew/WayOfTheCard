@@ -39,7 +39,7 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = 30
+        self.anim_speed = 20
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -66,11 +66,11 @@ class Board():
     def render_card(self, card_obj, position, is_animated = False, is_dash = False):  #   display card on screen
         card = pygame.Surface((self.cardwidth, self.cardheight))
         try:
-            art = pygame.image.load(card_obj.art_path).convert_alpha()
-
+            if card_obj.cardType == TYPE_CREATURE:
+                art = pygame.image.load(card_obj.art_path).convert_alpha()
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
         except:
-            art = self.bear
-        art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+            pass
 
         if is_animated or is_dash:
             for alpha in range(30):
@@ -101,6 +101,8 @@ class Board():
                     self.change_alpha(swords, 180)
                     swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
                     card.blit(swords, swords_rect)
+                if card_obj.cardType == TYPE_CREATURE:
+                    card.blit(art, (int(CARD_WIDTH*0.045), 30))
                 card.set_alpha(10 * alpha)
                 if not is_animated:
                     card.set_alpha(255)

@@ -25,7 +25,7 @@ class Game():
         player_list = []
         totrarprobs = sum(RARITY_PROBS)
         rarities = [np.random.choice(RARITIES, p = RARITY_PROBS) for a in range(DECK_INIT_SIZE)]
-
+        pygame.init()
         for j in range(1, self.players+1):
             print('Player %i:' % j)
             while True: #Create Loop for picking Name
@@ -206,7 +206,6 @@ class Game():
         """
         Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
         """
-        pygame.init()
         pygame.display.set_caption(random_game_name())
         #clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode([WINDOW_WIDTH, WINDOW_HEIGHT])
