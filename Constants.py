@@ -316,7 +316,7 @@ Deck start size: %s
 Hand start size: %s
 Hand max size: %s
 Max field size: %s
-Cards drawn per turn: %s
+Cards drawn per turn: %sArilock
 Mana gained per turn: %s
 Second turn card bonus: %s
 Temporary Mana: %s%s
