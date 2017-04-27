@@ -5,11 +5,11 @@ A randomized card game in all senses of the word. It possesses random rules, ran
 https://juicyslew.github.io/WayOfTheCard/
 
 ## Authors ##
-MJ McMillen 				Github: MJ-McMillen
-Nick Sherman			  Github: NickShermeister
-Nate Sampo: 			  Github: natesampo
-Will Derksen:       Github: juicyslew
-Jeremy Ryan:        Github: jeremycryan
+  MJ McMillen 				Github: MJ-McMillen
+  Nick Sherman			  Github: NickShermeister
+  Nate Sampo  			  Github: natesampo
+  Will Derksen        Github: juicyslew
+  Jeremy Ryan         Github: jeremycryan
 
 
 ## Description ##
