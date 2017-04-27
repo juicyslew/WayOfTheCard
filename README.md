@@ -37,13 +37,13 @@ Required Software:
 	4. Numpy
 	5. Download Github
 
-How to Install in Ubuntu:
+How to Install in Ubuntu
 	1. In command line type:
-	 sudo pip3 install Pillow
-	 sudo apt-get build-dep python-pygame
-	 sudo apt-get install python-dev
-	 sudo pip3 install pygame
-	 sudo pip3 install numpy
+	 * sudo pip3 install Pillow
+	 * sudo apt-get build-dep python-pygame
+	 * sudo apt-get install python-dev
+	 * sudo pip3 install pygame
+	 * sudo pip3 install numpy
 	2. Download Github: https://help.ubuntu.com/lts/serverguide/git.html	.
 			sudo apt install git
 	3. clone repository
