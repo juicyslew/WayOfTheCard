@@ -1,7 +1,14 @@
 # WayOfTheCard #
 A randomized card game in all senses of the word. It posseses random rules, random cards, and random pictures.
 
+<<<<<<< HEAD
 Website: https://juicyslew.github.io/WayOfTheCard/
+=======
+## Website
+https://juicyslew.github.io/WayOfTheCard/
+
+## Background and context: (3-5 minutes) ##
+>>>>>>> dbf24b9f2098048e67d3e3c920bd6c8408ca9671
 
 #Authors#
 MJ McMillen 				Github: MJ-McMillen
