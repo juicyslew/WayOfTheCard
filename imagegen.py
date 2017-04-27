@@ -45,7 +45,7 @@ noun_list= ["sofa","cat","mage","horror","bear","warrior", "soldier","shade",
             "succubis", "hydra","basilisk", "satyr", "minotaur", "fish","gargoyle", "wolf", "ooze", "protector",
             "goblin", "destroyer","ape","roc","beast","colossus", "titan","dwarf","sphinx",
             "ravager","hellhound", "rogue","knight","tiger","unicorn","eater","king","gremlin"
-            ,"orc","fungus","god","leviathan","cleric","vagabond","reaper","eagle"
+            ,"orc","fungus","god","leviathan","cleric","vagabond","reaper","eagle","sprite"
             ]
 
 name_list = ["fire", "slash", "ice", "sword", "destruction",

@@ -1,55 +1,117 @@
 # WayOfTheCard #
-A randomized card game in all senses of the word. Below is our architectural review overview. 
+A randomized card game in all senses of the word. It posseses random rules, random cards, and random pictures.
 
+<<<<<<< HEAD
+Website: https://juicyslew.github.io/WayOfTheCard/
+=======
 ## Website
 https://juicyslew.github.io/WayOfTheCard/
 
 ## Background and context: (3-5 minutes) ##
+>>>>>>> dbf24b9f2098048e67d3e3c920bd6c8408ca9671
 
-For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards. 
-	
-In the beginning of each game, each player receives  a deck of randomly generated cards. These cards are split into two general categories: “dudes” and “dos”. The whole point of the game is to play cards to kill the other player. The “dude” cards called minions can be deployed to attack the other opponent and do cards have some effect on the board. There is a limit to the power of the cards you can deploy each turn. Each player starts with two points called mana. Every turn you get one additional mana to spend on cards. The more destructive cards cost more mana so they can only be played towards the end of the game making the game more interesting. 
+#Authors#
+MJ McMillen 				Github: MJ-McMillen
+Nick Sherman			  Github: NickShermeister
+Nate Sampo: 			  Github: natesampo
+Will Derksen:       Github: juicyslew
+Jeremy Ryan:        Github: jeremycryan
 
-This structure is based on Hearthstone. An outline of the Hearthstone UI is below. 
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/hearthStone.png" width="600">
+## Description##
+
+For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards.
+
+In the beginning of each game, each player receives  a deck of randomly generated cards. These cards are split into two general categories: “dudes” and “dos”. The whole point of the game is to play cards to kill the other player. The “dude” cards called minions can be deployed to attack the other opponent and do cards have some effect on the board. There is a limit to the power of the cards you can deploy each turn. Each player starts with two points called mana. Every turn you get one additional mana to spend on cards. The more destructive cards cost more mana so they can only be played towards the end of the game making the game more interesting.
+
+This structure is based on Hearthstone and Magic The Gathering
 
 A brief outline of everything that you can see on the screen:
 
-* Weapons (not currently implemented) are equippable items that can only be equipped to your hero, allowing your hero to attack an enemy.
 * Minions are the “dudes” in our game who can attack other minions or your opponent’s character
 * The minion with a shield on it is a “taunt” minion; this minion must be destroyed before the opponent’s hero can be attacked.
-* A hero power is not something we not are implementing (at least not yet); it costs 2 mana and is something that can be used recurringly.
 
-Currently our random generation is limited to player names, card names, card costs, and card effects. We also do not have a UI currently. Eventually we also want to randomize rules and include random semi-random pictures mined from the top google images result to add another layer of fun to our game.
+We have a  UI that displays cards with randomly generated pictures on them. There are animations that represent different special effects that act on each card.
 
-## Game Demo (5 minutes + 3-4 minutes questions) ##
+Currently, our game actions are run through the command line and the actions appear on the screen.
 
-Play our game to see it work! Ask questions as necessary.
+#Getting Started#
+Required Software:
+	1. Python 3
+	2. PIL Image Library
+	3. pygame
+	4. Numpy
+	5. Download Github
 
-Sample cards generated are below.
+How to Install in Ubuntu:
+	1. In command line type:
+	 sudo pip3 install Pillow
+	 sudo apt-get build-dep python-pygame
+	 sudo apt-get install python-dev
+	 sudo pip3 install pygame
+	 sudo pip3 install numpy
+	2. Download Github: https://help.ubuntu.com/lts/serverguide/git.html	.
+			sudo apt install git
+	3. clone repository
+				git clone https://github.com/juicyslew/WayOfTheCard.git
+	4. find the way of the card folder in your computer
+	5. In the command line type: python3 Game.py
+	6. Enjoy!
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20One.png" width="200">
+How to Install in Windows:
+	1. register for github
+	2. Click the green 'Clone or Download' button in the GitHub repository.
+	3. Click 'Download ZIP'
+	4.	Right click on the downloaded zipped folder and click 'Extract All'
+	5. Select an easily accessible location to extract the files to, and confirm the extraction (Remember this location!)
+	6. Install Python 3 by downloading and running the Windows Executable Installer (Under Files in https://www.python.org/downloads/release/python-361/). Make sure to check the box that says 'Add Path' in the Installer.
+	9. Open the terminal by clicking on the Windows button in the bottom left corner, typing 'Command Prompt', right clicking on it and hitting 'Run as Administrator'
+	10. If you checked the 'Add Path' box in the installer, 'python' will be your file path. If not, find the location of your Python 3 install and copy the location of 'python.exe'
+	11. Paste this file path into the terminal (should look something like this 'C:\Python36\python.exe')
+  12.	Add a space and type '-m pip install Pillow' after the file path. Press Enter
+	13. Repeat steps 7-9, however replace 'Pillow' with 'pygame'
+	14. Repeat step 13 but replace 'pygame' with 'numpy'
+	15. Again repeat steps 7 and 8, and add a space after the Python file path
+	16. Find the location of your WayOfTheCard install and copy the location of 'Game.py'
+	17. Paste this file path into the terminal after your Python file path
+	18. Should look something like this: 'C:\Python36\python.exe C:\Users\Nate\Desktop\WayOfTheCard\Game.py'
+	19. Press Enter to Launch the Game
+	20. Enjoy!
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Two.png" width="200">
 
-<img src="https://github.com/juicyslew/WayOfTheCard/blob/master/Sample%20Card%20Three.png" width="200">
 
-## Future Work/Questions (3 minutes + 5 minutes question) ##
 
-The largest part of our project that still needs to completed is the graphics and user interface. Ideally, the final game will use pygame to show cards on the field and be controlled using mouse clicks or drag-and-drop. In addition, we will implement some amount of random generation of base game rules, rather than just having random cards being generated in the context of a standard game.
-	In addition, we can expand the game’s implemented ability effects, triggers, and other card attributes to make a more varied play experience. These effects can be based on common card effects in Magic or Hearthstone, and can interact with player hands and discard piles rather than just with creatures and life totals.
+# Ussage#
+	1. run Game.py in the command line
+	2. Options for Arena mode and Random rule generation will appear
+	3. It will ask to confirm randomly generated player names.
+	4. The Game field will appear in a seperate window.
+	5. go through your turns in the command line to move the cards around the feild
+	6. to close, press control+c in the command line.
 
-## Free Play and Feedback (remainder of time) ##
 
-At this point, feel free to play around with our code. Ask any and all questions and if you have any suggestions feel free to tell us.
 
-Possible things you may want to discuss:
 
-* Discuss how to get random images for cards
-* Discussed RGB value based on descriptive for a saved dictionary of pictures
-* Could smash together pictures for different things
-* Feedback about scope of the project
-* Feedback about rules/how to give them
-* Wishlist for UI 
-* Randomness of rules: How much would you figure out vs. the game tell?
+
+#License#
+
+	Copyright (c) 2017 Miranda J. McMillen Nichlos C. Sherman Nathan J. Sampo,
+											William N. Derksen, and Jeremy C. Ryan
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in all
+	copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+	SOFTWARE.
