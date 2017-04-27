@@ -1,16 +1,10 @@
 # WayOfTheCard #
-A randomized card game in all senses of the word. It posseses random rules, random cards, and random pictures.
+A randomized card game in all senses of the word. It possesses random rules, random cards, and random pictures.
 
-<<<<<<< HEAD
-Website: https://juicyslew.github.io/WayOfTheCard/
-=======
-## Website
+## Website ##
 https://juicyslew.github.io/WayOfTheCard/
 
-## Background and context: (3-5 minutes) ##
->>>>>>> dbf24b9f2098048e67d3e3c920bd6c8408ca9671
-
-#Authors#
+## Authors ##
 MJ McMillen 				Github: MJ-McMillen
 Nick Sherman			  Github: NickShermeister
 Nate Sampo: 			  Github: natesampo
@@ -18,7 +12,7 @@ Will Derksen:       Github: juicyslew
 Jeremy Ryan:        Github: jeremycryan
 
 
-## Description##
+## Description ##
 
 For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards.
 
@@ -31,11 +25,11 @@ A brief outline of everything that you can see on the screen:
 * Minions are the “dudes” in our game who can attack other minions or your opponent’s character
 * The minion with a shield on it is a “taunt” minion; this minion must be destroyed before the opponent’s hero can be attacked.
 
-We have a  UI that displays cards with randomly generated pictures on them. There are animations that represent different special effects that act on each card.
+We have a User Interface that displays cards with randomly generated pictures on them. There are animations that represent different special effects that act on each card.
 
 Currently, our game actions are run through the command line and the actions appear on the screen.
 
-#Getting Started#
+## Getting Started ##
 Required Software:
 	1. Python 3
 	2. PIL Image Library
@@ -59,7 +53,7 @@ How to Install in Ubuntu:
 	6. Enjoy!
 
 How to Install in Windows:
-	1. register for github
+	1. Register for Github
 	2. Click the green 'Clone or Download' button in the GitHub repository.
 	3. Click 'Download ZIP'
 	4.	Right click on the downloaded zipped folder and click 'Extract All'
@@ -80,20 +74,17 @@ How to Install in Windows:
 
 
 
-
-# Ussage#
+## Usage ##
 	1. run Game.py in the command line
 	2. Options for Arena mode and Random rule generation will appear
 	3. It will ask to confirm randomly generated player names.
-	4. The Game field will appear in a seperate window.
-	5. go through your turns in the command line to move the cards around the feild
+	4. The Game field will appear in a separate window.
+	5. go through your turns in the command line to move the cards around the field
 	6. to close, press control+c in the command line.
 
 
 
-
-
-#License#
+## License ##
 
 	Copyright (c) 2017 Miranda J. McMillen Nichlos C. Sherman Nathan J. Sampo,
 											William N. Derksen, and Jeremy C. Ryan
@@ -101,7 +92,7 @@ How to Install in Windows:
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	to use, copy, modify, merge, publish, distribute, sub-license, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
 
