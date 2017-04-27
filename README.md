@@ -1,6 +1,9 @@
 # WayOfTheCard #
 A randomized card game in all senses of the word. Below is our architectural review overview. 
 
+## Website
+https://juicyslew.github.io/WayOfTheCard/
+
 ## Background and context: (3-5 minutes) ##
 
 For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards. 
