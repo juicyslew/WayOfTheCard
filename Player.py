@@ -78,9 +78,10 @@ class Player():
             if card.stats[DEF] <= 0: #If card has no defense/health
                 if card is self.player: #If card is player
                     self.dead = True #This player is dead
-                card.state = STATE_GRAVEYARD #Change Card State To Dead
-                ls.append(card) # Add to list of cards that died
-                self.discard.cards.append(self.cards.pop(self.cards.index(card))) #Remove from Player Field, Add to Discard Pile
+                else:
+                    card.state = STATE_GRAVEYARD #Change Card State To Dead
+                    ls.append(card) # Add to list of cards that died
+                    self.discard.cards.append(self.cards.pop(self.cards.index(card))) #Remove from Player Field, Add to Discard Pile
 
         """
         doing the activating the cards that died on ones field before killing the enemies cards. causes some weird issues.
