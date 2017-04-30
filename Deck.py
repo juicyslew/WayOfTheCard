@@ -8,6 +8,7 @@ class Deck():
     """
     def __init__(self, rare_ls = None):
         self.cards = []
+        self.damage_counter = 0
         if rare_ls == None:
             self.rarities = [None for a in range(DECK_INIT_SIZE)]
         else:
@@ -48,12 +49,19 @@ class Deck():
         shuffle(self.cards)
 
     def draw(self, hand, num):
-        """ Draw "num" Cards into Hand """
+        """ Draw "num" Cards into Hand
+        NOTE: this handles whether or not there is Fatigue"""
         for n in range(num):
             if(FATIGUE):
                 try:
                     hand.cards.append(self.cards.pop(0))
                 except IndexError:
-                    print("You're out of cards fool!")
+                    self.damage_counter += 1
+                    print("You're out of cards fool! Take %d damage!" % self.damage_counter)
             else:
-                hand.cards.append(self.cards.pop(0))
+                try:
+                    hand.cards.append(self.cards.pop(0))
+                except IndexError:
+                    print("You ran out of cards to draw. You lose!") #I feel like this definitely won't work and will need to be redone
+                    self.damage_counter = -1
+        return self.damage_counter

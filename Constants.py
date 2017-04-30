@@ -15,6 +15,8 @@ HAND_MAX_SIZE = 10 # Maximum Hand Size, Need To Actually Impliment
 CARDS_DRAWN_PER_TURN = 1
 SECOND_PLAYER_CARD_BONUS = 1
 MAX_BOARD_SIZE = 7
+FATIGUE = True
+MINION_RECOVER = False
 
 #NAME_LIST = ["Bird", "Robot Doctor", "Magic Stones", "Test Card", "JEREMEEEEE"]
 
@@ -275,10 +277,6 @@ CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
-FATIGUE = True
-
-MINION_RECOVER = False
-
 """TODO CONSTANTS:
 
 #Need to code in mana-giving
@@ -288,10 +286,6 @@ COIN = random.choice([True, False])
 #I think this is kinda useless? Players can decide who goes first before they start playing?
 FIRST_PLAYER = True #True means the first player created goes first
 FIRST_PLAYER = random.choice([True, False])
-
-FATIGUE = False
-FATIGUE = random.choice(0, 1)
-
 """
 
 ### RANDOMIZATION PART ###
@@ -308,6 +302,7 @@ if yup == "y":
     TEMP_MANA = random.randint(0, 1)
     MANA_LIMIT = random.randint(10, 40)
     MINION_RECOVER = random.randint(0,1)
+    FATIGUE = random.randint(0,1)
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
 print("""\n \n RULES: \n
@@ -319,6 +314,7 @@ Max field size: %s
 Cards drawn per turn: %s
 Mana gained per turn: %s
 Second turn card bonus: %s
+Fatigue: %s
 Temporary Mana: %s%s
 Minion Recovery: %s \n \n"""
-% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("Yes" if TEMP_MANA else "No"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("Yes" if MINION_RECOVER else "No")))
+% (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("Yes" if TEMP_MANA else "No"), ("Yes" if FATIGUE else "No"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("Yes" if MINION_RECOVER else "No")))
