@@ -63,6 +63,7 @@ class Game():
         player = all_players[player]
         opp = all_players[not self.player_turn]
         while True: #Yes, it's bad. Will come back to to see necessity of this.
+            not_played = True
             print("### %s's Hand ###" % player.name)
             print(player.hand) #Print the player hand
             print("mana: %i" % player.mana) #display mana
