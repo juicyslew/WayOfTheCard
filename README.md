@@ -80,12 +80,11 @@ Required Software:
 
 
 ## Usage ##
-1. Run Game.py in the command line
-2. Options for Arena mode and Random rule generation will appear
-3. It will ask to confirm randomly generated player names.
-4. The Game field will appear in a separate window.
-5. Proceed through your turns in the command line to move the cards around the field
-6. To force close, press control+c in the command line.
+1. Run Game.py in the command line from where the repository is saved on your computer.
+2. Options for Arena mode and Random rule generation will appear; answer according to how you want to play.
+3. The game will then randomly create names that the players can select. Once both players are done, there will be a short pause as the game generates.
+4. The Game field will appear in a separate window from where you can play.
+5. Play through the game to its conclusion. If you wish to end early, press CTRL-C in the command line.
 
 
 
