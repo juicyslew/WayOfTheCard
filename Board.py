@@ -14,6 +14,12 @@ class Board():
         self.mana_font = pygame.font.SysFont(typeface, MANA_COST_FONT_SIZE)
         self.stats_font = pygame.font.SysFont(typeface, CREATURE_STATS_FONT_SIZE)
         self.health_font = pygame.font.SysFont(typeface, PLAYER_HEALTH_FONT_SIZE)
+        self.card_name_font_small = pygame.font.SysFont(typeface, round(17*0.75)+2)   #   sets card fonts
+        self.hero_name_font_small = pygame.font.SysFont(typeface, round(PLAYER_CARD_FONT_SIZE*0.75)+1)
+        self.card_text_font_small = pygame.font.SysFont(typeface, round(CREATURE_CARD_FONT_SIZE*0.75)+1)
+        self.mana_font_small = pygame.font.SysFont(typeface, round(MANA_COST_FONT_SIZE*0.75)+1)
+        self.stats_font_small = pygame.font.SysFont(typeface, round(CREATURE_STATS_FONT_SIZE*0.75)+1)
+        self.health_font_small = pygame.font.SysFont(typeface, round(PLAYER_HEALTH_FONT_SIZE*0.75)+1)
         self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]
@@ -63,12 +69,12 @@ class Board():
     #         effect_height += 15
     #     return surface
 
-    def render_card(self, card_obj, position, is_animated = False, is_dash = False):  #   display card on screen
-        card = pygame.Surface((self.cardwidth, self.cardheight))
+    def render_card(self, card_obj, position, is_animated = False, is_dash = False, scale_x = 1, scale_y = 1):  #   display card on screen
+        card = pygame.Surface((self.cardwidth * scale_x, self.cardheight * scale_y))
         try:
             if card_obj.cardType == TYPE_CREATURE:
                 art = pygame.image.load(card_obj.art_path).convert_alpha()
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86*scale_x), int(CARD_WIDTH*0.495*scale_y)))
         except:
             pass
 
@@ -117,6 +123,7 @@ class Board():
 
 
     def read_card(self, card):  #   turns card object into easily read tuple
+        effect_text = ""
         name = card.name
         name_length = 20
         while len(name) - name.rfind("\n") > name_length: # arranges name into lines of length <= name_length
@@ -232,16 +239,6 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
-        for cardindex in range(len(player1.hand.cards)):
-            cardsurface = pygame.Surface((50, 50))
-            cardsurface.fill((255, 255, 255))
-            screen.blit(cardsurface, (100 * cardindex, 600))
-
-        for cardindex in range(len(player2.hand.cards)):
-            cardsurface = pygame.Surface((50, 50))
-            cardsurface.fill((255, 255, 255))
-            screen.blit(cardsurface, (100 * cardindex, 100))
-
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         for card in player2.cards[1:] + player1.cards[1:]:
@@ -351,6 +348,117 @@ class Board():
                             self.screen.blit(ice, ice_rect)
                 except ValueError:
                     pass
+
+        for card in player2.hand.cards + player1.hand.cards:
+            try:
+                art = pygame.image.load(card.art_path).convert_alpha()
+            except:
+                art = self.bear
+            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2475)))
+            try:
+                x = player1.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
+                if player1.hand.cards.index(card) > 5:
+                    x += 370
+                y = WINDOW_HEIGHT - self.cardheight*0.75 - 30
+                if card is card_not_to_render:
+                    continue
+                elif card is card_to_animate:
+                    card_backlog.append([card, (x, y)])
+                    #self.render_card(card, (x, y), True)
+                else:
+                    self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
+                if card is not card_to_animate and card is not card_not_to_render:
+                    screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                    if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
+                        glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
+                        glow_rect = glow.get_rect()
+                        self.change_alpha(glow, 100)
+                        glow_rect = glow_rect.move(x, y)
+                        self.screen.blit(glow, glow_rect)
+                    (name, mana, stats, effect_text) = self.read_card(card)
+                    name_height = 0
+                    for line in name:   #   renders name in individual lines
+                        name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
+                        screen.blit(name_render, (x + 15, y + name_height + 15))
+                        name_height += self.name_spacing
+                    mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
+                    screen.blit(mana_render, (x + self.cardwidth*0.75 - 20, y))
+                    stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
+                    screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
+                    effect_height = 0
+                    for line in effect_text:    #   renders effect text in individual lines
+                        effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
+                        screen.blit(effect_render, (x + 7, y + self.cardheight/3 + effect_height))
+                        effect_height += self.effect_spacing
+                    if card.active_effects[WINDFURY_INDEX] == 1:
+                        swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
+                        swords_rect = swords.get_rect()
+                        self.change_alpha(swords, 180)
+                        swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
+                        self.screen.blit(swords, swords_rect)
+                    if card.active_effects[FROZEN_INDEX] == 1:
+                        ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
+                        ice_rect = ice.get_rect()
+                        self.change_alpha(ice, 180)
+                        ice_rect = ice_rect.move(x, y)
+                        self.screen.blit(ice, ice_rect)
+
+
+            except ValueError:
+                try:
+                    art = pygame.image.load(card.art_path).convert_alpha()
+                except:
+                    art = self.bear
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
+                try:
+                    x = player2.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
+                    if player2.hand.cards.index(card) > 5:
+                        x += 370
+                    y = 30
+                    if card is card_not_to_render:
+                        continue
+                    elif card is card_to_animate:
+                        self.render_card(card, (x, y), True, scale_x = 0.75, scale_y = 0.75)
+                    else:
+                        self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
+                    if card is not card_to_animate and card is not card_not_to_render:
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
+                            glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
+                            glow_rect = glow.get_rect()
+                            self.change_alpha(glow, 100)
+                            glow_rect = glow_rect.move(x, y)
+                            self.screen.blit(glow, glow_rect)
+                        (name, mana, stats, effect_text) = self.read_card(card)
+                        name_height = 0
+                        for line in name:   #   renders name in individual lines
+                            name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
+                            screen.blit(name_render, (x + 15, y + name_height + 15))
+                            name_height += self.name_spacing
+                        mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
+                        screen.blit(mana_render, (x + self.cardwidth*0.75 - 20, y))
+                        stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
+                        screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
+                        height = 0
+                        for line in effect_text:    #   renders effect text in individual lines
+                            effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
+                            screen.blit(effect_render, (x + 7, y + self.cardheight/3 + height))
+                            height += self.effect_spacing
+                        if card.active_effects[WINDFURY_INDEX] == 1:
+                            swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
+                            swords_rect = swords.get_rect()
+                            self.change_alpha(swords, 180)
+                            swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
+                            self.screen.blit(swords, swords_rect)
+                        if card.active_effects[FROZEN_INDEX] == 1:
+                            ice = pygame.transform.scale(self.ice, (self.cardwidth, self.cardheight))
+                            ice_rect = ice.get_rect()
+                            self.change_alpha(ice, 180)
+                            ice_rect = ice_rect.move(x, y)
+                            self.screen.blit(ice, ice_rect)
+                except ValueError:
+                    pass
+
         for card in card_backlog:
             self.render_card(card_backlog[0][0], card_backlog[0][1], True)
 
