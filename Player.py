@@ -36,6 +36,7 @@ class Player():
         self.dead = False # Set Player to Alive
         self.mana = 0 #Set Initial Mana
         self.max_mana = MAX_MANA #Set Max Mana
+        self.rmana = 0
 
     def __str__(self): # Return Formatted Cards from the Field
         return '\n' + '\n'.join(['%i)\n%s\n==============================================='%(i+1,str(self.cards[i])) for i in range(len(self.cards))]) + '\n'
@@ -45,6 +46,8 @@ class Player():
         """
         Awaken all the Cards from sleep state
         """
+        self.mana -= self.rmana
+        self.rmana = 0
         for card in self.cards:
             if not card == self.player:
                 card.state = STATE_ACTIVE

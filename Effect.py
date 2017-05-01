@@ -60,7 +60,7 @@ class Effect():
                 if self.effect[i] == SUMMON_EFFECT:
                     #try:
                     numeric[i] = random()*MAX_NUMERIC #np.random.choice(np.random.choice(range(0, MAX_COST), p = MANA_CURVE))
-                    #except ValueError:
+                    #except ValueError:1
                     #    numeric = effect_spend
                 else:
                     numeric[i] = math.ceil(MAX_NUMERIC * random())
@@ -451,6 +451,18 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             enemy_player.cards[enemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
                         print("Creature Evolved to %s cost" %c.stats[0])
                     print('-----------------------------------')
+                if self.effect == AMANA_EFFECT:
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add Numeric to player mana
+                        c.mana += self.numeric
+                if self.effect == RMANA_EFFECT:
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add Numeric to player mana
+                        c.rmana += self.numeric
             self.effect = eff_ls
             self.trigger = trig_ls
             self.target = targ_ls
