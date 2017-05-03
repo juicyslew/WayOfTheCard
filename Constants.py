@@ -282,7 +282,6 @@ CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
 """TODO CONSTANTS:
-
 #Need to code in mana-giving
 COIN = True #True = given to opponent, False = no coin given
 COIN = random.choice([True, False])
