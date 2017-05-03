@@ -18,12 +18,7 @@ class Effect():
             if cardType == TYPE_CREATURE:
                 actual_spend = effect_spend*eff_pref
                 effect_spend -= actual_spend
-                #elif cardType == TYPE_CREATURE:
-                #    effect_spend = EFFECT_PREF * (CARD_INITIAL_STRENGTH+cost-cost*CARD_STRENGTH_DROPOFF) * CARD_STRENGTH * 1/3 # Multiply Creature multiplier by the effective card cost, then by card strength and divide by 3 since the spending should be split between this and the attack and defense
-                #print(cost)
-                #effect, trigger, target, numeric,
                 [effect_info, leftover] = generate_numerical_effect(actual_spend, cardType) #Use Effect Spend to Generate Effect
-                #print(effect_spend, actual_spend, leftover)
                 effect_spend += leftover
             elif cardType == TYPE_SPELL:
                 actual_spend = effect_spend * SPELL_EFFECT_MULTIPLIER + SPELL_ADDER
@@ -53,7 +48,6 @@ class Effect():
         for i in range(eff_len):
             if self.effect[i] == None:
                 self.class_type = CLASS_PLAYER
-                #effect_spend = 0
             else:
                 self.class_type = EFFECT_CLASS_DICT[self.effect[i]]
             if numeric[i] == None: #If no numeric value, Generate Numeric
@@ -239,7 +233,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 self.trigger = trig_ls[i]
                 self.target = targ_ls[i]
                 self.numeric = num_ls[i]
-            except AttributeError or TypeError:
+            except: # AttributeError or TypeError
                 return
             if time == self.trigger: # If the current timing is the cards effect timing
                 if self.effect == DRAW_EFFECT: # If draw
@@ -250,7 +244,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         for c in self.t: # For Object in Target List
                             #Print Nice Strings and Draw Cards
                             print('-----------------------------------')
-                            print("%s's hand increased from %i cards," %(c.name, len(c.hand.cards)))
+                            print("%s's hand increased from %i cards," % (c.name, len(c.hand.cards)))
                             c.deck.draw(c.hand, self.numeric)
                             print("to %i cards" % len(c.hand.cards))
                             print('-----------------------------------')
