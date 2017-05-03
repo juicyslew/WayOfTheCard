@@ -34,7 +34,7 @@ class Effect():
                 trigger = (choice(TRIGGER_LIST),)
             if effect == None:
                 effect = (choice(EFFECT_LIST),)
-            if target == None:
+            if target == None: #THIS CODE DOESNT WORK RIGHT NOW
                 if self.class_type == CLASS_PLAYER:
                     target = (choice(PLAYER_TARGET_LIST),) #Add target based on stuff???
                 elif self.class_type == CLASS_CREATURE:
@@ -45,11 +45,12 @@ class Effect():
         eff_len = len(effect)
         self.effect = effect
         self.trigger = trigger
+        self.class_type = []
         for i in range(eff_len):
             if self.effect[i] == None:
-                self.class_type = CLASS_PLAYER
+                self.class_type.append(CLASS_PLAYER)
             else:
-                self.class_type = EFFECT_CLASS_DICT[self.effect[i]]
+                self.class_type.append(EFFECT_CLASS_DICT[self.effect[i]])
             if numeric[i] == None: #If no numeric value, Generate Numeric
                 if self.effect[i] == SUMMON_EFFECT:
                     #try:
@@ -224,17 +225,19 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             self.eff_len = 1
             return
         for i in range(self.eff_len):
-            eff_ls = self.effect
-            trig_ls = self.trigger
-            targ_ls = self.target
-            num_ls = self.numeric
-            try:
+            if self.eff_len > 1:
+                eff_ls = self.effect
+                trig_ls = self.trigger
+                targ_ls = self.target
+                num_ls = self.numeric
+                class_ls = self.class_type
                 self.effect = eff_ls[i]
                 self.trigger = trig_ls[i]
                 self.target = targ_ls[i]
                 self.numeric = num_ls[i]
-            except: # AttributeError or TypeError
-                return
+                self.class_type = class_ls[i]
+            #except: # AttributeError or TypeError
+            #    return
             if time == self.trigger: # If the current timing is the cards effect timing
                 if self.effect == DRAW_EFFECT: # If draw
                     self.t = self.determine_target(own_player, enemy_player) # Find Target List
@@ -457,8 +460,10 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     for c in self.t: # Loop Through Targets
                         #Add Numeric to player mana
                         c.rmana += self.numeric
-            self.effect = eff_ls
-            self.trigger = trig_ls
-            self.target = targ_ls
-            self.numeric = num_ls
+            if self.eff_len > 1:
+                self.effect = eff_ls
+                self.trigger = trig_ls
+                self.target = targ_ls
+                self.numeric = num_ls
+                self.class_type = class_ls
             print('eff num: ' + str(len(self.effect)))
