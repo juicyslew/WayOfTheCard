@@ -81,16 +81,6 @@ SPELL_ADDER = 1
 EFFECT_TRY_NUM = 40
 #NEGATIVE_ADDER = 1
 #ZERO_STRENGTH = 1.5
-ARENA = False
-while True:
-    ans = input('Arena Mode? (y/n): ')
-    if ans == 'y':
-        ARENA = True
-    elif ans == 'n':
-        ARENA = False
-    else:
-        continue
-    break
 MINCHOICE = 2
 MAXCHOICE = 4
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
@@ -237,9 +227,6 @@ for i in EFFECT_LIST:
         for k in EFFECT_TARGET_DICT[i]:
             if not k in TRIGGER_TARGET_DICT[j]:
                 continue
-            #if i in STATIC_EFFECT_LIST:
-            #    j = TRIGGER_PLAY
-            #    k = TARGET_THIS_CREATURE
             eff_cost = EFFECT_COST_DICT[i] * TRIGGER_COST_DICT[j] * TARGET_COST_DICT[k]
             if k in TARGET_UNIVERSAL_POSITIVE:
                 eff_cost = abs(eff_cost)
@@ -257,9 +244,6 @@ for i in EFFECT_LIST:
         for k in EFFECT_TARGET_DICT[i]:
             if not k in SPELL_TARGET_LIST:
                 continue
-            #if i in STATIC_EFFECT_LIST:
-            #    j = TRIGGER_PLAY
-            #    k = TARGET_THIS_CREATURE
             eff_cost = EFFECT_COST_DICT[i] * TRIGGER_COST_DICT[j] * TARGET_COST_DICT[k]
             if k in TARGET_UNIVERSAL_POSITIVE:
                 eff_cost = abs(eff_cost)
@@ -268,10 +252,6 @@ for i in EFFECT_LIST:
     SPELL_EFFECT_POSSIBILITIES.append((i, Trigger_And_Targets))
 MIN_EFF_COST = EFFECT_COST_DICT[DEAL_EFFECT] * TRIGGER_COST_DICT[TRIGGER_PLAY] * TARGET_COST_DICT[TARGET_CREATURE]#SPELL_EFFECT_POSSIBILITIES[DEAL_EFFECT][1][TRIGGER_PLAY][1][TARGET_CREATURE][1]
 
-#for j,ls in CREATURE_EFFECT_POSSIBILITIES[10][1]:
-#    for k in ls:
-#        print(TARGET_DICT[k[0]])
-#V######################V#
 
 #Constants for rendering the Field
 PLAYER_CARD_FONT_SIZE = 35
@@ -279,6 +259,8 @@ PLAYER_HEALTH_FONT_SIZE = 100
 CREATURE_CARD_FONT_SIZE = 15
 CREATURE_STATS_FONT_SIZE = 30
 MANA_COST_FONT_SIZE = 40
+END_TURN_SHAPE = (100, 50)
+END_TURN_POS = (WINDOW_WIDTH-END_TURN_SHAPE[0], (WINDOW_HEIGHT-END_TURN_SHAPE[1])/2)
 
 CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
@@ -295,8 +277,30 @@ FIRST_PLAYER = random.choice([True, False])
 """
 RANDOM = False
 ### RANDOMIZATION PART ###
-yup = input("do watn radnokm? (y/n): ").lower()
-if yup == "y":
+info = input("Would you like to hear the rules? (y/n): ").lower()
+if info == "y":
+    print("Filler")
+    effs = input("Would you like to hear the explanation of different effects? (y/n): ").lower()
+    if effs == "y":
+        print("""
+
+
+              """)
+    print("More blep and rules")
+    rulee = input("Would you like some more information on the rules? (y/n): ").lower()
+    if rulee == "y":
+        print("RULES EXPLANATION")
+    print("Good luck!")
+
+ARENA = False
+ans = input('\n \n \nArena mode is when you pick between a random number of cards to choose the best cards for your deck. \nDo you want Arena Mode? (y/n): ')
+if ans == 'y':
+    ARENA = True
+else:
+    ARENA = False
+
+yup = input("Do you want a randomized game (recommended for advanced players) (y/n): ").lower()
+if yup.lower() == "y":
     PLAYER_HEALTH = random.randint(20, 50)
     DECK_INIT_SIZE = random.randint(20, 50)
     HAND_MAX_SIZE = random.randint(7, 12)
@@ -312,17 +316,17 @@ if yup == "y":
     RANDOM = True
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
-if RANDOM:
-    print("""\n \n RULES: \n
-    Player starting health: %s
-    Deck start size: %s
-    Hand start size: %s
-    Hand max size: %s
-    Max field size: %s
-    Cards drawn per turn: %s
-    Mana gained per turn: %s
-    Second turn card bonus: %s
-    Fatigue is turned %s
-    Temporary Mana is turned %s%s
-    Minion Recovery is turned %s \n \n"""
-    % (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("On" if TEMP_MANA else "Off"), ("On" if FATIGUE else "Off"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("On" if MINION_RECOVER else "Off")))
+print("""\n \n%sRULES: \n
+Player starting health: %s
+Deck start size: %s
+Hand start size: %s
+Hand max size: %s
+Max field size: %s
+Cards drawn per turn: %s
+Mana gained per turn: %s
+Second turn card bonus: %s
+Fatigue is turned %s
+Temporary Mana is turned %s%s
+Minion Recovery is turned %s \n \n"""
+% (("RANDOMIZED " if RANDOM else ""), PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("on" if TEMP_MANA else "off"), ("on" if FATIGUE else "off"), ("\nMax Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("on" if MINION_RECOVER else "off")))
+irrelevent = input("Press any button when you're ready to begin with the name randomization.")

@@ -41,7 +41,7 @@ class Game():
         pygame.init()
         names = []
         for j in range(1, self.players+1):
-            print('\n PLAYER %i:' % j)
+            print('\nPLAYER %i:' % j)
             while True: #Create Loop for picking Name
                 name = random_name().capitalize() #Create Name
                 #print(name) #Display Name
@@ -50,12 +50,12 @@ class Game():
                     names.append(name)
                     break
                 continue #If player doesn't like it, then generate new name
+        print("The cards are being generated. Please wait a moment.")
         for j in range(self.players):
             if j == 0:
                 player_list.append(Player(names[j], HAND_INIT_SIZE, rarities)) #Save Player Name
             else:
                 player_list.append(Player(names[j], HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
-        # player_list.append(Player('Daniel', 4))
         self.game_loop(player_list) #Start Game Loop
 
 
@@ -200,19 +200,16 @@ class Game():
         """
         player1 = all_players[0]
         player2 = all_players[1]
-        if all_players == None or len(all_players) == 2:
-            if player1.dead and player2.dead: #If both players died then
-                print("Well Shoot.  A Tie.")
-                return True
-            elif player2.dead:
-                print(player1.name + " Wins!!!")
-                return True
-            elif player1.dead:
-                print(player2.name + " Wins!!!")
-                return True
-            return False
-        else:       #lotsa logic no point implementing yet
-            pass
+        if player1.dead and player2.dead: #If both players died then
+            print("Well Shoot.  A Tie.")
+            return True
+        elif player2.dead:
+            print(player1.name + " Wins!!!")
+            return True
+        elif player1.dead:
+            print(player2.name + " Wins!!!")
+            return True
+        return False
 
 
     def game_loop(self, all_players):
@@ -236,8 +233,28 @@ class Game():
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
+            print("\nPress The Purple Button to Start %s's Turn: "% player1.name)
+            startturn = False
+            while True:
+                # get all events
+                ev = pygame.event.get()
 
-            pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        print("mouseButton")
+                        pos = pygame.mouse.get_pos()
+                        print("pos: " + str(pos))
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
             if TEMP_MANA:
                 player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -246,16 +263,11 @@ class Game():
                     player1.mana = MANA_LIMIT
             player1.activate_cards() #Activate cards in the field for usage
             print("\n\n\n\n### %s || %ls ###" % (player1.name, player1.cards[0].stats)) # Print player for turn and Stats
-            #print() # Print Player Stats
             for card in player1.cards: #Run through the player cards on the field
                 try:
                     card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
                 except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                     continue
-            #while True: #Start Infinite Loop
-            #    if not self.play_card(player1, player2): #Run play_card until it returns True, then break the loop
-            #        continue
-            #    break
             self.play_card(0 ,all_players) #Need to unhardcode
             self.use_cards(self.player_turn, all_players) # Run Use Cards Script
             player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
@@ -285,8 +297,27 @@ class Game():
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
             self.update_board()
-            #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
-            pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
+
+            print("\nPress Enter to Start %s's Turn: "% player2.name)
+            while True:
+                # get all events
+                ev = pygame.event.get()
+
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
+
             if TEMP_MANA:
                 player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -302,10 +333,6 @@ class Game():
                     card.effect.activate(player2, player1, TRIGGER_BEGIN) # If card has beginning trigger, activate effect
                 except AttributeError or TypeError:
                     continue
-            #while True: # Display hand and run play_card until it return's true
-            #    if not self.play_card(player2, player1):
-            #        continue
-            #    break
             self.play_card(1, all_players)
             #print(player2) # display player 2 cards in field.
             self.use_cards(self.player_turn, all_players)
@@ -319,7 +346,6 @@ class Game():
                     self.update_board()
                 except AttributeError or TypeError:
                     continue
-            #break # Break out of player2 while loop
             if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                 break
             if MINION_RECOVER:
