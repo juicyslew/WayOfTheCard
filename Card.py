@@ -112,6 +112,32 @@ class Card():
             self.arted = False
             self.art = 1
             self.art_path = "ImageStuff/finimages/%s%s%s%s.jpg" % (noun, adj1, adj2n,adj_sn)
+        elif cardType == TYPE_SPELL:
+            #chnge potato to spell to make work
+            namelist = name.split()
+            adj1 = 'NONE'
+            adj2 = 'NONE'
+            adj_s = 'NONE'
+            for i in namelist:
+                if i.lower() in name_list:
+                    if adj1 =='NONE':
+                        adj1 = i.lower()
+                    else:
+                        adj2 = i.lower()
+                elif i.lower() in special_adj:
+                    adj_s = i.lower()
+            self.art = genimage_does(adj1, adj2=adj2, adj_s = adj_s)
+            if adj2 == "NONE":
+                adj2n = ""
+            else:
+                adj2n = adj2
+            if adj_s == "NONE":
+                adj_sn = ""
+            else:
+                adj_sn = adj_s
+            self.arted = False
+            self.art = 1
+            self.art_path = "ImageStuff/finimages/%s%s%s%s.jpg" % ('spell', adj1, adj2n,adj_sn)
         self.cardType = cardType
         self.stats = stats
         self.state = state
