@@ -58,7 +58,7 @@ class Board():
         self.glow = pygame.image.load(os.path.join('glow.jpg')).convert_alpha()
         self.double_sword = pygame.image.load(os.path.join('crossedswords.png')).convert_alpha()
         self.mana_crystal = pygame.image.load(os.path.join('crystal.png')).convert_alpha()
-        self.mana_crystal = pygame.transform.scale(self.mana_crystal, (35, 35))
+        self.mana_crystal = pygame.transform.scale(self.mana_crystal, (50, 50))
 
         #   Set board constants
         self.effect_spacing = 10        #   Spacing between lines of effect text
@@ -240,6 +240,7 @@ class Board():
         """
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
+
         #   Render screen background
         screen.fill((200, 100, 200))
         bkgd = pygame.transform.scale(self.backdrop, (WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -272,7 +273,8 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
-        #self.render_mana()
+        self.render_mana(player2.mana, (25, 200))
+        self.render_mana(player1.mana, (25, WINDOW_HEIGHT - 200 - 50))
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         #   Render all cards in hands
@@ -670,4 +672,4 @@ class Board():
     def render_mana(self, num, pos):
         if num > 0:
             self.screen.blit(self.mana_crystal, pos)
-            render_mana(num - 1, (pos[0] + 50, pos[1]))
+            self.render_mana(num - 1, (pos[0] + 80, pos[1]))
