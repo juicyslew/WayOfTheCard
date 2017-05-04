@@ -236,10 +236,8 @@ class Game():
             while True:
                 # get all events
                 ev = pygame.event.get()
-
                 # proceed events
                 for event in ev:
-
                     # handle MOUSEBUTTONUP
                     if event.type == pygame.MOUSEBUTTONUP:
                         print("mouseButton")

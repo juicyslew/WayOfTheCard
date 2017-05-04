@@ -439,18 +439,41 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             enemy_player.cards[enemy_player.cards.index(c)] = new_c
                         print("EVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
                     print('-----------------------------------')
-                if self.effect == AMANA_EFFECT:
+                if self.effect == AMANA_EFFECT: # If Adds Mana
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Add Numeric to player mana
                         c.mana += self.numeric
-                if self.effect == RMANA_EFFECT:
+                if self.effect == RMANA_EFFECT: # If Removes Mana
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Add Numeric to player mana
                         c.rmana += self.numeric
+                if self.effect == RETURN_EFFECT: # If Returns Creature to Hand
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add Numeric to player mana
+                        if c in own_player.cards:
+                            own_player.hand.cards.append(c)
+                            own_player.cards.remove(c)
+                        else:
+                            enemy_player.hand.cards.append(c)
+                            enemy_player.cards.remove(c)
+                if self.effect == REANIMATE_EFFECT: # If Revives Creature
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add Numeric to player mana
+                        for i in range(self.numeric):
+                            if len(c.discard.cards) > 0:
+                                r = randint(0,len(c.discard.cards)-1)
+                                c.discard.cards[r].stats[0] = c.discard.cards[r].starting_stats[0]
+                                c.discard.cards[r].stats[1] = c.discard.cards[r].starting_stats[1]
+                                c.discard.cards[r].stats[2] = c.discard.cards[r].starting_stats[2]
+                                c.cards.append(c.discard.cards[r])
             self.effect = eff_ls
             self.trigger = trig_ls
             self.target = targ_ls

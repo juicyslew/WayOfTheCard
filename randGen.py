@@ -16,7 +16,7 @@ def generate(cardType = TYPE_CREATURE):
     Generates Names for Creatures.
     (ADD COMMENTS)
     """
-    if cardType == TYPE_CREATURE:     #Decides name length for creatures
+    if cardType == TYPE_CREATURE: #Decides name length for creatures
         word_num = random.choice([1,2])
     else:
         word_num = random.choice([1,2,3]) #Decides name length for spells
