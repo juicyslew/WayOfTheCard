@@ -233,8 +233,28 @@ class Game():
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
+            print("\nPress The Purple Button to Start %s's Turn: "% player1.name)
+            startturn = False
+            while True:
+                # get all events
+                ev = pygame.event.get()
 
-            pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        print("mouseButton")
+                        pos = pygame.mouse.get_pos()
+                        print("pos: " + str(pos))
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
             if TEMP_MANA:
                 player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -277,7 +297,27 @@ class Game():
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
             self.update_board()
-            pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
+
+            print("\nPress Enter to Start %s's Turn: "% player2.name)
+            while True:
+                # get all events
+                ev = pygame.event.get()
+
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
+
             if TEMP_MANA:
                 player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
