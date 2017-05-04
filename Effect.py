@@ -82,7 +82,7 @@ class Effect():
 $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_DICT[self.effect[i]], TRIGGER_DICT[self.trigger[i]], TARGET_DICT[self.target[i]], self.numeric[i]))
         return "".join(s)
 
-    def determine_target(self, own_player, enemy_player):
+    def determine_target(self, own_player, enemy_player): #Determines and returns which cards/players to target with effects
         """
         Determine the target for an effect
         """
@@ -104,13 +104,13 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             return tuple(own_player.cards + enemy_player.cards)
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
             return (a, b)
-        elif self.target == TARGET_RANDOM:
+        elif self.target == TARGET_RANDOM: # If Target is Random All
             return (choice(own_player.cards + enemy_player.cards),)
-        elif self.target == TARGET_RANDOM_ENEMY:
+        elif self.target == TARGET_RANDOM_ENEMY: # If Target is Random Enemy
             return (choice(enemy_player.cards),)
-        elif self.target == TARGET_RANDOM_ALLY:
+        elif self.target == TARGET_RANDOM_ALLY: # If Target is Random Ally
             return (choice(own_player.cards),)
-        elif self.target == TARGET_RANDOM_CREATURE:
+        elif self.target == TARGET_RANDOM_CREATURE: # If Target is a Random Creature
             targs = []
             if len(own_player.cards) - 1 == 0:
                 pass
@@ -123,26 +123,26 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             if len(targs) == 0:
                 return ()
             return (choice(targs),)
-        elif self.target == TARGET_RANDOM_ALLY_CREATURE:
+        elif self.target == TARGET_RANDOM_ALLY_CREATURE: # If Target is a Random Ally Creature
             if len(own_player.cards) - 1 == 0:
                 return ()
             return [choice(own_player.cards[1:])]
-        elif self.target == TARGET_RANDOM_ENEMY_CREATURE:
+        elif self.target == TARGET_RANDOM_ENEMY_CREATURE: # If Target is a Random Enemy Creature
             if len(enemy_player.cards) - 1 == 0:
                 return ()
             return (choice(enemy_player.cards[1:]),)
-        elif self.target == TARGET_ALL_CREATURE:
+        elif self.target == TARGET_ALL_CREATURE: #If Target is all Creatures
             targs = []
             for ca in own_player.cards[1:] + enemy_player.cards[1:]:
                 targs.append(ca)
             return targs
-        elif self.target == TARGET_THIS_CREATURE:
+        elif self.target == TARGET_THIS_CREATURE: # If Target is the own creature
             return (self.ThisCard,)
-        elif self.target == TARGET_ALL_ENEMY_CREATURE:
+        elif self.target == TARGET_ALL_ENEMY_CREATURE: # If Target is Every Enemy Creature
             if len(enemy_player.cards) - 1 == 0:
                 return ()
             return tuple(enemy_player.cards[1:])
-        elif self.target == TARGET_ALL_ALLY_CREATURE:
+        elif self.target == TARGET_ALL_ALLY_CREATURE: # If Target is Every Ally Creature
             if len(own_player.cards) - 1 == 0:
                 return ()
             return tuple(own_player.cards[1:])
@@ -202,9 +202,9 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 except ValueError:
                     print('\nInput a Number!')
                     continue
-        print('If you see this message, A target is not correctly implimented')
+        print('If you see this message, A target is not correctly implemented')
 
-    def activate(self, own_player, enemy_player, time, all_players = None):     #May have to rewrite Activate based on all hands to make it make sense...
+    def activate(self, own_player, enemy_player, time, all_players = None): #Checks if Trigger is Correct then Activates Effects
         """
         Function for Activating the Card Effect
         """
@@ -383,7 +383,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 own_player.board.render_buff(self.numeric, own_player, own_player.cards.index(c))
                             elif c in enemy_player.cards:
                                 own_player.board.render_buff(self.numeric, enemy_player, enemy_player.cards.index(c))
-                if self.effect == DESTROY_EFFECT:
+                if self.effect == DESTROY_EFFECT: # If The Effect Destroys a Creature
                     self.t = self.determine_target(own_player, enemy_player)
                     if len(self.t) == 0:
                         pass
@@ -395,14 +395,14 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 own_player.board.render_damage(self.numeric, own_player, own_player.cards.index(c))
                             elif c in enemy_player.cards:
                                 own_player.board.render_damage(self.numeric, enemy_player, enemy_player.cards.index(c))
-                if self.effect == FREEZE_EFFECT:
+                if self.effect == FREEZE_EFFECT: # Freezing Effect
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     if len(self.t) == 0:
                         pass
                     else:
                         for c in self.t: # Loop Through Targets
                             c.active_effects[FROZEN_INDEX] = 1
-                if self.effect == DEVOLVE_EFFECT: # If Devolve
+                if self.effect == DEVOLVE_EFFECT: # If Devolve (Changes card to a card of lower mana cost)
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
@@ -414,7 +414,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                             enemy_player.cards[enemy_player.cards.index(c)] = new_c
                         print("DEVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
                     print('-----------------------------------')
-                if self.effect == REVOLVE_EFFECT: # If Revolve
+                if self.effect == REVOLVE_EFFECT: # If Revolve (Changes card to a card of same mana cost)
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
@@ -427,7 +427,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                         print("REVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
 
                     print('-----------------------------------')
-                if self.effect == EVOLVE_EFFECT: # If Evolve
+                if self.effect == EVOLVE_EFFECT: # If Evolve (Changes card to a card of higher mana cost)
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
