@@ -101,7 +101,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
             return [b]
         elif self.target == TARGET_ALL: # If Target is All Cards, set and return
-            return [own_player.cards + enemy_player.cards]
+            return own_player.cards + enemy_player.cards
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
             return [a, b]
         elif self.target == TARGET_RANDOM: # If Target is Random All

@@ -37,7 +37,7 @@ class Card():
         self.blink = 0
         self.is_player = False
         if rarity == None:
-            rarity = DEFAULT_RARITY
+            rarity = np.random.choice(RARITIES, p = RARITY_PROBS)
         if cardType == None:
             if random.random() < spell_chance:
                 cardType = TYPE_SPELL
