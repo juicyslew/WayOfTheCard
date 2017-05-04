@@ -193,12 +193,15 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
         nam2 = ""
     if noun.lower() in blend_back or noun.lower() == "acid":
         blendy = (blendy[0],0.99)
+    if noun.lower() in spells:
+        blendy = (blendy[0], 0.5)
     noun_image = noun_image.convert('RGB')
     effect_image = effect_image.convert('RGB')
     final =Image.blend(noun_image,effect_image,blendy[1])
     pix = final.load()
     size = (480,270)
     almost_white = 220
+    almost_black = 30
     if noun.lower() == 'angel'or noun.lower()=='beast' or noun.lower() == "god" or noun.lower() == "prophet":
         almost_white = 230
     super_white = ["sofa", "cleric","sphinx"]
@@ -210,7 +213,7 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
                 for j in range(size[1]):
                     origional = noun_image.getpixel((i,j))
                     average =  (origional[0]+origional[1]+ origional[2])/3
-                    if average < almost_white:
+                    if average > almost_white:
                         pix[i,j]= (origional)
         else:
             for i in range(size[0]):

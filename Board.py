@@ -451,7 +451,7 @@ class Board():
                             card.art = pygame.image.load(card.art_path).convert_alpha()
                             card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
                             art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
-                            screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                             card.arted = True
                         else:
                             art = card.art
@@ -496,7 +496,7 @@ class Board():
                                 card.art = pygame.image.load(card.art_path).convert_alpha()
                                 card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
                                 art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
-                                screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
+                                screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                                 card.arted = True
                             else:
                                 art = card.art
