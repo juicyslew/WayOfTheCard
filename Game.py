@@ -74,7 +74,7 @@ class Game():
                     return True
                 elif i == '-1':
                     return
-                try:ar
+                try:
                     i = int(i) #set input to integer
                     try:
                         card = player.hand.cards[i-1] #pull the card from hand
