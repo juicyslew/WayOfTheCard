@@ -272,7 +272,7 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
-        self.render_mana()
+        #self.render_mana()
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         #   Render all cards in hands
