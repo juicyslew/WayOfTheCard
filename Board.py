@@ -7,6 +7,8 @@ class Board():
     def __init__(self, screen, players):
         self.clock = pygame.time.Clock()
         self.screen = screen
+
+        # Create font objects
         typeface = "myriad pro cond"
         self.card_name_font = pygame.font.SysFont(typeface, 17)   #   sets card fonts
         self.hero_name_font = pygame.font.SysFont(typeface, PLAYER_CARD_FONT_SIZE)
@@ -20,14 +22,17 @@ class Board():
         self.mana_font_small = pygame.font.SysFont(typeface, round(MANA_COST_FONT_SIZE*0.75)+1)
         self.stats_font_small = pygame.font.SysFont(typeface, round(CREATURE_STATS_FONT_SIZE*0.75)+1)
         self.health_font_small = pygame.font.SysFont(typeface, round(PLAYER_HEALTH_FONT_SIZE*0.75)+1)
+
         self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
         self.cardheight = CARD_HEIGHT
-        self.player1 = players[0]
+        self.player1 = players[0]           #  add players to class board for easy access
         self.player2 = players[1]
+
+        #   Load background image and icons
         backgrounds = ['BackgroundImage.jpg', 'bk2.jpg', 'bk3.jpg', 'bk4.jpg', 'bk5.jpg', 'bk6.jpg', 'bk7.jpg']
         self.backdrop = pygame.image.load(os.path.join(random.choice(backgrounds))).convert_alpha()
         self.backdrop = pygame.transform.scale(self.backdrop, (int(WINDOW_WIDTH/2), int(WINDOW_HEIGHT/2)))
-        self.change_brightness(self.backdrop, 0.75)
+        self.change_brightness(self.backdrop, 0.75)     #   Darken image slightly
         self.boom = pygame.image.load(os.path.join('redglow2.png')).convert_alpha()
         self.axe = pygame.image.load(os.path.join('axe.png')).convert_alpha()
         self.bear = pygame.image.load(os.path.join('bear.png')).convert_alpha()
@@ -38,46 +43,29 @@ class Board():
         self.ice = pygame.image.load(os.path.join('ice.jpg')).convert_alpha()
         self.glow = pygame.image.load(os.path.join('glow.jpg')).convert_alpha()
         self.double_sword = pygame.image.load(os.path.join('crossedswords.png')).convert_alpha()
-        self.effect_spacing = 10
-        self.name_spacing = 15
-        self.char_length = 24
+
+        #   Set board constants
+        self.effect_spacing = 10        #   Spacing between lines of effect text
+        self.name_spacing = 15          #   Spacing between lines of card name
+        self.char_length = 24           #   Max number of characters in a line
         self.effnames = {WINDFURY_EFFECT: generate_effect_name(WINDFURY_EFFECT),
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = 30
+        self.anim_speed = 30            #   FPS of all animations
         self.scale_img = 0.5
         self.end_turn = pygame.Surface(END_TURN_SHAPE) #End Turn is 100 by 50
         self.end_turn.fill(PURPLE)
         self.end_turn_rect = pygame.Rect(END_TURN_POS, END_TURN_SHAPE)
 
-    # def render_text(self, card_obj, pos):
-    #     surface = pygame.Surface((self.cardwidth, self.cardheight))
-    #     surface.fill(255, 255, 255)
-    #     x = 0
-    #     y = 0
-    #     (name, mana, stats, effect_text) = self.read_card(card_obj)
-    #     name_height = 0
-    #     for line in name:   #   renders name in individual lines
-    #         name_render = self.card_name_font.render(line, 1, (0, 0, 0))
-    #         surface.blit(name_render, (x + 15, y + name_height + 15))
-    #         name_height += 20
-    #     mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
-    #     surface.blit(mana_render, (x + self.cardwidth - 20, y))
-    #     stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
-    #     surface.blit(stats_render, (x + 10, y + self.cardheight - 25))
-    #     effect_height = 0
-    #     for line in effect_text:    #   renders effect text in individual lines
-    #         effect_render = self.card_text_font.render(line, 1, (0, 0, 0))
-    #         surface.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
-    #         effect_height += 15
-    #     return surface
 
     def render_card(self, card_obj, position, is_animated = False, is_dash = False, scale_x = 1, scale_y = 1):  #   display card on screen
         card = pygame.Surface((self.cardwidth * scale_x, self.cardheight * scale_y))
         try:
             if card_obj.cardType == TYPE_CREATURE and not card_obj.arted:
+                #   Load art using path in card
                 card_obj.art = pygame.image.load(card_obj.art_path).convert_alpha()
+                #   Compress then uncompress to minimize procecssing power
                 card_obj.art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
                 card_obj.art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
                 art = card_obj.art
@@ -99,7 +87,7 @@ class Board():
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
                     name_height += self.name_spacing
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))    #   renders art
                 card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
@@ -111,22 +99,22 @@ class Board():
                     card.blit(effect_render, (x + 15, y + self.cardheight/2 + effect_height))
                     effect_height += self.effect_spacing
                 #card.set_alpha(50)
-                if card_obj.active_effects[WINDFURY_INDEX] == 1:
+                if card_obj.active_effects[WINDFURY_INDEX] == 1:    #   Adds swords icon if card has windfury
                     swords = pygame.transform.scale(self.double_sword, (int(self.cardwidth/6), int(self.cardwidth/6)))
                     swords_rect = swords.get_rect()
                     self.change_alpha(swords, 180)
                     swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
                     card.blit(swords, swords_rect)
-                if card_obj.cardType == TYPE_CREATURE:
+                if card_obj.cardType == TYPE_CREATURE:  #   only creatures have art
                     card.blit(art, (int(CARD_WIDTH*0.045), 30))
-                card.set_alpha(10 * alpha)
+                card.set_alpha(10 * alpha)     #    Makes card fade in over course of one second
                 if not is_animated:
                     card.set_alpha(255)
                 self.screen.blit(card, (position[0], position[1]))
                 pygame.display.flip()
                 if not is_animated:
                     break
-                self.clock.tick(20)
+                self.clock.tick(self.anim_speed)
         else:
                 card.fill((255, 255, 255))
                 self.screen.blit(card, (position[0], position[1]))
