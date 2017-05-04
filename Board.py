@@ -214,6 +214,10 @@ class Board():
                         effect_text += "%s Gains %s Mana" % (TARGET_TEXT_DICT[targ], num)
                     elif eff == RMANA_EFFECT:
                         effect_text += "%s loses %s mana next turn." % (TARGET_TEXT_DICT[targ], num)
+                    elif eff == RETURN_EFFECT:
+                        effect_text += "Return creature to %s's hand" % (TARGET_TEXT_DICT[targ])
+                    elif eff == REANIMATE_EFFECT:
+                        effect_text += "Revives %s creatures for %s." % (num, TARGET_TEXT_DICT[targ])
                     if targ == TARGET_THIS_CREATURE and eff in [TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, WINDFURY_EFFECT, CHARGE_EFFECT]:
                         effect_text = self.effnames[eff] + ". "
                         keyword = True
