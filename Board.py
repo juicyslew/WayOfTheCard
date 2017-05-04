@@ -69,7 +69,7 @@ class Board():
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
         self.anim_speed = 24            #   FPS of all animations
-        self.scale_img = 0.5
+        self.scale_img = 1
         self.end_turn = pygame.Surface(END_TURN_SHAPE) #End Turn is 100 by 50
         self.end_turn.fill(PURPLE)
         self.end_turn_rect = pygame.Rect(END_TURN_POS, END_TURN_SHAPE)
