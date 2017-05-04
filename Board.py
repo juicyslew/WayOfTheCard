@@ -72,17 +72,11 @@ class Board():
     def render_card(self, card_obj, position, is_animated = False, is_dash = False, scale_x = 1, scale_y = 1):  #   display card on screen
         card = pygame.Surface((self.cardwidth * scale_x, self.cardheight * scale_y))
         try:
-<<<<<<< HEAD
             if card_obj.cardType == TYPE_CREATURE and not card_obj.arted:
                 card_obj.art = pygame.image.load(card_obj.art_path).convert_alpha()
                 art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
             elif card_obj.arted:
                 art = card_obj.art
-=======
-            if card_obj.cardType == TYPE_CREATURE:
-                art = pygame.image.load(card_obj.art_path).convert_alpha()
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86*scale_x), int(CARD_WIDTH*0.495*scale_y)))
->>>>>>> 37953f26255b93760d52978621de41017541cf1e
         except:
             pass
 
@@ -251,19 +245,6 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
-<<<<<<< HEAD
-        # for cardindex in range(len(player1.hand.cards)):
-        #     cardsurface = pygame.Surface((50, 50))
-        #     cardsurface.fill((255, 255, 255))
-        #     screen.blit(cardsurface, (100 * cardindex, 600))
-        #
-        # for cardindex in range(len(player2.hand.cards)):
-        #     cardsurface = pygame.Surface((50, 50))
-        #     cardsurface.fill((255, 255, 255))
-        #     screen.blit(cardsurface, (100 * cardindex, 100))
-
-=======
->>>>>>> 37953f26255b93760d52978621de41017541cf1e
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         for card in player2.cards[1:] + player1.cards[1:]:
