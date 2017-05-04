@@ -432,7 +432,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Evolve Card with cost plus Numeric
-                        new_c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)
+                        new_c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
                         if c in own_player.cards:
                             own_player.cards[own_player.cards.index(c)] = new_c
                         else:

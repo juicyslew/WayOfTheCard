@@ -59,128 +59,135 @@ class Game():
         self.game_loop(player_list) #Start Game Loop
 
 
-    def play_card(self, player, all_players = None):
+    def play_card(self, player, opp, i, all_players = None):
         """
         Function for putting cards into the field at the beginning of a player's turn
         """
-        player = all_players[player]
-        opp = all_players[not self.player_turn]
-        while True: #Yes, it's bad. Will come back to to see necessity of this.
-            not_played = True
-            print("### %s's Hand ###" % player.name)
-            print(player.hand) #Print the player hand
-            print("mana: %i" % player.mana) #display mana
-            while True:
-                self.update_board()
-                i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
-                if i == '0': #if 0 then end function, showing that the player is done with their turn.
-                    return True
-                elif i == '-1':
-                    return
-                try:
-                    i = int(i) #set input to integer
-                    try:
-                        card = player.hand.cards[i-1] #pull the card from hand
-                        if card.stats[COST] > player.mana: #if player can't pay for card
-                            print("That Card Costs Too Much!")
-                            continue #return False #End Function and Return that it failed, and thus should be run again.
-                        if player:
-                            if len(player.cards) > MAX_BOARD_SIZE:
-                                print("Too many monsters are on the board! You can't play this card.")
-                                continue #return False #End Function and Return that it failed, and thus should be run again.
-                        else:
-                            if len(opp.cards) > MAX_BOARD_SIZE:
-                                print("Too many monsters are on the board! You can't play this card.")
-                                continue #return False #End Function and Return that it failed, and thus should be run again.
-                        #print(card)
-                        card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
-                        player.mana -= card.stats[COST] #Subtract from the player's mana
-                        player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
-                        opp.check_dead(player)
-                        self.update_board()
-                        break
-                    except IndexError: # If index is out of range, return an error
-                        print("\nYou don't have that many cards!")
-                except ValueError: # if value converting to int is not possible, return error
-                    print('\n`Input a Number!`')
+        try:
+            card = player.hand.cards[i] #pull the card from hand
+            print('attempted to play %s' %card.name)
+            if card.stats[COST] > player.mana: #if player can't pay for card
+                print("That Card Costs Too Much!")
+                return
+            if len(player.cards) > MAX_BOARD_SIZE:
+                print("Too many monsters are on the board! You can't play this card.")
+                return
+            #print(card)
+            card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
+            player.mana -= card.stats[COST] #Subtract from the player's mana
+            player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
+            opp.check_dead(player)
+            self.update_board()
+        except IndexError: # If index is out of range, return an error
+            print("\nYou don't have that many cards!")
+                #except ValueError: # if value converting to int is not possible, return error
+                #    print('\n`Input a Number!`')
                 #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
 
 
-    def use_cards(self, player, all_players = None):
+    def use_cards(self, player, opp, opp_field, opp_face, i, all_players = None):
         """
         Function for using cards to perform actions (Do Work)
         """
-        player = all_players[self.player_turn]
-        opp = all_players[not self.player_turn]
-        a = player.check_active() # Create Variable that contains the active cards on the board
-        active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
-        while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
-            self.update_board()
-            print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
-            print('\n'.join(active) + '\n') #Print active cards to choose from
-            i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
-            print('')
+        #if all_players == None or len(all_players) == 2:
+        #    player = all_players[self.player_turn]
+        #    opp = all_players[not self.player_turn]
+        #    a = player.check_active() # Create Variable that contains the active cards on the board
+        #    active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
+        #    while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
+        #        self.update_board()
+        #        print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
+        #        print('\n'.join(active) + '\n') #Print active cards to choose from
+        #        i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
+        #        print('')
+        #        try:
+        #            i = int(i) #check that input is a number
+        #                if i == 0: #if i == 0, end function
+        #                    break
+                        #print(player.cards[i-1])
+        try:
+            attack_card = player.cards[i] # set attack card
+            if attack_card.state == STATE_SLEEP:
+                print("That card is asleep!")
+                return
+        except IndexError: # if index error
+            print("\nYou don't have that many cards in field!")
+            return
+        #        except ValueError: # if value error (input isn't an integer)
+        #            print('\nInput a Number!')
+        #            continue #start over
+
+        taunt = False
+        for card in opp.cards:
             try:
-                i = int(i) #check that input is a number
-                try:
-                    if i == 0: #if i == 0, end function
+                if card.active_effects[TAUNT_INDEX]:
+                    taunt = True
+                    continue
+            except AttributeError:
+                pass
+
+        print("### %s FIELD ### \n" % opp.name) # Print Opponent Field Header
+        print(str(opp) + '\n') # Print Enemy Combatents
+        #i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
+        a = None
+        while True:
+            # get all events
+            ev = pygame.event.get()
+
+            # proceed events
+            for event in ev:
+
+                # handle MOUSEBUTTONUP
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    #if playnum:
+                    #    active_spots = self.board.p2_hand_spots
+                    #else:
+                    if opp_face.collidepoint(pos):
+                        a = 0
+                    k = 0
+                    for j in opp_field:
+                        if j.collidepoint(pos):
+                            a = k
+                            break
+                        k += 1
+                    if a != None:
                         break
-                    #print(player.cards[i-1])
-                    attack_card = a[i-1] # set attack card
-                except IndexError: # if index error
-                    print("\nYou don't have that many cards in field!")
-                    continue #start over
-            except ValueError: # if value error (input isn't an integer)
-                print('\nInput a Number!')
-                continue #start over
-
-            taunt = False
-            for card in opp.cards:
-                try:
-                    if card.active_effects[TAUNT_INDEX]:
-                        taunt = True
-                        continue
-                except AttributeError:
-                    pass
-
-            print("### %s FIELD ### \n" % opp.name) # Print Opponent Field Header
-            print(str(opp) + '\n') # Print Enemy Combatents
-            i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
-            try:
-                i = int(i) #check that input is an integer
-                try:
-                    if i == 0: #if input is 0 go back to first step
-                        continue
-                    defend_card = opp.cards[i-1] #Set defense Card
-                    if taunt and not defend_card.active_effects[TAUNT_INDEX]:
-                        print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                        continue
-                    attack_card.attack(defend_card) #Run the Attack Function
-                    damage_dealt = attack_card.stats[ATT]
-                    attacking_index = player.cards.index(attack_card)
-                    self.board.card_dash((player, attacking_index), (opp, i - 1))
-                    self.board.render_damage(damage_dealt, opp, i - 1)
-                    if i - 1 != 0:
-                        self.board.render_damage(damage_dealt, player, attacking_index)
-                except IndexError: # if index error
-                    print("\nThe enemy doesn't have that many cards in field!")
-                    continue # Start Over
-            except ValueError: # if value error (input isn't an integer)
-                print('\nInput a Number!')
-                continue # Start Over
-            player.check_dead(opp) # Check if anything died on your opponent's field
-            opp.check_dead(player) # Check if anything died on your field.
-            a = player.check_active() # Update a (active cards list)
-            active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
-            self.update_board()
+                    else:
+                        return False#Cancel Attack
+                if a != None:
+                    break
+            if a != None:
+                break
+        #try:
+        #    i = int(i) #check that input is an integer
+        try:
+            #if i == 0: #if input is 0 go back to first step
+            #    continue
+            defend_card = opp.cards[a] #Set defense Card
+            if taunt and not defend_card.active_effects[TAUNT_INDEX]:
+                print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                return
+            attack_card.attack(defend_card) #Run the Attack Function
+            damage_dealt = attack_card.stats[ATT]
+            attacking_index = player.cards.index(attack_card)
+            self.board.card_dash((player, attacking_index), (opp, a))
+            self.board.render_damage(damage_dealt, opp, a)
+            if a != 0:
+                self.board.render_damage(damage_dealt, player, attacking_index)
+        except IndexError: # if index error
+            print("\nThe enemy doesn't have that many cards in field!")
+            return
+        #except ValueError: # if value error (input isn't an integer)
+        #    print('\nInput a Number!')
+        #    continue # Start Over
+                #player.check_dead(opp) # Check if anything died on your opponent's field
+                #opp.check_dead(player) # Check if anything died on your field.
+                #a = player.check_active() # Update a (active cards list)
+                #active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
         player.check_dead(opp) # Check if anything died on your opponent's field
-        opp.check_dead(player) # Check if anything died on your field.
+        opp.check_dead(player)
         self.update_board()
-        for c in player.cards:
-            if c.active_effects[WINDFURY_INDEX] == 2:
-                c.active_effects[WINDFURY_INDEX] = 1
-            if c.active_effects[FROZEN_INDEX] == 1:
-                c.active_effects[FROZEN_INDEX] = 0
 
 
     def check_game_end(self, player, all_players = None):
@@ -266,9 +273,62 @@ class Game():
                     card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
                 except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                     continue
-            self.play_card(0 ,all_players) #Need to unhardcode
-            self.use_cards(self.player_turn, all_players) # Run Use Cards Script
+            #self.play_card(0 ,all_players) #Need to unhardcode
+            #self.use_cards(self.player_turn, all_players) # Run Use Cards Script
             player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
+
+            #Start Placing and Attacking
+            while True:
+                self.update_board()
+                i = None
+                not_played = True
+                print("### %s's Hand ###" % player1.name)
+                print(player1.hand) #Print the player hand
+                print("mana: %i" % player1.mana) #display mana
+                while True:
+                    # get all events
+                    ev = pygame.event.get()
+
+                    # proceed events
+                    for event in ev:
+
+                        # handle MOUSEBUTTONUP
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            pos = pygame.mouse.get_pos()
+                            #if playnum:
+                            #    active_spots = self.board.p2_hand_spots
+                            #else:
+                            if self.board.end_turn_rect.collidepoint(pos):
+                                i = -1
+                                break
+
+                            k = 0 #iterator
+                            for j in self.board.p1_hand_spots:
+                                if j.collidepoint(pos):
+                                    i = k
+                                    self.play_card(player1, player2, i, all_players)
+                                    break
+                                k += 1
+                            k = 0
+                            for j in self.board.p1_field_spots:
+                                if j.collidepoint(pos):
+                                    i = k
+                                    f = self.use_cards(player1, player2, self.board.p2_field_spots, self.board.p2_player_spot, i, all_players)
+                                    if f == False:
+                                        break
+                                k += 1
+                        if i != None:
+                            break
+                    if i != None:
+                        break
+                if i == -1:
+                    break
+            for c in player1.cards:
+                if c.active_effects[WINDFURY_INDEX] == 2:
+                    c.active_effects[WINDFURY_INDEX] = 1
+                if c.active_effects[FROZEN_INDEX] == 1:
+                    c.active_effects[FROZEN_INDEX] = 0
+
             player1.check_hand()
             for card in player1.cards: #Run through cards on the field
                 try:
@@ -296,9 +356,9 @@ class Game():
                         continue
             self.game_turn_status = 0
             self.update_board()
-
-            print("\nPress Enter to Start %s's Turn: "% player2.name)
             self.game_turn_status = 2
+            startturn = False
+            print("\nPress The Purple Button to Start %s's Turn: "% player2.name)
             while True:
                 # get all events
                 ev = pygame.event.get()
@@ -331,10 +391,59 @@ class Game():
                     card.effect.activate(player2, player1, TRIGGER_BEGIN) # If card has beginning trigger, activate effect
                 except AttributeError or TypeError:
                     continue
-            self.play_card(1, all_players)
-            #print(player2) # display player 2 cards in field.
-            self.use_cards(self.player_turn, all_players)
-            player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw one
+            player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
+
+            #Start Placing and Attacking
+            while True:
+                self.update_board()
+                i = None
+                not_played = True
+                print("### %s's Hand ###" % player2.name)
+                print(player2.hand) #Print the player hand
+                print("mana: %i" % player2.mana) #display mana
+                while True:
+                    # get all events
+                    ev = pygame.event.get()
+
+                    # proceed events
+                    for event in ev:
+
+                        # handle MOUSEBUTTONUP
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            pos = pygame.mouse.get_pos()
+                            #if playnum:
+                            #    active_spots = self.board.p2_hand_spots
+                            #else:
+                            if self.board.end_turn_rect.collidepoint(pos):
+                                i = -1
+                                break
+
+                            k = 0 #iterator
+                            for j in self.board.p2_hand_spots:
+                                if j.collidepoint(pos):
+                                    i = k
+                                    self.play_card(player2, player1, i, all_players)
+                                    break
+                                k += 1
+                            k = 0
+                            for j in self.board.p2_field_spots:
+                                if j.collidepoint(pos):
+                                    i = k
+                                    f = self.use_cards(player2, player1, self.board.p1_field_spots, self.board.p1_player_spot, i, all_players)
+                                    if f == False:
+                                        break
+                                k += 1
+                        if i != None:
+                            break
+                    if i != None:
+                        break
+                if i == -1:
+                    break
+            for c in player2.cards:
+                if c.active_effects[WINDFURY_INDEX] == 2:
+                    c.active_effects[WINDFURY_INDEX] = 1
+                if c.active_effects[FROZEN_INDEX] == 1:
+                    c.active_effects[FROZEN_INDEX] = 0
             player2.check_hand()
             for card in player2.cards: # For Card in player2.cards:
                 try:
