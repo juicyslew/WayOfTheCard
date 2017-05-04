@@ -241,6 +241,8 @@ class Board():
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
 
+        if turn_status == 3:
+            turn_status = player1.turn_status
         #   Render screen background
         screen.fill((200, 100, 200))
         bkgd = pygame.transform.scale(self.backdrop, (WINDOW_WIDTH, WINDOW_HEIGHT))
