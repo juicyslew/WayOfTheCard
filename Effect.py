@@ -97,19 +97,19 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         except TypeError:
             print("Effect: %s , Numeric: [%i,%i]" % (EFFECT_DICT[self.effect], self.numeric[0], self.numeric[1]))
         if self.target == TARGET_OWN_PLAYER: # If Target Is Own Player, Return
-            return (a,)
+            return [a]
         elif self.target == TARGET_OPPONENT: # If Target is Enemy Player, Return
-            return (b,)
+            return [b]
         elif self.target == TARGET_ALL: # If Target is All Cards, set and return
-            return tuple(own_player.cards + enemy_player.cards)
+            return [own_player.cards + enemy_player.cards]
         elif self.target == TARGET_BOTH: # If Target is Both Players, set and return
-            return (a, b)
+            return [a, b]
         elif self.target == TARGET_RANDOM: # If Target is Random All
-            return (choice(own_player.cards + enemy_player.cards),)
+            return [choice(own_player.cards + enemy_player.cards)]
         elif self.target == TARGET_RANDOM_ENEMY: # If Target is Random Enemy
-            return (choice(enemy_player.cards),)
+            return [choice(enemy_player.cards)]
         elif self.target == TARGET_RANDOM_ALLY: # If Target is Random Ally
-            return (choice(own_player.cards),)
+            return [choice(own_player.cards)]
         elif self.target == TARGET_RANDOM_CREATURE: # If Target is a Random Creature
             targs = []
             if len(own_player.cards) - 1 == 0:
@@ -122,7 +122,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                 targs + enemy_player.cards[1:]
             if len(targs) == 0:
                 return ()
-            return (choice(targs),)
+            return [choice(targs)]
         elif self.target == TARGET_RANDOM_ALLY_CREATURE: # If Target is a Random Ally Creature
             if len(own_player.cards) - 1 == 0:
                 return ()
@@ -130,22 +130,22 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         elif self.target == TARGET_RANDOM_ENEMY_CREATURE: # If Target is a Random Enemy Creature
             if len(enemy_player.cards) - 1 == 0:
                 return ()
-            return (choice(enemy_player.cards[1:]),)
+            return [choice(enemy_player.cards[1:])]
         elif self.target == TARGET_ALL_CREATURE: #If Target is all Creatures
             targs = []
             for ca in own_player.cards[1:] + enemy_player.cards[1:]:
                 targs.append(ca)
             return targs
         elif self.target == TARGET_THIS_CREATURE: # If Target is the own creature
-            return (self.ThisCard,)
+            return [self.ThisCard]
         elif self.target == TARGET_ALL_ENEMY_CREATURE: # If Target is Every Enemy Creature
             if len(enemy_player.cards) - 1 == 0:
                 return ()
-            return tuple(enemy_player.cards[1:])
+            return enemy_player.cards[1:]
         elif self.target == TARGET_ALL_ALLY_CREATURE: # If Target is Every Ally Creature
             if len(own_player.cards) - 1 == 0:
                 return ()
-            return tuple(own_player.cards[1:])
+            return own_player.cards[1:]
         elif self.target == TARGET_PLAYERS: # If Target is Player of Choice
             while True:
                 print("Your Health: %i\nEnemy Health: %i" % (own_player.cards[0].stats[DEF], enemy_player.cards[0].stats[DEF]))
@@ -154,9 +154,9 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     self.i = int(self.i) # Check that it is an int
                     #Return player based on player input
                     if self.i == 1:
-                        return (a,)
+                        return [a]
                     elif self.i == 2:
-                        return (b,)
+                        return [b]
                     else:
                         print('Input a Number Between 1 and 2!')
                 except ValueError:
@@ -466,7 +466,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
-                        #Add Numeric to player mana
+                        #REvives a creature from graveyard
                         for i in range(self.numeric):
                             if len(c.discard.cards) > 0:
                                 r = randint(0,len(c.discard.cards)-1)
@@ -475,6 +475,27 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 c.discard.cards[r].stats[2] = c.discard.cards[r].starting_stats[2]
                                 c.cards.append(c.discard.cards[r])
                                 c.discard.cards.remove(c)
+                if self.effect == ADD_CARD_EFFECT: # If Adds a Card to hand
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add a Card to Hand
+                        for i in range(self.numeric):
+                            c.hand.cards.append(Card.Card(effect=True))
+                if self.effect == ADD_CREATURE_EFFECT: # If Adds a Creature to hand
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add a Creature to Hand
+                        for i in range(self.numeric):
+                            c.hand.cards.append(Card.Card(cardType = TYPE_CREATURE, effect=True))
+                if self.effect == ADD_SPELL_EFFECT: # If Adds a Spell to hand
+                    print('-----------------------------------')
+                    self.t = self.determine_target(own_player, enemy_player) # Determine Target
+                    for c in self.t: # Loop Through Targets
+                        #Add a Spell to Hand
+                        for i in range(self.numeric):
+                            c.hand.cards.append(Card.Card(cardType = TYPE_SPELL, effect=True))
             self.effect = eff_ls
             self.trigger = trig_ls
             self.target = targ_ls
