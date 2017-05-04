@@ -59,11 +59,11 @@ class Game():
         self.game_loop(player_list) #Start Game Loop
 
 
-    def play_card(self, player, all_players = None):
+    def play_card(self, playnum, all_players = None):
         """
         Function for putting cards into the field at the beginning of a player's turn
         """
-        player = all_players[player]
+        player = all_players[playnum]
         opp = all_players[not self.player_turn]
         while True: #Yes, it's bad. Will come back to to see necessity of this.
             not_played = True
@@ -72,37 +72,63 @@ class Game():
             print("mana: %i" % player.mana) #display mana
             while True:
                 self.update_board()
-                i = input('Index of Card to Play (End Placement, Start Attack = 0): ') #get input for card to play
-                if i == '0': #if 0 then end function, showing that the player is done with their turn.
-                    return True
-                elif i == '-1':
-                    return
-                try:
-                    i = int(i) #set input to integer
-                    try:
-                        card = player.hand.cards[i-1] #pull the card from hand
-                        if card.stats[COST] > player.mana: #if player can't pay for card
-                            print("That Card Costs Too Much!")
-                            continue #return False #End Function and Return that it failed, and thus should be run again.
-                        if player:
-                            if len(player.cards) > MAX_BOARD_SIZE:
-                                print("Too many monsters are on the board! You can't play this card.")
-                                continue #return False #End Function and Return that it failed, and thus should be run again.
-                        else:
-                            if len(opp.cards) > MAX_BOARD_SIZE:
-                                print("Too many monsters are on the board! You can't play this card.")
-                                continue #return False #End Function and Return that it failed, and thus should be run again.
-                        #print(card)
-                        card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
-                        player.mana -= card.stats[COST] #Subtract from the player's mana
-                        player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
-                        opp.check_dead(player)
-                        self.update_board()
+                i = None
+                while True:
+                    # get all events
+                    ev = pygame.event.get()
+
+                    # proceed events
+                    for event in ev:
+
+                        # handle MOUSEBUTTONUP
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            pos = pygame.mouse.get_pos()
+                            if playnum:
+                                active_spots = self.board.p2_hand_spots
+                            else:
+                                active_spots = self.board.p1_hand_spots
+                            k = 0 #iterator
+                            for j in active_spots:
+                                if j.collidepoint(pos):
+                                    i = k
+                                    break
+                                k += 1
+                        if i != None:
+                            break
+                    if i != None:
                         break
-                    except IndexError: # If index is out of range, return an error
-                        print("\nYou don't have that many cards!")
-                except ValueError: # if value converting to int is not possible, return error
-                    print('\n`Input a Number!`')
+
+                #if i == '0': #if 0 then end function, showing that the player is done with their turn.
+                #    return True
+                #elif i == '-1':
+                #    return
+                #try:
+                #    i = int(i) #set input to integer
+                try:
+                    card = player.hand.cards[i] #pull the card from hand
+                    print('attempted to play %s' %card)
+                    if card.stats[COST] > player.mana: #if player can't pay for card
+                        print("That Card Costs Too Much!")
+                        continue #return False #End Function and Return that it failed, and thus should be run again.
+                    if player:
+                        if len(player.cards) > MAX_BOARD_SIZE:
+                            print("Too many monsters are on the board! You can't play this card.")
+                            continue #return False #End Function and Return that it failed, and thus should be run again.
+                    else:
+                        if len(opp.cards) > MAX_BOARD_SIZE:
+                            print("Too many monsters are on the board! You can't play this card.")
+                            continue #return False #End Function and Return that it failed, and thus should be run again.
+                    #print(card)
+                    card.play(self.player_turn, all_players) #If it succeeded, Put the card in the field
+                    player.mana -= card.stats[COST] #Subtract from the player's mana
+                    player.check_dead(opp) #Check if anything died after the card play effect, which can happen in card.play()
+                    opp.check_dead(player)
+                    self.update_board()
+                    break
+                except IndexError: # If index is out of range, return an error
+                    print("\nYou don't have that many cards!")
+                #except ValueError: # if value converting to int is not possible, return error
+                #    print('\n`Input a Number!`')
                 #return False # Return false showing that something went wrong, the player's play turn should only end once they decide they are done playing card (aka input 0, as shown above)
 
 
