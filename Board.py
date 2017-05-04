@@ -46,9 +46,9 @@ class Board():
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
         self.anim_speed = 20
-        self.end_turn = pygame.Surface((100, 50)) #End Turn is 100 by 50
+        self.end_turn = pygame.Surface(END_TURN_SHAPE) #End Turn is 100 by 50
         self.end_turn.fill(PURPLE)
-        self.screen.blit(self.end_turn, (WINDOW_WIDTH-100, (WINDOW_HEIGHT-50)/2))
+        self.end_turn_rect = pygame.Rect(END_TURN_POS, END_TURN_SHAPE)
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
@@ -236,6 +236,7 @@ class Board():
         health_x_offset = 35
         health_y_offset = 45
 
+        self.screen.blit(self.end_turn, (WINDOW_WIDTH-END_TURN_SHAPE[0], (WINDOW_HEIGHT-END_TURN_SHAPE[1])/2))
         self.render_card(player2.cards[0], (xhalf - self.cardwidth/2, card_y_offset))
         player2_name_render = self.hero_name_font.render(player2.player.name, 1, (0, 0, 0))          #   define name font object
         player2_health_render = self.health_font.render(str(player2.player.stats[2]), 1, (0, 0, 0))     #   define health font object
