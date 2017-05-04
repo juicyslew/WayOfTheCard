@@ -474,6 +474,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 c.discard.cards[r].stats[1] = c.discard.cards[r].starting_stats[1]
                                 c.discard.cards[r].stats[2] = c.discard.cards[r].starting_stats[2]
                                 c.cards.append(c.discard.cards[r])
+                                c.discard.cards.remove(c)
             self.effect = eff_ls
             self.trigger = trig_ls
             self.target = targ_ls
