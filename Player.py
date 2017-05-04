@@ -16,6 +16,7 @@ class Player_Card(Card):
         self.effect = False #Player Has No Effects
         self.active_effects = INIT_ACTIVE_EFFECT
         self.is_player = True
+        self.turn_status = 0
 
     def __str__(self): #When printing the player
         s = """### %s || %s\n""" % (self.name, self.stats) # Return this string
