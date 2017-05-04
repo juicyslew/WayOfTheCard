@@ -230,7 +230,7 @@ class Board():
         tot_effect_text = tot_effect_text.split("\n")
         return (name, mana, stats, tot_effect_text)
 
-    def update_board(self, screen, player1, player2, card_to_animate = None, card_not_to_render = None, all_players = None):   #   updates board with current cards in play
+    def update_board(self, screen, player1, player2, card_to_animate = None, card_not_to_render = None, all_players = None, turn_status = 3):   #   updates board with current cards in play
         """
         Displaying an unknown number of players isn't my problem but I left an 'all' here anyway.
         """
@@ -382,59 +382,16 @@ class Board():
         for card in player2.hand.cards + player1.hand.cards:
             #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2475)))
             try:
-                x = player1.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
-                if player1.hand.cards.index(card) > 5:
-                    x += 370
-                y = WINDOW_HEIGHT - self.cardheight*0.75 - 30
-                if card is card_not_to_render:
-                    continue
-                elif card is card_to_animate:
-                    card_backlog.append([card, (x, y)])
-                    #self.render_card(card, (x, y), True)
-                else:
-                    self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
-                if card is not card_to_animate and card is not card_not_to_render:
-                    if card.cardType == TYPE_CREATURE and not card.arted:
-                        card.art = pygame.image.load(card.art_path).convert_alpha()
-                        card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
-                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
-                        card.arted = True
-                    elif card.cardType == TYPE_CREATURE:
-                        art = card.art
-                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
-                    small_border = pygame.transform.scale(self.bord_dict[card.rarity], (int(CARD_WIDTH*0.75), int(CARD_HEIGHT*0.75)))
-                    screen.blit(small_border, (x, y))
-                    (name, mana, stats, effect_text) = self.read_card(card)
-                    name_height = -4
-                    for line in name:   #   renders name in individual lines
-                        name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
-                        screen.blit(name_render, (x + 15, y + name_height + 15))
-                        name_height += self.name_spacing - 4
-                    mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
-                    screen.blit(mana_render, (x + self.cardwidth*0.75 - 15, y))
-                    if card.cardType == TYPE_CREATURE:
-                        stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
-                        screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
-                    effect_height = 15
-                    for line in effect_text:    #   renders effect text in individual lines
-                        effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
-                        screen.blit(effect_render, (x + 7, y + self.cardheight/3 + effect_height))
-                        effect_height += self.effect_spacing
-
-
-            except ValueError:
-                #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
-                try:
-                    x = player2.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
-                    if player2.hand.cards.index(card) > 5:
+                if turn_status == 3 or turn_status == 2:
+                    x = player1.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
+                    if player1.hand.cards.index(card) > 5:
                         x += 370
-                    y = 30
+                    y = WINDOW_HEIGHT - self.cardheight*0.75 - 30
                     if card is card_not_to_render:
                         continue
                     elif card is card_to_animate:
-                        self.render_card(card, (x, y), True, scale_x = 0.75, scale_y = 0.75)
+                        card_backlog.append([card, (x, y)])
+                        #self.render_card(card, (x, y), True)
                     else:
                         self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
                     if card is not card_to_animate and card is not card_not_to_render:
@@ -461,13 +418,58 @@ class Board():
                         if card.cardType == TYPE_CREATURE:
                             stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
                             screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
-                        height = 15
+                        effect_height = 15
                         for line in effect_text:    #   renders effect text in individual lines
                             effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
-                            screen.blit(effect_render, (x + 7, y + self.cardheight/3 + height))
-                            height += self.effect_spacing
-                except ValueError:
-                    pass
+                            screen.blit(effect_render, (x + 7, y + self.cardheight/3 + effect_height))
+                            effect_height += self.effect_spacing
+
+
+            except ValueError:
+                #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
+                try:
+                    if turn_status == 1 or turn_status == 3:
+                        x = player2.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
+                        if player2.hand.cards.index(card) > 5:
+                            x += 370
+                        y = 30
+                        if card is card_not_to_render:
+                            continue
+                        elif card is card_to_animate:
+                            self.render_card(card, (x, y), True, scale_x = 0.75, scale_y = 0.75)
+                        else:
+                            self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
+                        if card is not card_to_animate and card is not card_not_to_render:
+                            if card.cardType == TYPE_CREATURE and not card.arted:
+                                card.art = pygame.image.load(card.art_path).convert_alpha()
+                                card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
+                                art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
+                                screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
+                                card.arted = True
+                            elif card.cardType == TYPE_CREATURE:
+                                art = card.art
+                                art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
+                                screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                            small_border = pygame.transform.scale(self.bord_dict[card.rarity], (int(CARD_WIDTH*0.75), int(CARD_HEIGHT*0.75)))
+                            screen.blit(small_border, (x, y))
+                            (name, mana, stats, effect_text) = self.read_card(card)
+                            name_height = -4
+                            for line in name:   #   renders name in individual lines
+                                name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
+                                screen.blit(name_render, (x + 15, y + name_height + 15))
+                                name_height += self.name_spacing - 4
+                            mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
+                            screen.blit(mana_render, (x + self.cardwidth*0.75 - 15, y))
+                            if card.cardType == TYPE_CREATURE:
+                                stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
+                                screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
+                            height = 15
+                            for line in effect_text:    #   renders effect text in individual lines
+                                effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
+                                screen.blit(effect_render, (x + 7, y + self.cardheight/3 + height))
+                                height += self.effect_spacing
+                    except ValueError:
+                        pass
 
         for card in card_backlog:
             self.render_card(card_backlog[0][0], card_backlog[0][1], True)
