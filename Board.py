@@ -275,8 +275,10 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
-        self.render_mana(player2.mana, (25, 200))
-        self.render_mana(player1.mana, (25, WINDOW_HEIGHT - 200 - 50))
+        if turn_status == 2:
+            self.render_mana(player2.mana, (25, 200))
+        if turn_status == 1:
+            self.render_mana(player1.mana, (25, WINDOW_HEIGHT - 200 - 50))
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         #   Render all cards in hands
@@ -674,4 +676,4 @@ class Board():
     def render_mana(self, num, pos):
         if num > 0:
             self.screen.blit(self.mana_crystal, pos)
-            self.render_mana(num - 1, (pos[0] + 80, pos[1]))
+            self.render_mana(num - 1, (pos[0] + 70, pos[1]))
