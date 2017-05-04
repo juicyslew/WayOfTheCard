@@ -84,11 +84,25 @@ class Board():
             self.p1_hand_spots.append(pygame.Rect(x,y,handcardwidth,handcardheight))
         self.p2_hand_spots = []
         for i in range(HAND_MAX_SIZE):
-            x = i*(handcardwidth) + 10
+            x = i*(handcardwidth + 10) + 10
             if i > 5:
                 x += 370
-            y = WINDOW_HEIGHT - handcardheight - 30
+            y = 30
             self.p2_hand_spots.append(pygame.Rect(x,y,handcardwidth,handcardheight))
+        yhalf = WINDOW_HEIGHT/2
+        xhalf = WINDOW_WIDTH/2
+        self.p2_field_spots = [pygame.Rect(-2,-2,1,1)] #Dummy Rect
+        for i in range(1,MAX_BOARD_SIZE):
+            x = i*(CARD_WIDTH + 20) + 80
+            y = yhalf - 15 - self.cardheight
+            self.p2_field_spots.append(pygame.Rect(x,y,CARD_WIDTH,CARD_HEIGHT))
+        self.p1_field_spots = [pygame.Rect(-2,-2,1,1)] #Starts with dummy rect
+        for i in range(1,HAND_MAX_SIZE):
+            x = i*(CARD_WIDTH + 20) + 80
+            y = yhalf + 15
+            self.p1_field_spots.append(pygame.Rect(x,y,CARD_WIDTH,CARD_HEIGHT))
+        self.p1_player_spot = pygame.Rect(xhalf - CARD_WIDTH/2, WINDOW_HEIGHT - 30 - CARD_HEIGHT,CARD_WIDTH,CARD_HEIGHT)
+        self.p2_player_spot = pygame.Rect(xhalf - CARD_WIDTH/2, 30,CARD_WIDTH,CARD_HEIGHT)
 
 
 
