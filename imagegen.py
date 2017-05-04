@@ -22,15 +22,15 @@ x = "x"
 y = "y"
 
 dict_paded = {"spell1":(1,b), "angel":(0,b), "bear":(0,b), "cat":(0,b),"giant":(0,x), "griffin":(0,b), "person": (0,x), "golem":(0,x),
-              "shaman":(0,x),"prophet":(0,x),"succubis":(0,x), "hydra":(0,x), "basilisk":(0,x), "satyr":(0,x),"minotaur":(0,x), "fish": (0,y),
-              "wolf":(0,x), "ooze":(0,x), "protector":(0,x),"goblin":(0,x), "destroyer": (0,y),"ape":(0,x),"roc":(0,x), "beast":(0,x),"colossus":(0,x),"dwarf":(0,x),"sphinx":(0,x),
-              "ravager":(0,x),"rogue":(0,x),"knight":(0,x),"tiger":(0,x),"unicorn":(0,x),"eater":(0,x),
+              "shaman":(0,x),"prophet":(0,x),"succubis":(0,x), "basilisk":(0,x), "satyr":(0,x),"minotaur":(0,x), "fish": (0,y),
+              "wolf":(0,x), "ooze":(0,x),"goblin":(0,x),"ape":(0,x),"roc":(0,x), "beast":(0,x),"colossus":(0,x),"dwarf":(0,x),"sphinx":(0,x),
+              "ravager":(0,x),"rogue":(0,x),"knight":(0,x),"tiger":(0,x),"unicorn":(0,x),
               "king":(0,x),"gremlin":(0,x),"orc":(0,x),"fungus":(0,x),"god":(0,x),"leviathan":(0,x),
               "cleric":(0,x),"sprite":(0,x), "vagabond":(0,x), "reaper":(0,x),"eagle":(0,y),"sheild":(0,x), "fairy":(0,x),"elemental":(0,x)}
 
 #1 = black
 #0 = white
-blend_back = ["griffin","shaman","prophet","hydra","basilisk","satyr", "minotaur",
+blend_back = ["griffin","shaman","prophet","basilisk","satyr", "minotaur",
               "fish", "ooze","protector","ape","beast","colossus","dwarf","sphinx",
               "ravager","rogue","king","god","cleric","sprite","vagabond","demon","acid","angel","giant"]
 
