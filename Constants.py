@@ -18,6 +18,9 @@ MAX_BOARD_SIZE = 7
 FATIGUE = True
 MINION_RECOVER = False
 
+#COLORS
+PURPLE = (225, 50, 225)
+
 #NAME_LIST = ["Bird", "Robot Doctor", "Magic Stones", "Test Card", "JEREMEEEEE"]
 
 #Integers to represent creature types, list of valid type choices, and dictionary for decoding them

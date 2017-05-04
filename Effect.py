@@ -34,7 +34,7 @@ class Effect():
                 trigger = (choice(TRIGGER_LIST),)
             if effect == None:
                 effect = (choice(EFFECT_LIST),)
-            if target == None:
+            if target == None: #THIS CODE DOESNT WORK RIGHT NOW
                 if self.class_type == CLASS_PLAYER:
                     target = (choice(PLAYER_TARGET_LIST),) #Add target based on stuff???
                 elif self.class_type == CLASS_CREATURE:
@@ -45,11 +45,12 @@ class Effect():
         eff_len = len(effect)
         self.effect = effect
         self.trigger = trigger
+        self.class_type = []
         for i in range(eff_len):
             if self.effect[i] == None:
-                self.class_type = CLASS_PLAYER
+                self.class_type.append(CLASS_PLAYER)
             else:
-                self.class_type = EFFECT_CLASS_DICT[self.effect[i]]
+                self.class_type.append(EFFECT_CLASS_DICT[self.effect[i]])
             if numeric[i] == None: #If no numeric value, Generate Numeric
                 if self.effect[i] == SUMMON_EFFECT:
                     #try:
@@ -65,6 +66,7 @@ class Effect():
             if self.effect[i] == BUFF_EFFECT or self.effect[i] == DEBUFF_EFFECT:
                 r = randint(0, numeric[i])
                 numeric[i] = [r, numeric[i]-r]
+
         self.numeric = numeric
         self.target = target
         self.leftover = effect_spend
@@ -221,20 +223,22 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
         Function for Activating the Card Effect
         """
         if self.eff_len < 1:
-            self.eff_len = 1
+            self.eff_len = 1 #Why is this here
             return
-        for i in range(self.eff_len):
+        for k in range(self.eff_len):
+            #if self.eff_len > 1:
             eff_ls = self.effect
             trig_ls = self.trigger
             targ_ls = self.target
             num_ls = self.numeric
-            try:
-                self.effect = eff_ls[i]
-                self.trigger = trig_ls[i]
-                self.target = targ_ls[i]
-                self.numeric = num_ls[i]
-            except: # AttributeError or TypeError
-                return
+            class_ls = self.class_type
+            self.effect = eff_ls[k]
+            self.trigger = trig_ls[k]
+            self.target = targ_ls[k]
+            self.numeric = num_ls[k]
+            self.class_type = class_ls[k]
+            #except: # AttributeError or TypeError
+            #    return
             if time == self.trigger: # If the current timing is the cards effect timing
                 if self.effect == DRAW_EFFECT: # If draw
                     self.t = self.determine_target(own_player, enemy_player) # Find Target List
@@ -417,33 +421,37 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Devolve Card with cost minus Numeric
+                        new_c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost-self.numeric)
                         if c in own_player.cards:
-                            own_player.cards[own_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost-self.numeric)
+                            own_player.cards[own_player.cards.index(c)] = new_c
                         else:
-                            enemy_player.cards[enemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost-self.numeric)
-                        print("Creature Devolved to %s cost" %c.stats[0])
+                            enemy_player.cards[enemy_player.cards.index(c)] = new_c
+                        print("DEVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
                     print('-----------------------------------')
                 if self.effect == REVOLVE_EFFECT: # If Revolve
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Revolve card with same cost
+                        new_c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)
                         if c in own_player.cards:
-                            own_player.cards[own_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)
+                            own_player.cards[own_player.cards.index(c)] = new_c
                         else:
-                            enemy_player.cards[enemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)
-                        print("Creature Revolved to %s cost" %c.stats[0])
+                            enemy_player.cards[enemy_player.cards.index(c)] = new_c
+                        print("REVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
+
                     print('-----------------------------------')
                 if self.effect == EVOLVE_EFFECT: # If Evolve
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
                     for c in self.t: # Loop Through Targets
                         #Evolve Card with cost plus Numeric
+                        new_c = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost)
                         if c in own_player.cards:
-                            own_player.cards[own_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
+                            own_player.cards[own_player.cards.index(c)] = new_c
                         else:
-                            enemy_player.cards[enemy_player.cards.index(c)] = Card.Card(cardType=TYPE_CREATURE, state = c.state, effect=True, cost = c.manacost+self.numeric)
-                        print("Creature Evolved to %s cost" %c.stats[0])
+                            enemy_player.cards[enemy_player.cards.index(c)] = new_c
+                        print("EVOLVE FROM \n%s\nTO\n%s" %(c, new_c))
                     print('-----------------------------------')
                 if self.effect == AMANA_EFFECT:
                     print('-----------------------------------')
@@ -461,4 +469,5 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             self.trigger = trig_ls
             self.target = targ_ls
             self.numeric = num_ls
+            self.class_type = class_ls
             print('eff num: ' + str(len(self.effect)))
