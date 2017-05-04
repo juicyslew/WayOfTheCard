@@ -39,19 +39,22 @@ class Game():
         totrarprobs = sum(RARITY_PROBS)
         rarities = [np.random.choice(RARITIES, p = RARITY_PROBS) for a in range(DECK_INIT_SIZE)]
         pygame.init()
+        names = []
         for j in range(1, self.players+1):
-            print('Player %i:' % j)
+            print('\n PLAYER %i:' % j)
             while True: #Create Loop for picking Name
                 name = random_name().capitalize() #Create Name
                 #print(name) #Display Name
                 i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
                 if i is 'y': #If player liked
-                    if j == 1:
-                        player_list.append(Player(name, HAND_INIT_SIZE, rarities)) #Save Player Name
-                    else:
-                        player_list.append(Player(name, HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
+                    names.append(name)
                     break
                 continue #If player doesn't like it, then generate new name
+        for j in range(self.players):
+            if j == 0:
+                player_list.append(Player(names[j], HAND_INIT_SIZE, rarities)) #Save Player Name
+            else:
+                player_list.append(Player(names[j], HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
         # player_list.append(Player('Daniel', 4))
         self.game_loop(player_list) #Start Game Loop
 

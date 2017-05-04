@@ -46,6 +46,9 @@ class Board():
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
         self.anim_speed = 20
+        self.end_turn = pygame.Surface((100, 50)) #End Turn is 100 by 50
+        self.end_turn.fill(PURPLE)
+        self.screen.blit(self.end_turn, (WINDOW_WIDTH-100, (WINDOW_HEIGHT-50)/2))
 
     # def render_text(self, card_obj, pos):
     #     surface = pygame.Surface((self.cardwidth, self.cardheight))
