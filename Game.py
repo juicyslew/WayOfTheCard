@@ -133,6 +133,8 @@ class Game():
         a = None
         while True:
             # get all events
+            attack_card.blink = 1
+            self.update_board()
             ev = pygame.event.get()
 
             # proceed events
@@ -150,15 +152,25 @@ class Game():
                     for j in opp_field:
                         if j.collidepoint(pos):
                             a = k
+                            attack_card.blink = 0
+                            self.update_board()
                             break
                         k += 1
                     if a != None:
+                        attack_card.blink = 0
+                        self.update_board()
                         break
                     else:
+                        attack_card.blink = 0
+                        self.update_board()
                         return False#Cancel Attack
                 if a != None:
+                    attack_card.blink = 0
+                    self.update_board()
                     break
             if a != None:
+                card.blink = 0
+                self.update_board()
                 break
         #try:
         #    i = int(i) #check that input is an integer
@@ -326,7 +338,7 @@ class Game():
                     break
             self.game_turn_status = 0
             self.update_board()
-            time.sleep(.7s5)
+            time.sleep(.75)
             for c in player1.cards:
                 if c.active_effects[WINDFURY_INDEX] == 2:
                     c.active_effects[WINDFURY_INDEX] = 1

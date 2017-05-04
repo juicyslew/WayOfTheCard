@@ -59,6 +59,7 @@ class Board():
         self.double_sword = pygame.image.load(os.path.join('crossedswords.png')).convert_alpha()
         self.mana_crystal = pygame.image.load(os.path.join('crystal.png')).convert_alpha()
         self.mana_crystal = pygame.transform.scale(self.mana_crystal, (50, 50))
+        self.exhaust = pygame.image.load(os.path.join('exhaust.png')).convert_alpha()
 
         #   Set board constants
         self.effect_spacing = 10        #   Spacing between lines of effect text
@@ -159,6 +160,8 @@ class Board():
                 card.set_alpha(10 * alpha)     #    Makes card
                 if not is_animated:
                     card.set_alpha(255)
+                if card_obj.state == STATE_SLEEP:
+                    card.blit(self.exhaust, (x, y))
                 self.screen.blit(card, (position[0], position[1]))
                 pygame.display.flip()
                 if not is_animated:
@@ -341,7 +344,7 @@ class Board():
                         pass
                     a = self.bord_dict[card.rarity].copy()
                     if card.blink:
-                        self.change_brightness(a, 1.2)
+                        self.change_brightness(a, 1.3)
                     screen.blit(a, (x, y))
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:   #   Render yellow glow if card has divine shield
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
@@ -376,6 +379,9 @@ class Board():
                         self.change_alpha(ice, 180)
                         ice_rect = ice_rect.move(x, y)
                         self.screen.blit(ice, ice_rect)
+                    if card.state == STATE_SLEEP:
+                        self.screen.blit(self.exhaust, (x, y))
+
 
 
             except ValueError:
@@ -433,6 +439,8 @@ class Board():
                             self.change_alpha(ice, 180)
                             ice_rect = ice_rect.move(x, y)
                             self.screen.blit(ice, ice_rect)
+                        if card.state == STATE_SLEEP:
+                            self.screen.blit(self.exhaust, (x, y))
                 except ValueError:
                     pass
 
