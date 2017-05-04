@@ -23,6 +23,18 @@ class Board():
         self.stats_font_small = pygame.font.SysFont(typeface, round(CREATURE_STATS_FONT_SIZE*0.75)+1)
         self.health_font_small = pygame.font.SysFont(typeface, round(PLAYER_HEALTH_FONT_SIZE*0.75)+1)
 
+        #   Load card borders
+        self.bord_c = pygame.image.load(os.path.join('CardBorder.png')).convert_alpha()
+        self.bord_c = pygame.transform.scale(self.bord_c, (CARD_WIDTH, CARD_HEIGHT))
+        self.bord_u = pygame.image.load(os.path.join('CardBorderU.png')).convert_alpha()
+        self.bord_u = pygame.transform.scale(self.bord_u, (CARD_WIDTH, CARD_HEIGHT))
+        self.bord_r = pygame.image.load(os.path.join('CardBorderR.png')).convert_alpha()
+        self.bord_r = pygame.transform.scale(self.bord_r, (CARD_WIDTH, CARD_HEIGHT))
+        self.bord_l = pygame.image.load(os.path.join('CardBorderL.png')).convert_alpha()
+        self.bord_l = pygame.transform.scale(self.bord_l, (CARD_WIDTH, CARD_HEIGHT))
+
+        self.bord_dict = {COMMON: self.bord_c, UNCOMMON: self.bord_u, RARE: self.bord_r, EPIC: self.bord_l, LEGENDARY: self.bord_l}
+
         self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
         self.cardheight = CARD_HEIGHT
         self.player1 = players[0]           #  add players to class board for easy access
@@ -83,12 +95,13 @@ class Board():
                 y = 0
                 (name, mana, stats, effect_text) = self.read_card(card_obj)
                 name_height = 0
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))    #   renders art
+                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                card.blit(self.bord_dict[card_obj.rarity], (x, y))
                 for line in name:   #   renders name in individual lines
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
                     name_height += self.name_spacing
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))    #   renders art
-                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
                 stats_render = self.stats_font.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
@@ -237,6 +250,7 @@ class Board():
         #   Create player 2 card
         self.screen.blit(self.end_turn, (WINDOW_WIDTH-END_TURN_SHAPE[0], (WINDOW_HEIGHT-END_TURN_SHAPE[1])/2))
         self.render_card(player2.cards[0], (xhalf - self.cardwidth/2, card_y_offset))
+        screen.blit(self.bord_dict[COMMON], (xhalf - self.cardwidth/2, card_y_offset))
         player2_name_render = self.hero_name_font.render(player2.player.name, 1, (0, 0, 0))          #   define name font object
         player2_health_render = self.health_font.render(str(player2.player.stats[2]), 1, (0, 0, 0))     #   define health font object
         screen.blit(player2_name_render, (xhalf - self.cardwidth/2 + name_x_offset, 30 + name_y_offset))                  #   blit player 2 name
@@ -244,6 +258,7 @@ class Board():
 
         #   Create player 1 card
         self.render_card(player1.cards[0], (xhalf - self.cardwidth/2, screen.get_size()[1] - card_y_offset - self.cardheight))
+        screen.blit(self.bord_dict[COMMON], (xhalf - self.cardwidth/2, screen.get_size()[1] - card_y_offset - self.cardheight))
         player1_name_render = self.hero_name_font.render(player1.player.name, 1, (0, 0, 0))
         player1_health_render = self.health_font.render(str(player1.player.stats[2]), 1, (0, 0, 0))     #   define health font object
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
@@ -271,6 +286,7 @@ class Board():
                         screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                     except:
                         pass
+                    screen.blit(self.bord_dict[card.rarity], (x, y))
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:   #   Render yellow glow if card has divine shield
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                         glow_rect = glow.get_rect()
@@ -324,6 +340,7 @@ class Board():
                             screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                         except:
                             pass
+                        screen.blit(self.bord_dict[card.rarity], (x, y))
                         if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                             glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                             glow_rect = glow.get_rect()
@@ -378,25 +395,27 @@ class Board():
                     if card.cardType == TYPE_CREATURE and not card.arted:
                         card.art = pygame.image.load(card.art_path).convert_alpha()
                         card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
-                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045 + 15), y + 30))
+                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
                         card.arted = True
                     elif card.cardType == TYPE_CREATURE:
                         art = card.art
-                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                         screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                    small_border = pygame.transform.scale(self.bord_dict[card.rarity], (int(CARD_WIDTH*0.75), int(CARD_HEIGHT*0.75)))
+                    screen.blit(small_border, (x, y))
                     (name, mana, stats, effect_text) = self.read_card(card)
-                    name_height = 0
+                    name_height = -4
                     for line in name:   #   renders name in individual lines
                         name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
                         screen.blit(name_render, (x + 15, y + name_height + 15))
-                        name_height += self.name_spacing
+                        name_height += self.name_spacing - 4
                     mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
-                    screen.blit(mana_render, (x + self.cardwidth*0.75 - 20, y))
+                    screen.blit(mana_render, (x + self.cardwidth*0.75 - 15, y))
                     if card.cardType == TYPE_CREATURE:
                         stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
                         screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
-                    effect_height = 0
+                    effect_height = 15
                     for line in effect_text:    #   renders effect text in individual lines
                         effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
                         screen.blit(effect_render, (x + 7, y + self.cardheight/3 + effect_height))
@@ -420,25 +439,27 @@ class Board():
                         if card.cardType == TYPE_CREATURE and not card.arted:
                             card.art = pygame.image.load(card.art_path).convert_alpha()
                             card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
-                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
-                            screen.blit(art, (x + int(CARD_WIDTH*0.045 + 15), y + 30))
+                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
                             card.arted = True
                         elif card.cardType == TYPE_CREATURE:
                             art = card.art
-                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                             screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        small_border = pygame.transform.scale(self.bord_dict[card.rarity], (int(CARD_WIDTH*0.75), int(CARD_HEIGHT*0.75)))
+                        screen.blit(small_border, (x, y))
                         (name, mana, stats, effect_text) = self.read_card(card)
-                        name_height = 0
+                        name_height = -4
                         for line in name:   #   renders name in individual lines
                             name_render = self.card_name_font_small.render(line, 1, (0, 0, 0))
                             screen.blit(name_render, (x + 15, y + name_height + 15))
-                            name_height += self.name_spacing
+                            name_height += self.name_spacing - 4
                         mana_render = self.mana_font_small.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
-                        screen.blit(mana_render, (x + self.cardwidth*0.75 - 20, y))
+                        screen.blit(mana_render, (x + self.cardwidth*0.75 - 15, y))
                         if card.cardType == TYPE_CREATURE:
                             stats_render = self.stats_font_small.render(str(stats[1:]), 1, (0, 0, 0)) #   renders stats
                             screen.blit(stats_render, (x + 10, y + self.cardheight*0.75 - 25))
-                        height = 0
+                        height = 15
                         for line in effect_text:    #   renders effect text in individual lines
                             effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
                             screen.blit(effect_render, (x + 7, y + self.cardheight/3 + height))
