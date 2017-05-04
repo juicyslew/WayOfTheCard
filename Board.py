@@ -300,7 +300,7 @@ class Board():
         health_y_offset = 45
 
         #   Create player 2 card
-        self.screen.blit(self.end_turn, (WINDOW_WIDTH-END_TURN_SHAPE[0], (WINDOW_HEIGHT-END_TURN_SHAPE[1])/2))
+        self.screen.blit(self.end_turn, END_TURN_POS)
         self.render_card(player2.cards[0], (xhalf - self.cardwidth/2, card_y_offset))
         screen.blit(self.bord_dict[COMMON], (xhalf - self.cardwidth/2, card_y_offset))
         player2_name_render = self.hero_name_font.render(player2.player.name, 1, (0, 0, 0))          #   define name font object

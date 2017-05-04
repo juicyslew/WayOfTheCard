@@ -338,7 +338,6 @@ class Game():
                     break
             self.game_turn_status = 0
             self.update_board()
-            time.sleep(.75)
             for c in player1.cards:
                 if c.active_effects[WINDFURY_INDEX] == 2:
                     c.active_effects[WINDFURY_INDEX] = 1
@@ -454,7 +453,6 @@ class Game():
                     break
             self.game_turn_status = 0
             self.update_board()
-            time.sleep(.75)
             for c in player2.cards:
                 if c.active_effects[WINDFURY_INDEX] == 2:
                     c.active_effects[WINDFURY_INDEX] = 1
