@@ -474,7 +474,7 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
                                 c.discard.cards[r].stats[1] = c.discard.cards[r].starting_stats[1]
                                 c.discard.cards[r].stats[2] = c.discard.cards[r].starting_stats[2]
                                 c.cards.append(c.discard.cards[r])
-                                c.discard.cards.remove(c)
+                                c.discard.cards.remove(c.discard.cards[r])
                 if self.effect == ADD_CARD_EFFECT: # If Adds a Card to hand
                     print('-----------------------------------')
                     self.t = self.determine_target(own_player, enemy_player) # Determine Target
