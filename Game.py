@@ -110,75 +110,72 @@ class Game():
         """
         Function for using cards to perform actions (Do Work)
         """
-        if all_players == None or len(all_players) == 2:
-            player = all_players[self.player_turn]
-            opp = all_players[not self.player_turn]
-            a = player.check_active() # Create Variable that contains the active cards on the board
-            active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
-            while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
-                self.update_board()
-                print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
-                print('\n'.join(active) + '\n') #Print active cards to choose from
-                i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
-                print('')
+        player = all_players[self.player_turn]
+        opp = all_players[not self.player_turn]
+        a = player.check_active() # Create Variable that contains the active cards on the board
+        active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
+        while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
+            self.update_board()
+            print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
+            print('\n'.join(active) + '\n') #Print active cards to choose from
+            i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
+            print('')
+            try:
+                i = int(i) #check that input is a number
                 try:
-                    i = int(i) #check that input is a number
-                    try:
-                        if i == 0: #if i == 0, end function
-                            break
-                        #print(player.cards[i-1])
-                        attack_card = a[i-1] # set attack card
-                    except IndexError: # if index error
-                        print("\nYou don't have that many cards in field!")
-                        continue #start over
-                except ValueError: # if value error (input isn't an integer)
-                    print('\nInput a Number!')
+                    if i == 0: #if i == 0, end function
+                        break
+                    #print(player.cards[i-1])
+                    attack_card = a[i-1] # set attack card
+                except IndexError: # if index error
+                    print("\nYou don't have that many cards in field!")
                     continue #start over
+            except ValueError: # if value error (input isn't an integer)
+                print('\nInput a Number!')
+                continue #start over
 
-                taunt = False
-                for card in opp.cards:
-                    try:
-                        if card.active_effects[TAUNT_INDEX]:
-                            taunt = True
-                            continue
-                    except AttributeError:
-                        pass
-
-                print("### %s FIELD ### \n" % opp.name) # Print Opponent Field Header
-                print(str(opp) + '\n') # Print Enemy Combatents
-                i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
+            taunt = False
+            for card in opp.cards:
                 try:
-                    i = int(i) #check that input is an integer
-                    try:
-                        if i == 0: #if input is 0 go back to first step
-                            continue
-                        defend_card = opp.cards[i-1] #Set defense Card
-                        if taunt and not defend_card.active_effects[TAUNT_INDEX]:
-                            print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
-                            continue
-                        attack_card.attack(defend_card) #Run the Attack Function
-                        damage_dealt = attack_card.stats[ATT]
-                        attacking_index = player.cards.index(attack_card)
-                        self.board.card_dash((player, attacking_index), (opp, i - 1))
-                        self.board.render_damage(damage_dealt, opp, i - 1)
-                        if i - 1 != 0:
-                            self.board.render_damage(damage_dealt, player, attacking_index)
-                    except IndexError: # if index error
-                        print("\nThe enemy doesn't have that many cards in field!")
-                        continue # Start Over
-                except ValueError: # if value error (input isn't an integer)
-                    print('\nInput a Number!')
+                    if card.active_effects[TAUNT_INDEX]:
+                        taunt = True
+                        continue
+                except AttributeError:
+                    pass
+
+            print("### %s FIELD ### \n" % opp.name) # Print Opponent Field Header
+            print(str(opp) + '\n') # Print Enemy Combatents
+            i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
+            try:
+                i = int(i) #check that input is an integer
+                try:
+                    if i == 0: #if input is 0 go back to first step
+                        continue
+                    defend_card = opp.cards[i-1] #Set defense Card
+                    if taunt and not defend_card.active_effects[TAUNT_INDEX]:
+                        print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
+                        continue
+                    attack_card.attack(defend_card) #Run the Attack Function
+                    damage_dealt = attack_card.stats[ATT]
+                    attacking_index = player.cards.index(attack_card)
+                    self.board.card_dash((player, attacking_index), (opp, i - 1))
+                    self.board.render_damage(damage_dealt, opp, i - 1)
+                    if i - 1 != 0:
+                        self.board.render_damage(damage_dealt, player, attacking_index)
+                except IndexError: # if index error
+                    print("\nThe enemy doesn't have that many cards in field!")
                     continue # Start Over
-                player.check_dead(opp) # Check if anything died on your opponent's field
-                opp.check_dead(player) # Check if anything died on your field.
-                a = player.check_active() # Update a (active cards list)
-                active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
-                self.update_board()
+            except ValueError: # if value error (input isn't an integer)
+                print('\nInput a Number!')
+                continue # Start Over
             player.check_dead(opp) # Check if anything died on your opponent's field
             opp.check_dead(player) # Check if anything died on your field.
+            a = player.check_active() # Update a (active cards list)
+            active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
             self.update_board()
-        else:
-            pass
+        player.check_dead(opp) # Check if anything died on your opponent's field
+        opp.check_dead(player) # Check if anything died on your field.
+        self.update_board()
         for c in player.cards:
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
@@ -368,6 +365,8 @@ class Game():
 
     def update_board(self, card_to_animate = None):
         pygame.display.update()
+        self.player1.turn_status = self.game_turn_status
+        self.player2.turn_status = self.game_turn_status
         self.board.update_board(self.screen, self.player1, self.player2, card_to_animate, turn_status = self.game_turn_status)
         pygame.display.flip()
 
