@@ -45,7 +45,8 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = 20
+        self.anim_speed = 30
+        self.scale_img = 0.5
         self.end_turn = pygame.Surface((100, 50)) #End Turn is 100 by 50
         self.end_turn.fill(PURPLE)
         self.screen.blit(self.end_turn, (WINDOW_WIDTH-100, (WINDOW_HEIGHT-50)/2))
@@ -77,7 +78,10 @@ class Board():
         try:
             if card_obj.cardType == TYPE_CREATURE and not card_obj.arted:
                 card_obj.art = pygame.image.load(card_obj.art_path).convert_alpha()
-                art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                card_obj.art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
+                card_obj.art = pygame.transform.scale(card_obj.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                art = card_obj.art
+                card_obj.arted = True
             elif card_obj.arted:
                 art = card_obj.art
         except:
@@ -95,6 +99,7 @@ class Board():
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
                     card.blit(name_render, (x + 15, y + name_height + 15))
                     name_height += self.name_spacing
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
                 card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                 mana_render = self.mana_font.render(str(mana), 1, (0, 0, 0))    #   renders mana cost
                 card.blit(mana_render, (x + self.cardwidth - 20, y))
@@ -251,12 +256,8 @@ class Board():
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         for card in player2.cards[1:] + player1.cards[1:]:
-            try:
-                art = pygame.image.load(card.art_path).convert_alpha()
-
-            except:
-                art = self.bear
-            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+            art = card.art
+            #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
             try:
                 x = player2.cards.index(card)*(self.cardwidth + 20) + 80
                 y = yhalf - 15 - self.cardheight
@@ -267,8 +268,12 @@ class Board():
                     #self.render_card(card, (x, y), True)
                 else:
                     self.render_card(card, (x, y))
-                if card is not card_to_animate and card is not card_not_to_render:
-                    screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                if card is not card_to_animate and card is not card_not_to_render and card.arted:
+                    try:
+                        art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                    except:
+                        pass
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                         glow_rect = glow.get_rect()
@@ -305,12 +310,8 @@ class Board():
 
 
             except ValueError:
-                try:
-                    art = pygame.image.load(card.art_path).convert_alpha()
-
-                except:
-                    art = self.bear
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                art = card.art
+                #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
                 try:
                     x = player1.cards.index(card)*(self.cardwidth + 20) + 80
                     y = yhalf + 15
@@ -321,7 +322,11 @@ class Board():
                     else:
                         self.render_card(card, (x, y))
                     if card is not card_to_animate and card is not card_not_to_render:
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        try:
+                            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        except:
+                            pass
                         if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                             glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                             glow_rect = glow.get_rect()
@@ -359,11 +364,7 @@ class Board():
                     pass
 
         for card in player2.hand.cards + player1.hand.cards:
-            try:
-                art = pygame.image.load(card.art_path).convert_alpha()
-            except:
-                art = self.bear
-            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2475)))
+            #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2475)))
             try:
                 x = player1.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
                 if player1.hand.cards.index(card) > 5:
@@ -377,7 +378,16 @@ class Board():
                 else:
                     self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
                 if card is not card_to_animate and card is not card_not_to_render:
-                    screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                    if card.cardType == TYPE_CREATURE and not card.arted:
+                        card.art = pygame.image.load(card.art_path).convert_alpha()
+                        card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
+                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045 + 15), y + 30))
+                        card.arted = True
+                    elif card.cardType == TYPE_CREATURE:
+                        art = card.art
+                        art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                         glow_rect = glow.get_rect()
@@ -414,11 +424,7 @@ class Board():
 
 
             except ValueError:
-                try:
-                    art = pygame.image.load(card.art_path).convert_alpha()
-                except:
-                    art = self.bear
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
+                #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
                 try:
                     x = player2.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
                     if player2.hand.cards.index(card) > 5:
@@ -431,7 +437,16 @@ class Board():
                     else:
                         self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
                     if card is not card_to_animate and card is not card_not_to_render:
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        if card.cardType == TYPE_CREATURE and not card.arted:
+                            card.art = pygame.image.load(card.art_path).convert_alpha()
+                            card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
+                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045 + 15), y + 30))
+                            card.arted = True
+                        elif card.cardType == TYPE_CREATURE:
+                            art = card.art
+                            art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH * 0.2375)))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
                         if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                             glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                             glow_rect = glow.get_rect()

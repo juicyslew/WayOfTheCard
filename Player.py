@@ -15,6 +15,7 @@ class Player_Card(Card):
         self.state = STATE_SLEEP #Player State is Pretty Much Constantly Asleep
         self.effect = False #Player Has No Effects
         self.active_effects = INIT_ACTIVE_EFFECT
+        self.is_player = True
 
     def __str__(self): #When printing the player
         s = """### %s || %s\n""" % (self.name, self.stats) # Return this string

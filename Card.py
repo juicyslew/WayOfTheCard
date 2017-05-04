@@ -34,6 +34,7 @@ class Card():
                  effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100,
                  spell_chance = SPELL_CHANCE, active_effects = None, rarity = None): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
+        self.is_player = False
         if rarity == None:
             rarity = DEFAULT_RARITY
         if cardType == None:
@@ -154,7 +155,8 @@ class Card():
             self.art = pygame.image.load(self.art_path).convert_alpha()
             self.art = pygame.transform.scaleNone(self.art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
         except:
-            self.art = pygame.image.load(os.path.join('bear.png')).convert_alpha()
+            #self.art = pygame.image.load(os.path.join('bear.png')).convert_alpha()
+            pass
         player = all_players[player_turn]
         enemy_player = all_players[not player_turn]
         if self.cardType == TYPE_CREATURE:
