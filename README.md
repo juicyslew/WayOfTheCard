@@ -8,7 +8,7 @@ https://juicyslew.github.io/WayOfTheCard/
 https://www.youtube.com/watch?v=d0bYkYRSbRQ&feature=youtu.be
 
 ## Project Poster ##
-
+https://drive.google.com/open?id=0BzPupSCM6VOqeFpKaklramswREk
 
 
 ## Authors ##
