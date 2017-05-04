@@ -34,7 +34,6 @@ class Card():
                  effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100,
                  spell_chance = SPELL_CHANCE, active_effects = None, rarity = None): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
-        self.art = 1
         if rarity == None:
             rarity = DEFAULT_RARITY
         if cardType == None:
@@ -79,6 +78,7 @@ class Card():
         #if effect_spend == None: # if effect_spend == None
             #effect_spend = stats.pop(-1) # make effect_spend the final value of the stats
         self.name = name
+        self.art = 1
         if cardType == TYPE_CREATURE:
             namelist = name.split()
             adj1 = 'NONE'
@@ -108,6 +108,8 @@ class Card():
                 adj_sn = ""
             else:
                 adj_sn = adj_s
+            self.arted = False
+            self.art = 1
             self.art_path = "ImageStuff/finimages/%s%s%s%s.jpg" % (noun, adj1, adj2n,adj_sn)
         self.cardType = cardType
         self.stats = stats
