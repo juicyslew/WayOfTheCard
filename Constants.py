@@ -81,16 +81,6 @@ SPELL_ADDER = 1
 EFFECT_TRY_NUM = 40
 #NEGATIVE_ADDER = 1
 #ZERO_STRENGTH = 1.5
-ARENA = False
-while True:
-    ans = input('Arena Mode? (y/n): ')
-    if ans == 'y':
-        ARENA = True
-    elif ans == 'n':
-        ARENA = False
-    else:
-        continue
-    break
 MINCHOICE = 2
 MAXCHOICE = 4
 #MANA_CURVE_CDF = [sum(MANA_CURVE[:i+1]) for i in range(len(MANA_CURVE))]
@@ -310,7 +300,14 @@ if info == "y":
         print("RULES EXPLANATION")
     print("Good luck!")
 
-"y"yup = input("Do you want a randomized game (for advanced players) (y/n): ").lower()
+ARENA = False
+ans = input('\n \n \nArena mode is when you pick between a random number of cards to choose the best cards for your deck. \nDo you want Arena Mode? (y/n): ')
+if ans == 'y':
+    ARENA = True
+else:
+    ARENA = False
+
+yup = input("Do you want a randomized game (recommended for advanced players) (y/n): ").lower()
 if yup.lower() == "y":
     PLAYER_HEALTH = random.randint(20, 50)
     DECK_INIT_SIZE = random.randint(20, 50)
@@ -327,17 +324,17 @@ if yup.lower() == "y":
     RANDOM = True
 
 ### PRINT RULES; UPDATE AS RANDOMIZATION IS UPDATED ###
-if RANDOM:
-    print("""\n \n RULES: \n
-    Player starting health: %s
-    Deck start size: %s
-    Hand start size: %s
-    Hand max size: %s
-    Max field size: %s
-    Cards drawn per turn: %s
-    Mana gained per turn: %s
-    Second turn card bonus: %s
-    Fatigue is turned %s
-    Temporary Mana is turned %s%s
-    Minion Recovery is turned %s \n \n"""
-    % (PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("On" if TEMP_MANA else "Off"), ("On" if FATIGUE else "Off"), ("\n Max Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("On" if MINION_RECOVER else "Off")))
+print("""\n \n%sRULES: \n
+Player starting health: %s
+Deck start size: %s
+Hand start size: %s
+Hand max size: %s
+Max field size: %s
+Cards drawn per turn: %s
+Mana gained per turn: %s
+Second turn card bonus: %s
+Fatigue is turned %s
+Temporary Mana is turned %s%s
+Minion Recovery is turned %s \n \n"""
+% (("RANDOMIZED " if RANDOM else ""), PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("on" if TEMP_MANA else "off"), ("on" if FATIGUE else "off"), ("\nMax Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("on" if MINION_RECOVER else "off")))
+irrelevent = input("Press any button when you're ready to begin with the name randomization.")
