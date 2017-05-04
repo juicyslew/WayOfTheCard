@@ -90,6 +90,22 @@ class Game():
         """
         Function for using cards to perform actions (Do Work)
         """
+        #if all_players == None or len(all_players) == 2:
+        #    player = all_players[self.player_turn]
+        #    opp = all_players[not self.player_turn]
+        #    a = player.check_active() # Create Variable that contains the active cards on the board
+        #    active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # Create string to display the active cards on the board
+        #    while len(active) > 0: #Allow attacks as long as there are active creatures on your field.S
+        #        self.update_board()
+        #        print("### %s's FIELD ### \n" % player.name) #Print name of player and their field
+        #        print('\n'.join(active) + '\n') #Print active cards to choose from
+        #        i = input('Index To Attack With (End Turn = 0): ') # Get input of which creature to attack with.
+        #        print('')
+        #        try:
+        #            i = int(i) #check that input is a number
+        #                if i == 0: #if i == 0, end function
+        #                    break
+                        #print(player.cards[i-1])
         try:
             attack_card = player.cards[i] # set attack card
             if attack_card.state == STATE_SLEEP:
@@ -98,6 +114,9 @@ class Game():
         except IndexError: # if index error
             print("\nYou don't have that many cards in field!")
             return
+        #        except ValueError: # if value error (input isn't an integer)
+        #            print('\nInput a Number!')
+        #            continue #start over
 
         taunt = False
         for card in opp.cards:
@@ -113,8 +132,6 @@ class Game():
         #i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
         a = None
         while True:
-            attack_card.blink = 1
-            self.update_board()
             # get all events
             ev = pygame.event.get()
 
@@ -124,33 +141,30 @@ class Game():
                 # handle MOUSEBUTTONUP
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = pygame.mouse.get_pos()
+                    #if playnum:
+                    #    active_spots = self.board.p2_hand_spots
+                    #else:
                     if opp_face.collidepoint(pos):
                         a = 0
                     k = 0
                     for j in opp_field:
                         if j.collidepoint(pos):
                             a = k
-                            attack_card.blink = 0
-                            self.update_board()
                             break
                         k += 1
                     if a != None:
-                        attack_card.blink = 0
-                        self.update_board()
                         break
                     else:
-                        attack_card.blink = 0
-                        self.update_board()
                         return False#Cancel Attack
                 if a != None:
-                    attack_card.blink = 0
-                    self.update_board()
                     break
             if a != None:
-                attack_card.blink = 0
-                self.update_board()
                 break
+        #try:
+        #    i = int(i) #check that input is an integer
         try:
+            #if i == 0: #if input is 0 go back to first step
+            #    continue
             defend_card = opp.cards[a] #Set defense Card
             if taunt and not defend_card.active_effects[TAUNT_INDEX]:
                 print("!!!!!---------------You Must Attack Taunt Cards First---------------!!!!!")
@@ -165,6 +179,13 @@ class Game():
         except IndexError: # if index error
             print("\nThe enemy doesn't have that many cards in field!")
             return
+        #except ValueError: # if value error (input isn't an integer)
+        #    print('\nInput a Number!')
+        #    continue # Start Over
+                #player.check_dead(opp) # Check if anything died on your opponent's field
+                #opp.check_dead(player) # Check if anything died on your field.
+                #a = player.check_active() # Update a (active cards list)
+                #active = [str(i+1)+')\n'+str(a[i]) for i in range(len(a))] # update active cards string for display
         player.check_dead(opp) # Check if anything died on your opponent's field
         opp.check_dead(player)
         self.update_board()
@@ -226,7 +247,7 @@ class Game():
                 # proceed events
                 for event in ev:
                     # handle MOUSEBUTTONUP
-                    if event.type == pygame.MOUSEBUTTONUP:
+                    if event.type == pygame.MOUSEBUTTONDOWN:
                         print("mouseButton")
                         pos = pygame.mouse.get_pos()
                         print("pos: " + str(pos))
@@ -253,7 +274,10 @@ class Game():
                     card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
                 except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                     continue
+            #self.play_card(0 ,all_players) #Need to unhardcode
+            #self.use_cards(self.player_turn, all_players) # Run Use Cards Script
             player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
+
             #Start Placing and Attacking
             while True:
                 self.update_board()
@@ -300,6 +324,9 @@ class Game():
                         break
                 if i == -1:
                     break
+            self.game_turn_status = 0
+            self.update_board()
+            time.sleep(.7s5)
             for c in player1.cards:
                 if c.active_effects[WINDFURY_INDEX] == 2:
                     c.active_effects[WINDFURY_INDEX] = 1
@@ -331,9 +358,6 @@ class Game():
                         self.update_board()
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
-            self.game_turn_status = 0
-            self.update_board()
-            self.game_turn_status = 2
             startturn = False
             print("\nPress The Purple Button to Start %s's Turn: "% player2.name)
             while True:
@@ -352,7 +376,7 @@ class Game():
                 if startturn:
                     break
             startturn = False
-
+            self.game_turn_status = 2
             if TEMP_MANA:
                 player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -416,6 +440,9 @@ class Game():
                         break
                 if i == -1:
                     break
+            self.game_turn_status = 0
+            self.update_board()
+            time.sleep(.75)
             for c in player2.cards:
                 if c.active_effects[WINDFURY_INDEX] == 2:
                     c.active_effects[WINDFURY_INDEX] = 1
@@ -447,8 +474,7 @@ class Game():
                         continue
             self.player_turn = not self.player_turn
             self.turn += 1 # Increment turn by 1.
-            self.game_turn_status = 0
-            self.update_board()
+
 
     def update_board(self, card_to_animate = None):
         pygame.display.update()
