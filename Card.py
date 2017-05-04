@@ -34,6 +34,7 @@ class Card():
                  effect = False, effect_chance = EFFECT_CHANCE, cost = None, x = -100, y = -100,
                  spell_chance = SPELL_CHANCE, active_effects = None, rarity = None): #Replace eventually with no init variables and just random generation.
         #Generate Randomly for Certain Items
+        self.blink = 0
         self.is_player = False
         if rarity == None:
             rarity = DEFAULT_RARITY

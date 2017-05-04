@@ -339,7 +339,10 @@ class Board():
                         screen.blit(art, (x + int(CARD_WIDTH*0.045) + self.bc_move[0], y + 30 + self.bc_move[1]))
                     except:
                         pass
-                    screen.blit(self.bord_dict[card.rarity], (x, y))
+                    a = self.bord_dict[card.rarity].copy()
+                    if card.blink:
+                        self.change_brightness(a, 1.2)
+                    screen.blit(a, (x, y))
                     if card.active_effects[DIVINE_SHIELD_INDEX] == 1:   #   Render yellow glow if card has divine shield
                         glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                         glow_rect = glow.get_rect()
@@ -393,7 +396,10 @@ class Board():
                             screen.blit(art, (x + int(CARD_WIDTH*0.045) + self.bc_move[0], y + 30 + self.bc_move[1]))
                         except:
                             pass
-                        screen.blit(self.bord_dict[card.rarity], (x, y))
+                        a = self.bord_dict[card.rarity].copy()
+                        if card.blink:
+                            self.change_brightness(a, 1.3)
+                        screen.blit(a, (x, y))
                         if card.active_effects[DIVINE_SHIELD_INDEX] == 1:
                             glow = pygame.transform.scale(self.glow, (self.cardwidth, self.cardheight))
                             glow_rect = glow.get_rect()
@@ -692,7 +698,8 @@ class Board():
         for x in range(0, width):
             for y in range(0, height):
                 r, g, b, alpha = img.get_at((x, y))
-                img.set_at((x, y), (r*f, g*f, b*f, alpha))
+                r, g, b = r*f, g*f, b*f
+                img.set_at((x, y), (min(255, r), min(255, g), min(255, b), alpha))
 
     def get_card_xy(self, player, index):
         #   Find the xy coordinates of a card on the field based on its
