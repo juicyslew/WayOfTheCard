@@ -34,6 +34,8 @@ class Board():
         self.bord_l = pygame.transform.scale(self.bord_l, (CARD_WIDTH, CARD_HEIGHT))
 
         self.bord_dict = {COMMON: self.bord_c, UNCOMMON: self.bord_u, RARE: self.bord_r, EPIC: self.bord_l, LEGENDARY: self.bord_l}
+        self.bc_off = 0.9
+        self.bc_move = (12, 14)
 
         self.cardwidth = CARD_WIDTH         #  width in pixels of a card. Other scaling changes because of this
         self.cardheight = CARD_HEIGHT
@@ -64,7 +66,7 @@ class Board():
         CHARGE_EFFECT: generate_effect_name(CHARGE_EFFECT),
         DIVINE_SHIELD_EFFECT: generate_effect_name(DIVINE_SHIELD_EFFECT),
         TAUNT_EFFECT: generate_effect_name(TAUNT_EFFECT)}
-        self.anim_speed = 30            #   FPS of all animations
+        self.anim_speed = 24            #   FPS of all animations
         self.scale_img = 0.5
         self.end_turn = pygame.Surface(END_TURN_SHAPE) #End Turn is 100 by 50
         self.end_turn.fill(PURPLE)
@@ -95,8 +97,8 @@ class Board():
                 y = 0
                 (name, mana, stats, effect_text) = self.read_card(card_obj)
                 name_height = 0
-                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))    #   renders art
-                card.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86*self.bc_off), int(CARD_WIDTH*0.495*self.bc_off)))    #   renders art
+                card.blit(art, (x + int(CARD_WIDTH*0.045) + self.bc_move[0], y + 30 + self.bc_move[1]))
                 card.blit(self.bord_dict[card_obj.rarity], (x, y))
                 for line in name:   #   renders name in individual lines
                     name_render = self.card_name_font.render(line, 1, (0, 0, 0))
@@ -118,8 +120,8 @@ class Board():
                     self.change_alpha(swords, 180)
                     swords_rect = swords_rect.move(x + self.cardwidth - int(self.cardwidth/6) - 12, y + self.cardheight - int(self.cardwidth/6) - 12)
                     card.blit(swords, swords_rect)
-                if card_obj.cardType == TYPE_CREATURE:  #   only creatures have art
-                    card.blit(art, (int(CARD_WIDTH*0.045), 30))
+                #if card_obj.cardType == TYPE_CREATURE:  #   only creatures have art
+                #    card.blit(art, (int(CARD_WIDTH*0.045), 30))
                 card.set_alpha(10 * alpha)     #    Makes card
                 if not is_animated:
                     card.set_alpha(255)
@@ -282,8 +284,8 @@ class Board():
                     self.render_card(card, (x, y))
                 if card is not card_to_animate and card is not card_not_to_render and card.arted:
                     try:
-                        art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
-                        screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                        art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86*self.bc_off), int(CARD_WIDTH*0.495*self.bc_off)))
+                        screen.blit(art, (x + int(CARD_WIDTH*0.045) + self.bc_move[0], y + 30 + self.bc_move[1]))
                     except:
                         pass
                     screen.blit(self.bord_dict[card.rarity], (x, y))
@@ -336,8 +338,8 @@ class Board():
                         self.render_card(card, (x, y))
                     if card is not card_to_animate and card is not card_not_to_render:
                         try:
-                            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86), int(CARD_WIDTH*0.495)))
-                            screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
+                            art = pygame.transform.scale(art, (int(CARD_WIDTH*0.86*self.bc_off), int(CARD_WIDTH*0.495*self.bc_off)))
+                            screen.blit(art, (x + int(CARD_WIDTH*0.045) + self.bc_move[0], y + 30 + self.bc_move[1]))
                         except:
                             pass
                         screen.blit(self.bord_dict[card.rarity], (x, y))
