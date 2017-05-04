@@ -113,6 +113,8 @@ class Game():
         #i = input('Index to Attack (Cancel Attack = 0): ') # Get Input for Creature to Attack.
         a = None
         while True:
+            attack_card.blink = 1
+            self.update_board()
             # get all events
             ev = pygame.event.get()
 
@@ -128,15 +130,25 @@ class Game():
                     for j in opp_field:
                         if j.collidepoint(pos):
                             a = k
+                            attack_card.blink = 0
+                            self.update_board()
                             break
                         k += 1
                     if a != None:
+                        attack_card.blink = 0
+                        self.update_board()
                         break
                     else:
+                        attack_card.blink = 0
+                        self.update_board()
                         return False#Cancel Attack
                 if a != None:
+                    attack_card.blink = 0
+                    self.update_board()
                     break
             if a != None:
+                attack_card.blink = 0
+                self.update_board()
                 break
         try:
             defend_card = opp.cards[a] #Set defense Card
