@@ -229,10 +229,9 @@ class Game():
         self.player_turn = False
 
         while(self.running):  #While the game is still running (Which is essentially While True)
+            self.game_turn_status = 0
             self.update_board()
             print("\nPress The Purple Button to Start %s's Turn: "% player1.name)
-            self.game_turn_status = 1
-            self.update_board()
             startturn = False
             while True:
                 # get all events
@@ -252,6 +251,8 @@ class Game():
                 if startturn:
                     break
             startturn = False
+            self.game_turn_status = 1
+            self.update_board()
             if TEMP_MANA:
                 player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
