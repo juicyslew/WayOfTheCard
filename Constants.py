@@ -227,9 +227,6 @@ for i in EFFECT_LIST:
         for k in EFFECT_TARGET_DICT[i]:
             if not k in TRIGGER_TARGET_DICT[j]:
                 continue
-            #if i in STATIC_EFFECT_LIST:
-            #    j = TRIGGER_PLAY
-            #    k = TARGET_THIS_CREATURE
             eff_cost = EFFECT_COST_DICT[i] * TRIGGER_COST_DICT[j] * TARGET_COST_DICT[k]
             if k in TARGET_UNIVERSAL_POSITIVE:
                 eff_cost = abs(eff_cost)
@@ -247,9 +244,6 @@ for i in EFFECT_LIST:
         for k in EFFECT_TARGET_DICT[i]:
             if not k in SPELL_TARGET_LIST:
                 continue
-            #if i in STATIC_EFFECT_LIST:
-            #    j = TRIGGER_PLAY
-            #    k = TARGET_THIS_CREATURE
             eff_cost = EFFECT_COST_DICT[i] * TRIGGER_COST_DICT[j] * TARGET_COST_DICT[k]
             if k in TARGET_UNIVERSAL_POSITIVE:
                 eff_cost = abs(eff_cost)
@@ -258,10 +252,6 @@ for i in EFFECT_LIST:
     SPELL_EFFECT_POSSIBILITIES.append((i, Trigger_And_Targets))
 MIN_EFF_COST = EFFECT_COST_DICT[DEAL_EFFECT] * TRIGGER_COST_DICT[TRIGGER_PLAY] * TARGET_COST_DICT[TARGET_CREATURE]#SPELL_EFFECT_POSSIBILITIES[DEAL_EFFECT][1][TRIGGER_PLAY][1][TARGET_CREATURE][1]
 
-#for j,ls in CREATURE_EFFECT_POSSIBILITIES[10][1]:
-#    for k in ls:
-#        print(TARGET_DICT[k[0]])
-#V######################V#
 
 #Constants for rendering the Field
 PLAYER_CARD_FONT_SIZE = 35
