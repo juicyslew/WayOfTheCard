@@ -409,13 +409,13 @@ class Board():
                     else:
                         self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
                     if card is not card_to_animate and card is not card_not_to_render:
-                        if card.cardType == TYPE_CREATURE and not card.arted:
+                        if not card.arted:
                             card.art = pygame.image.load(card.art_path).convert_alpha()
                             card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
                             art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                             screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
                             card.arted = True
-                        elif card.cardType == TYPE_CREATURE:
+                        else:
                             art = card.art
                             art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                             screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
@@ -454,13 +454,13 @@ class Board():
                         else:
                             self.render_card(card, (x, y), scale_x = 0.75, scale_y = 0.75)
                         if card is not card_to_animate and card is not card_not_to_render:
-                            if card.cardType == TYPE_CREATURE and not card.arted:
+                            if not card.arted:
                                 card.art = pygame.image.load(card.art_path).convert_alpha()
                                 card.art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.86*self.scale_img), int(CARD_WIDTH*0.495*self.scale_img)))
                                 art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                                 screen.blit(art, (x + int(CARD_WIDTH*0.045 + 20), y + 30))
                                 card.arted = True
-                            elif card.cardType == TYPE_CREATURE:
+                            else:
                                 art = card.art
                                 art = pygame.transform.scale(card.art, (int(CARD_WIDTH*0.43*1.4), int(CARD_WIDTH * 0.2375 * 1.4)))
                                 screen.blit(art, (x + int(CARD_WIDTH*0.045), y + 30))
