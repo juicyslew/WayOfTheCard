@@ -6,15 +6,19 @@ https://juicyslew.github.io/WayOfTheCard/
 
 ## Authors ##
   MJ McMillen 				Github: MJ-McMillen
+
   Nick Sherman			  Github: NickShermeister
+
   Nate Sampo  			  Github: natesampo
+
   Will Derksen        Github: juicyslew
+
   Jeremy Ryan         Github: jeremycryan
 
 
 ## Description ##
 
-For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated. So far, we have created a Hearthstone knock off with randomly generated cards.
+For this project we are making a randomly generated card game based on card games like Hearthstone and Magic the Gathering. Both the rules and the cards are being randomly generated if the player wants to; otherwise they use a base set of rules.
 
 In the beginning of each game, each player receives  a deck of randomly generated cards. These cards are split into two general categories: “dudes” and “dos”. The whole point of the game is to play cards to kill the other player. The “dude” cards called minions can be deployed to attack the other opponent and do cards have some effect on the board. There is a limit to the power of the cards you can deploy each turn. Each player starts with two points called mana. Every turn you get one additional mana to spend on cards. The more destructive cards cost more mana so they can only be played towards the end of the game making the game more interesting.
 
@@ -53,7 +57,7 @@ Required Software:
 	6. Enjoy!
 
 ### How to Install in Windows ###
-1. Register for Github
+1. Sign into Github
 2. Click the green 'Clone or Download' button in the GitHub repository.
 3. Click 'Download ZIP'
 4.	Right click on the downloaded zipped folder and click 'Extract All'
@@ -76,12 +80,11 @@ Required Software:
 
 
 ## Usage ##
-1. Run Game.py in the command line
-2. Options for Arena mode and Random rule generation will appear
-3. It will ask to confirm randomly generated player names.
-4. The Game field will appear in a separate window.
-5. go through your turns in the command line to move the cards around the field
-6. to close, press control+c in the command line.
+1. Run Game.py in the command line from where the repository is saved on your computer.
+2. Options for Arena mode and Random rule generation will appear; answer according to how you want to play.
+3. The game will then randomly create names that the players can select. Once both players are done, there will be a short pause as the game generates.
+4. The Game field will appear in a separate window from where you can play.
+5. Play through the game to its conclusion. If you wish to end early, press CTRL-C in the command line.
 
 
 

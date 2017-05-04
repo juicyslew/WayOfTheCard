@@ -203,7 +203,10 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
             targ = TARGET_CREATURE
             return(((eff, TRIGGER_PLAY, targ, 1),), effect_spend - MIN_EFF_COST)
     else:
-        valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
+        if second:
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend % k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
+        else:
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
     for i in range(EFFECT_TRY_NUM):
         success = False
         eff, val_trigs_targs = random.choice(valid_combs)

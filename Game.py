@@ -63,6 +63,7 @@ class Game():
         player = all_players[player]
         opp = all_players[not self.player_turn]
         while True: #Yes, it's bad. Will come back to to see necessity of this.
+            not_played = True
             print("### %s's Hand ###" % player.name)
             print(player.hand) #Print the player hand
             print("mana: %i" % player.mana) #display mana
@@ -196,16 +197,20 @@ class Game():
         """
         player1 = all_players[0]
         player2 = all_players[1]
-        if player1.dead and player2.dead: #If both players died then
-            print("Well shoot.  A Tie.")
-            return True
-        elif player2.dead:
-            print(player1.name + " Wins!!!")
-            return True
-        elif player1.dead:
-            print(player2.name + " Wins!!!")
-            return True
-        return False
+        if all_players == None or len(all_players) == 2:
+            if player1.dead and player2.dead: #If both players died then
+                print("Well Shoot.  A Tie.")
+                return True
+            elif player2.dead:
+                print(player1.name + " Wins!!!")
+                return True
+            elif player1.dead:
+                print(player2.name + " Wins!!!")
+                return True
+            return False
+        else:       #lotsa logic no point implementing yet
+            pass
+
 
     def game_loop(self, all_players):
         player1 = all_players[0]
@@ -228,7 +233,6 @@ class Game():
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
-            test = 0
 
             pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
             if TEMP_MANA:
@@ -243,22 +247,15 @@ class Game():
             for card in player1.cards: #Run through the player cards on the field
                 try:
                     card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
-                    if(self.check_game_end(self.player_turn, all_players)):
-                        break
                 except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                     continue
-
+            #while True: #Start Infinite Loop
+            #    if not self.play_card(player1, player2): #Run play_card until it returns True, then break the loop
+            #        continue
+            #    break
             self.play_card(0 ,all_players) #Need to unhardcode
             self.use_cards(self.player_turn, all_players) # Run Use Cards Script
-            test = player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN)    #basically, checking to see if there's damage
-            if (test) > 0: # Draw Card From Deck as turn ends
-                player1.cards[0].damage(test)
-                player1.check_dead(player2)
-                self.update_board()
-            elif (test) < 0:
-                player1.dead = True
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
-                break
+            player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
             player1.check_hand()
             for card in player1.cards: #Run through cards on the field
                 try:
@@ -270,9 +267,7 @@ class Game():
                     continue
             if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                 break
-
             self.player_turn = not self.player_turn
-
             if MINION_RECOVER:
                 for card in player1.cards[1:]: #Run through cards on the field
                     try:
@@ -287,7 +282,6 @@ class Game():
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
             self.update_board()
-
             #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
             pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
             if TEMP_MANA:
@@ -305,30 +299,26 @@ class Game():
                     card.effect.activate(player2, player1, TRIGGER_BEGIN) # If card has beginning trigger, activate effect
                 except AttributeError or TypeError:
                     continue
+            #while True: # Display hand and run play_card until it return's true
+            #    if not self.play_card(player2, player1):
+            #        continue
+            #    break
             self.play_card(1, all_players)
+            #print(player2) # display player 2 cards in field.
             self.use_cards(self.player_turn, all_players)
-            test = player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN)    #basically, checking to see if there's damage
-            if (test) > 0: # Draw Card From Deck as turn ends
-                player2.cards[0].damage(test)
-                player2.check_dead(player1)
-                self.update_board()
-            elif (test) < 0:
-                player2.dead = True
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
-                break
+            player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw one
             player2.check_hand()
             for card in player2.cards: # For Card in player2.cards:
                 try:
                     card.effect.activate(player2, player1, TRIGGER_END) # if card has end trigger, activate effect.
+                    player1.check_dead(player2) # Check if anything died.
+                    player2.check_dead(player1)
                     self.update_board()
-                    if(self.check_game_end(self.player_turn, all_players)):
-                        break
                 except AttributeError or TypeError:
                     continue
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
+            #break # Break out of player2 while loop
+            if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                 break
-
-
             if MINION_RECOVER:
                 for card in player1.cards[1:]: #Run through cards on the field
                     try:
