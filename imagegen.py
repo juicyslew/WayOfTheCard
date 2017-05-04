@@ -21,7 +21,9 @@ b = "both"
 x = "x"
 y = "y"
 
-dict_paded = {"spell1":(1,b), "angel":(0,b), "bear":(0,b), "cat":(0,b),"giant":(0,x), "griffin":(0,b), "person": (0,x), "golem":(0,x),
+dict_paded = {"spell1":(1,x),"spell2":(1,x),"spell3":(1,x),"spell4":(1,x),"spell5":(1,x),"spell6":(1,x),"spell7":(1,x),"spell8":(1,x),"spell9":(1,x),
+              "spell10":(1,x),"spell11":(1,x),"spell12":(1,x),"spell13":(1,x),
+              "angel":(0,b), "bear":(0,b), "cat":(0,b),"giant":(0,x), "griffin":(0,b), "person": (0,x), "golem":(0,x),
               "shaman":(0,x),"prophet":(0,x),"succubis":(0,x), "basilisk":(0,x), "satyr":(0,x),"minotaur":(0,x), "fish": (0,y),
               "wolf":(0,x), "ooze":(0,x),"goblin":(0,x),"ape":(0,x),"roc":(0,x), "beast":(0,x),"colossus":(0,x),"dwarf":(0,x),"sphinx":(0,x),
               "ravager":(0,x),"rogue":(0,x),"knight":(0,x),"tiger":(0,x),"unicorn":(0,x),
@@ -32,7 +34,7 @@ dict_paded = {"spell1":(1,b), "angel":(0,b), "bear":(0,b), "cat":(0,b),"giant":(
 #0 = white
 blend_back = ["griffin","shaman","prophet","basilisk","satyr", "minotaur",
               "fish", "ooze","protector","ape","beast","colossus","dwarf","sphinx",
-              "ravager","rogue","king","god","cleric","sprite","vagabond","demon","acid","angel","giant"]
+              "ravager","rogue","king","god","cleric","sprite","vagabond","demon","acid","angel","giant",'spell1','spell2',"spell3","spell4","spell5","spell6","spell7","spell8","spell9","spell10","spell11","spell12","spell13"]
 
 problem_children = []
 
@@ -77,7 +79,7 @@ def fix_image(filename,name):
         1. crop
             - can specify from where to crop
         2. pad image
-            - can specify which axis
+            - can sp"protector":(0,x)ecify which axis
             - can specify which color
             - use image paste to paste image onto a resized version of of the image.
     """
@@ -90,25 +92,28 @@ def fix_image(filename,name):
         #set the touple to a variable because I am lazy and do not want to write dict_padded a bunch
         if boop[0] == 1:
             #we need to have a black packground pad.
-            backdrop = Image.open("imagelib/box_black.jpg")
+            backdrop = Image.open("ImageStuff/imagelib/box_black.jpg")
             #backdrop is a plain black image
-            if boop[1]== b:
-                #not sure what to do yet. need to pad 'both'
-                print("moo")
-            elif boop[1] == x:
+            if boop[1] == x or boop[1]==b:
                 #need to pad x with black
                 new_width = int(16*size[1]/9)
                 backdrop = backdrop.resize((new_width,size[1]))
                 backdrop.paste(image,((new_width-size[0])//2,0))
+                #pasting the image onto a black backdrop
                 fin = backdrop.resize((480,270))
+                #resizing it
                 fin.save(filename)
+                #overwriting old image
             else:
                 #need to pad y with black.
                 new_height = int(9*size[0]/16)
                 backdrop = backdrop.resize((size[0],new_height))
+                #pasting the image onto a black backdrop
                 backdrop.paste(image,(0,(new_height-size[1])//2))
                 fin = backdrop.resize((480,270))
+                #resizing it
                 fin.save(filename)
+                #overwriting old image
         else:
             #we need to have a white background pad.
             backdrop = Image.open("ImageStuff/imagelib/box_white.jpg")
@@ -125,6 +130,7 @@ def fix_image(filename,name):
                 new_height = int(9*size[0]/16)
                 backdrop = backdrop.resize((size[0],new_height))
                 backdrop.paste(image,(0,(new_height-size[1])//2))
+                #pastes image onto white backfrop
                 fin = backdrop.resize((480,270))
                 fin.save(filename)
     elif name in special:
@@ -146,13 +152,15 @@ def fix_image(filename,name):
         fin = cropped.resize((480, 270))
         fin.save(filename)
     return fin
-
+spells = ['spell1','spell2',"spell3","spell4","spell5","spell6","spell7","spell8","spell9","spell11","spell12","spell13"]
 
 
 def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
     """adj are the adjictives from noun_name in randGen
     adj_s are the adjictives in ajictive list"""
     nounnam = noun
+    if nounnam in spells:
+        nounnam = 'spell'
     adj1nam = adj
     if adj == "NONE":
         adj = noun
@@ -197,12 +205,20 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
     if noun.lower() == "sofa" or noun.lower()=="cleric" or noun.lower == "sphinx":
         almost_white = 250
     if noun.lower() in blend_back:
-        for i in range(size[0]):
-            for j in range(size[1]):
-                origional = noun_image.getpixel((i,j))
-                average =  (origional[0]+origional[1]+ origional[2])/3
-                if average < almost_white:
-                    pix[i,j]= (origional)
+        if nounnam == "spell":
+            for i in range(size[0]):
+                for j in range(size[1]):
+                    origional = noun_image.getpixel((i,j))
+                    average =  (origional[0]+origional[1]+ origional[2])/3
+                    if average < almost_white:
+                        pix[i,j]= (origional)
+        else:
+            for i in range(size[0]):
+                for j in range(size[1]):
+                    origional = noun_image.getpixel((i,j))
+                    average =  (origional[0]+origional[1]+ origional[2])/3
+                    if average < almost_white:
+                        pix[i,j]= (origional)
     elif noun.lower() == "titan" :
         for i in range(size[0]):
             for j in range(size[1]):
@@ -216,7 +232,6 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
                 average =  (origional[0]+origional[1]+ origional[2])/3
                 if average > almost_white:
                     pix[i,j]= (255,255,255)
-
     if adj_s != 'NONE':
         nam3 = adj_s
         if adj_s in overlay:
@@ -252,14 +267,12 @@ def genimage_dudes(adj, adj2= 'NONE', noun= "sofa",adj_s = 'NONE'):
 
 
 
-def genimage_does():
+def genimage_does(adj, adj2= "NONE",adj_s = "NONE"):
     """ This does spell Generation"""
-    pass
+    num = random.choice(['1','2','3','4','5','6','7','8','9','11','12','13'])
+    noun = "spell" + num
+    return genimage_dudes(adj, adj2, noun,adj_s)
 
-
-def wipe_folder():
-    """ this wipes the folder of all images.  """
-    pass
 
 if __name__ == '__main__':
     for n in range(50):
