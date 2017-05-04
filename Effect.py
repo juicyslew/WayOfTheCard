@@ -53,13 +53,9 @@ class Effect():
                 self.class_type.append(EFFECT_CLASS_DICT[self.effect[i]])
             if numeric[i] == None: #If no numeric value, Generate Numeric
                 if self.effect[i] == SUMMON_EFFECT:
-                    #try:
-                    numeric[i] = random()*MAX_NUMERIC #np.random.choice(np.random.choice(range(0, MAX_COST), p = MANA_CURVE))
-                    #except ValueError:1
-                    #    numeric = effect_spend
+                    numeric[i] = random()*MAX_NUMERIC
                 else:
                     numeric[i] = math.ceil(MAX_NUMERIC * random())
-                #numeric = [math.ceil(MAX_NUMERIC * random()), math.ceil(MAX_NUMERIC * random())]
             #Set leftover self values
             if cardType == TYPE_SPELL and numeric[i] == 0:
                 numeric[i] = 1
@@ -140,16 +136,6 @@ $$$ %s Effect || Trigger on %s || Targets %s || Has Potency %s $$$"""% (EFFECT_D
             for ca in own_player.cards[1:] + enemy_player.cards[1:]:
                 targs.append(ca)
             return targs
-            '''if len(own_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + own_player.cards[1:]
-            if len(enemy_player.cards) - 1 == 0:
-                pass
-            else:
-                targs + enemy_player.cards[1:]
-            if len(targs) == 0:
-                return ()'''
         elif self.target == TARGET_THIS_CREATURE:
             return (self.ThisCard,)
         elif self.target == TARGET_ALL_ENEMY_CREATURE:

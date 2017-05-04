@@ -50,7 +50,7 @@ class Game():
                     names.append(name)
                     break
                 continue #If player doesn't like it, then generate new name
-        print("The cards are all being generated. Please wait.")
+        print("The cards are being generated. Please wait a moment.")
         for j in range(self.players):
             if j == 0:
                 player_list.append(Player(names[j], HAND_INIT_SIZE, rarities)) #Save Player Name
