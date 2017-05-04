@@ -468,8 +468,8 @@ class Board():
                                 effect_render = self.card_text_font_small.render(line, 1, (0, 0, 0))
                                 screen.blit(effect_render, (x + 7, y + self.cardheight/3 + height))
                                 height += self.effect_spacing
-                    except ValueError:
-                        pass
+                except ValueError:
+                    pass
 
         for card in card_backlog:
             self.render_card(card_backlog[0][0], card_backlog[0][1], True)

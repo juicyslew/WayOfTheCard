@@ -290,7 +290,9 @@ Draw Cards: Target player draws x cards.
 Heal: Heal x damage target has sustained.
 Evolve: Change creature to a randomly generated creature of one mana cost more.
 Revolve: Change creature to a randomly generated creature of the same mana cost.
-Devolve:Change creature to a randomly generated creature of one mana cost less.
+Devolve: Change creature to a randomly generated creature of one mana cost less.
+Return: Return a card that is on the field to a player's hand.
+Reanimate: Take a creature out of the graveyard and return it to the field.
 NOTE: Names can be randomized, and may be randomized.
 
               """)
@@ -341,7 +343,7 @@ if yup.lower() == "y":
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
-    MANA_LIMIT = random.randint(10, 40)
+    MANA_LIMIT = random.randint(10, 20)
     MINION_RECOVER = random.randint(0,1)
     FATIGUE = random.randint(0,1)
     RANDOM = True
