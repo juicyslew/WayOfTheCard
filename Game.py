@@ -39,20 +39,23 @@ class Game():
         totrarprobs = sum(RARITY_PROBS)
         rarities = [np.random.choice(RARITIES, p = RARITY_PROBS) for a in range(DECK_INIT_SIZE)]
         pygame.init()
+        names = []
         for j in range(1, self.players+1):
-            print('Player %i:' % j)
+            print('\nPLAYER %i:' % j)
             while True: #Create Loop for picking Name
                 name = random_name().capitalize() #Create Name
                 #print(name) #Display Name
                 i = input('\n%s\nAre You Ok With This Name(y/n): ' %name) #Display Name and Check if Player Likes
                 if i is 'y': #If player liked
-                    if j == 1:
-                        player_list.append(Player(name, HAND_INIT_SIZE, rarities)) #Save Player Name
-                    else:
-                        player_list.append(Player(name, HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
+                    names.append(name)
                     break
                 continue #If player doesn't like it, then generate new name
-        # player_list.append(Player('Daniel', 4))
+        print("The cards are being generated. Please wait a moment.")
+        for j in range(self.players):
+            if j == 0:
+                player_list.append(Player(names[j], HAND_INIT_SIZE, rarities)) #Save Player Name
+            else:
+                player_list.append(Player(names[j], HAND_INIT_SIZE + SECOND_PLAYER_CARD_BONUS, rarities)) #Save Player Name
         self.game_loop(player_list) #Start Game Loop
 
 
@@ -176,7 +179,7 @@ class Game():
             self.update_board()
         else:
             pass
-        for c in player.cards:  #Decrease the number of times that certain abilities can be used [ex: windfury allows 2 attacks, but attack once and it only allows 1]
+        for c in player.cards:
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
             if c.active_effects[FROZEN_INDEX] == 1:
@@ -186,10 +189,8 @@ class Game():
     def check_game_end(self, player, all_players = None):
         """
         Function for Checking if the game is over.
-
         return False means no player is dead and the game can continue
         return True means the game is done and the game_loop is broken
-
         Three cases in which game ends:
         -- P1 Wins
         -- P2 Wins
@@ -198,7 +199,7 @@ class Game():
         player1 = all_players[0]
         player2 = all_players[1]
         if player1.dead and player2.dead: #If both players died then
-            print("Well shoot.  A Tie.")
+            print("Well Shoot.  A Tie.")
             return True
         elif player2.dead:
             print(player1.name + " Wins!!!")
@@ -207,6 +208,7 @@ class Game():
             print(player2.name + " Wins!!!")
             return True
         return False
+
 
     def game_loop(self, all_players):
         player1 = all_players[0]
@@ -229,9 +231,28 @@ class Game():
 
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
-            test = 0
+            print("\nPress The Purple Button to Start %s's Turn: "% player1.name)
+            startturn = False
+            while True:
+                # get all events
+                ev = pygame.event.get()
 
-            pause = input("\nPress Enter to Start %s's Turn: "% player1.name)
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        print("mouseButton")
+                        pos = pygame.mouse.get_pos()
+                        print("pos: " + str(pos))
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
             if TEMP_MANA:
                 player1.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -240,26 +261,14 @@ class Game():
                     player1.mana = MANA_LIMIT
             player1.activate_cards() #Activate cards in the field for usage
             print("\n\n\n\n### %s || %ls ###" % (player1.name, player1.cards[0].stats)) # Print player for turn and Stats
-            #print() # Print Player Stats
             for card in player1.cards: #Run through the player cards on the field
                 try:
                     card.effect.activate(player1, player2, TRIGGER_BEGIN) #If the cards have a "Begin Turn" Trigger, then activate their effect
-                    if(self.check_game_end(self.player_turn, all_players)):
-                        break
                 except AttributeError or TypeError: #If there is some kind of attribute error then continue (This has to do with the "Player_Card", which is essentially a card but doesn't have some of the essential parts like an effect, Discussed more in Player.py)
                     continue
-
             self.play_card(0 ,all_players) #Need to unhardcode
             self.use_cards(self.player_turn, all_players) # Run Use Cards Script
-            test = player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN)    #basically, checking to see if there's damage
-            if (test) > 0: # Draw Card From Deck as turn ends
-                player1.cards[0].damage(test)
-                player1.check_dead(player2)
-                self.update_board()
-            elif (test) < 0:
-                player1.dead = True
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
-                break
+            player1.deck.draw(player1.hand, CARDS_DRAWN_PER_TURN) # Draw Card From Deck as turn ends
             player1.check_hand()
             for card in player1.cards: #Run through cards on the field
                 try:
@@ -271,9 +280,7 @@ class Game():
                     continue
             if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
                 break
-
             self.player_turn = not self.player_turn
-
             if MINION_RECOVER:
                 for card in player1.cards[1:]: #Run through cards on the field
                     try:
@@ -289,8 +296,26 @@ class Game():
                         continue
             self.update_board()
 
-            #while True: # Removed because Outdated# Nested While Loop for the Second Player.  This way when we say "continue" the code starts here instead.  If you have better idea, please mention, this doesn't feel like the best way to do this.
-            pause = input("\nPress Enter to Start %s's Turn: "% player2.name)
+            print("\nPress Enter to Start %s's Turn: "% player2.name)
+            while True:
+                # get all events
+                ev = pygame.event.get()
+
+                # proceed events
+                for event in ev:
+
+                    # handle MOUSEBUTTONUP
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        if self.board.end_turn_rect.collidepoint(pos):
+                            startturn = True
+                            break
+                    if startturn:
+                        break
+                if startturn:
+                    break
+            startturn = False
+
             if TEMP_MANA:
                 player2.mana = min((self.turn+1) * MANA_PER_TURN, MAX_MANA) # update mana for player2
             else:
@@ -307,29 +332,20 @@ class Game():
                 except AttributeError or TypeError:
                     continue
             self.play_card(1, all_players)
+            #print(player2) # display player 2 cards in field.
             self.use_cards(self.player_turn, all_players)
-            test = player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN)    #basically, checking to see if there's damage
-            if (test) > 0: # Draw Card From Deck as turn ends
-                player2.cards[0].damage(test)
-                player2.check_dead(player1)
-                self.update_board()
-            elif (test) < 0:
-                player2.dead = True
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
-                break
+            player2.deck.draw(player2.hand, CARDS_DRAWN_PER_TURN) # Draw one
             player2.check_hand()
             for card in player2.cards: # For Card in player2.cards:
                 try:
                     card.effect.activate(player2, player1, TRIGGER_END) # if card has end trigger, activate effect.
+                    player1.check_dead(player2) # Check if anything died.
+                    player2.check_dead(player1)
                     self.update_board()
-                    if(self.check_game_end(self.player_turn, all_players)):
-                        break
                 except AttributeError or TypeError:
                     continue
-            if self.check_game_end(self.player_turn, all_players): # if the game ends, end the game_loop
+            if self.check_game_end(self.player_turn, all_players): # if game ends, end game_loop
                 break
-
-
             if MINION_RECOVER:
                 for card in player1.cards[1:]: #Run through cards on the field
                     try:
