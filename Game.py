@@ -215,6 +215,8 @@ class Game():
         player2 = all_players[1]
         self.player1 = player1
         self.player2 = player2
+        self.game_turn_status = 0
+
         """
         Game Loop!  This runs the code of the game in a large while loop that allows the game to continue and function.
         """
@@ -232,6 +234,8 @@ class Game():
         while(self.running):  #While the game is still running (Which is essentially While True)
             self.update_board()
             print("\nPress The Purple Button to Start %s's Turn: "% player1.name)
+            self.game_turn_status = 1
+            self.update_board()
             startturn = False
             while True:
                 # get all events
@@ -292,16 +296,16 @@ class Game():
                         self.update_board()
                     except AttributeError or TypeError: # Attribute error check, in case activating the card didn't work due to not having the attributes necessary (player_card)
                         continue
+            self.game_turn_status = 0
             self.update_board()
 
             print("\nPress Enter to Start %s's Turn: "% player2.name)
+            self.game_turn_status = 2
             while True:
                 # get all events
                 ev = pygame.event.get()
-
                 # proceed events
                 for event in ev:
-
                     # handle MOUSEBUTTONUP
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         pos = pygame.mouse.get_pos()
@@ -359,11 +363,12 @@ class Game():
                         continue
             self.player_turn = not self.player_turn
             self.turn += 1 # Increment turn by 1.
+            self.game_turn_status = 0
 
 
     def update_board(self, card_to_animate = None):
         pygame.display.update()
-        self.board.update_board(self.screen, self.player1, self.player2, card_to_animate)
+        self.board.update_board(self.screen, self.player1, self.player2, card_to_animate, turn_status = self.game_turn_status)
         pygame.display.flip()
 
 if __name__ == "__main__": # If this is the run code (Game.py)

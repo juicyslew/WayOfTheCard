@@ -128,7 +128,7 @@ RMANA_EFFECT = 20
 #-----------ORDER MATTERS WITH ALL OF THESE LISTS AND COST DICTIONARIES, THEY NEED TO HAVE THE SAME ORDER--------------#
 EFFECT_LIST = (DRAW_EFFECT, DEAL_EFFECT, HEAL_EFFECT, SUMMON_EFFECT, BUFF_EFFECT, SPLIT_DEAL_EFFECT, SPLIT_HEAL_EFFECT, TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT, DEBUFF_EFFECT, DESTROY_EFFECT, FREEZE_EFFECT, RETURN_EFFECT, REANIMATE_EFFECT, DEVOLVE_EFFECT, REVOLVE_EFFECT, EVOLVE_EFFECT, AMANA_EFFECT, RMANA_EFFECT)
 EFFECT_DICT = {None:"None",DRAW_EFFECT:"Draw Cards", DEAL_EFFECT:"Deal Damage", HEAL_EFFECT:"Heal", SUMMON_EFFECT:"Summon Creature", BUFF_EFFECT:"Buff Card", SPLIT_DEAL_EFFECT:"Split Damage", SPLIT_HEAL_EFFECT:"Split Heal", TAUNT_EFFECT:"Give Taunt", DIVINE_SHIELD_EFFECT:"Give Divine Shield", CHARGE_EFFECT:"Give Charge", WINDFURY_EFFECT:"Give Windfury", DEBUFF_EFFECT:"Give Debuff", DESTROY_EFFECT:"Destroy Creature", FREEZE_EFFECT:"Freeze Creature", RETURN_EFFECT: "Return Creature to Hand",  REANIMATE_EFFECT: "Revive Creature", DEVOLVE_EFFECT:"Devolve", REVOLVE_EFFECT:"Revolve", EVOLVE_EFFECT:"Evolve", AMANA_EFFECT:"Gain Mana Temporarily", RMANA_EFFECT:"Lose Mana Next Turn"}
-EFFECT_COST_DICT = {DRAW_EFFECT:-1.7, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-1, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5, DEBUFF_EFFECT:1.35, DESTROY_EFFECT:4.5, FREEZE_EFFECT:2.25, RETURN_EFFECT:2, REANIMATE_EFFECT:0.5, DEVOLVE_EFFECT:2, REVOLVE_EFFECT:1, EVOLVE_EFFECT:-1.5, AMANA_EFFECT:-1.35, RMANA_EFFECT:1.35} #Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
+EFFECT_COST_DICT = {DRAW_EFFECT:-1.7, DEAL_EFFECT:1, HEAL_EFFECT:-.75, SUMMON_EFFECT:-1.0, BUFF_EFFECT:-1, SPLIT_DEAL_EFFECT:1, SPLIT_HEAL_EFFECT:-.75, TAUNT_EFFECT:-1.5, DIVINE_SHIELD_EFFECT:-2.5, CHARGE_EFFECT:-2, WINDFURY_EFFECT:-3.5, DEBUFF_EFFECT:1.35, DESTROY_EFFECT:4.5, FREEZE_EFFECT:2.25, RETURN_EFFECT:2, REANIMATE_EFFECT:-2, DEVOLVE_EFFECT:2, REVOLVE_EFFECT:1, EVOLVE_EFFECT:-1.5, AMANA_EFFECT:-1.35, RMANA_EFFECT:1.35} #Split Damage and heal are so high because they only work with random targets which have low values, this offsets them a bit #This converts the identity of the effect to the cost of it when generating effects
 STATIC_EFFECT_LIST = (TAUNT_EFFECT, DIVINE_SHIELD_EFFECT, CHARGE_EFFECT, WINDFURY_EFFECT, FREEZE_EFFECT, DEVOLVE_EFFECT, REVOLVE_EFFECT, EVOLVE_EFFECT)
 
 TAUNT_INDEX = 0
@@ -290,7 +290,9 @@ Draw Cards: Target player draws x cards.
 Heal: Heal x damage target has sustained.
 Evolve: Change creature to a randomly generated creature of one mana cost more.
 Revolve: Change creature to a randomly generated creature of the same mana cost.
-Devolve:Change creature to a randomly generated creature of one mana cost less.
+Devolve: Change creature to a randomly generated creature of one mana cost less.
+Return: Return a card that is on the field to a player's hand.
+Reanimate: Take a creature out of the graveyard and return it to the field.
 NOTE: Names can be randomized, and may be randomized.
 
               """)
@@ -341,7 +343,7 @@ if yup.lower() == "y":
     SECOND_PLAYER_CARD_BONUS = random.randint(0,1)
     MAX_BOARD_SIZE = random.randint(5, 10)
     TEMP_MANA = random.randint(0, 1)
-    MANA_LIMIT = random.randint(10, 40)
+    MANA_LIMIT = random.randint(10, 20)
     MINION_RECOVER = random.randint(0,1)
     FATIGUE = random.randint(0,1)
     RANDOM = True
