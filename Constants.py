@@ -295,8 +295,23 @@ FIRST_PLAYER = random.choice([True, False])
 """
 RANDOM = False
 ### RANDOMIZATION PART ###
-yup = input("do watn radnokm? (y/n): ").lower()
-if yup == "y":
+info = input("Would you like to hear the rules? (y/n): ").lower()
+if info == "y":
+    print("Filler")
+    effs = input("Would you like to hear the explanation of different effects? (y/n): ").lower()
+    if effs == "y":
+        print("""
+
+
+              """)
+    print("More blep and rules")
+    rulee = input("Would you like some more information on the rules? (y/n): ").lower()
+    if rulee == "y":
+        print("RULES EXPLANATION")
+    print("Good luck!")
+
+"y"yup = input("Do you want a randomized game (for advanced players) (y/n): ").lower()
+if yup.lower() == "y":
     PLAYER_HEALTH = random.randint(20, 50)
     DECK_INIT_SIZE = random.randint(20, 50)
     HAND_MAX_SIZE = random.randint(7, 12)
