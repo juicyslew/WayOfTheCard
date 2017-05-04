@@ -115,7 +115,6 @@ class Card():
         self.cardType = cardType
         self.stats = stats
         self.state = state
-        print(stats)
         self.creatureType = creatureType
         self.effect = effect
         self.manacost = cost

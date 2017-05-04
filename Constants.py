@@ -273,21 +273,55 @@ COIN = random.choice([True, False])
 
 RANDOM = False
 ### RANDOMIZATION PART ###
+
 info = input("Would you like to hear the rules? (y/n): ").lower()
 if info == "y":
-    print("Filler")
+    print("There are only two players in the game, you and your opponent. The goal of the game is to outlast your opponent and deplete their life points to zero. In the game, there are two types of cards-- “Dudes” and “Dos.” “Dudes,” or creatures/minions/etc. are entities that exist on the board that have a mana cost, health, and attack. Minions can have a variety of effects that can happen on summon, upon death, or at the beginning/end of turns. Minions are able to attack during the attack phase. “Dos,” or spells, have only a cost and one or more effects and can be cast during the “Play” phase. Spells are only cast during this phase. You cast spells and summon minions by spending mana, which is a resource that you get every turn.")
     effs = input("Would you like to hear the explanation of different effects? (y/n): ").lower()
     if effs == "y":
         print("""
-
+Taunt: Minions with Taunt must be attacked before other minions.
+Mana Effects: Minions can change the amount of mana you or your opponent receive on their next turn. Mana can be given or taken away.
+Divine Shield: Ignore the first amount of damage a minion takes. The shield can be re-applied to minions but each shield only absorbs one damage set.
+Windfury: Minions with Windfury can attack twice.
+Freeze: Minions cannot attack this turn. They unthaw at the end of the turn.
+Deal Damage: Deal x damage to target.
+Draw Cards: Target player draws x cards.
+Heal: Heal x damage target has sustained.
+Evolve: Change creature to a randomly generated creature of one mana cost more.
+Revolve: Change creature to a randomly generated creature of the same mana cost.
+Devolve:Change creature to a randomly generated creature of one mana cost less.
+NOTE: Names can be randomized, and may be randomized.
 
               """)
-    print("More blep and rules")
+    print("""The following rules will all hold true in a non-randomized game. If you wish to try the random rules, you will get a printed version of the new rules. The rules are as follows:
+
+Player starting health: 30
+Deck start size: 30
+Hand start size: 3
+Hand max size: 10
+Max field size: 7
+Cards drawn per turn: 1
+Mana gained per turn: 1
+The maximum mana is 10.
+Second turn card bonus: 1
+Fatigue is on.
+Minion Recovery is off.
+
+""")
     rulee = input("Would you like some more information on the rules? (y/n): ").lower()
     if rulee == "y":
-        print("RULES EXPLANATION")
-    print("Good luck!")
+        print("""Hand max size denotes the most cards that you can have in your hand. As you draw at the end of your turn, a good strategy is to have one less than the number of cards the maximum is.
+Mana gained per turn means that one more mana is gained than the last turn when compared to the current turn. There is a maximum of 10 mana.
+Fatigue occurs when a player runs out of cards. Whenever said player first tries to draw a card, they will take 1 damage. For every subsequent draw, they will take 1 more damage than the last draw.
+Minion recovery means that at the conclusion of each player’s turn all minions will be healed to full health.""")
 
+
+info1 = input("Do you want to hear about how to play? (y/n):").lower()
+if info1 == "y":
+    print("""
+
+          A player hits the button to start their turn. The player then plays cards out of his or her hand during the “Play” phase of their turn by clicking and dragging their chosen card. Once they have spent all of their mana or wish to stop playing cards, they can choose to end their play phase by clicking on the button in the right again. If there are minions that the player has that can attack, the player then enters attack phase. During this phase, the player can make their minions attack valid targets by clicking on their minion and dragging to the enemy they want to attack. When the player wishes to end their turn or can make no more attacks, they end their turn by clicking on the button again. At this point, end of turn actions will automatically happen. When the next person is ready to begin their turn, they click on the button to reveal their cards.""")
 ARENA = False
 ans = input('\n \n \nArena mode is when you pick between a random number of cards to choose the best cards for your deck. \nDo you want Arena Mode? (y/n): ')
 if ans == 'y':
@@ -326,4 +360,4 @@ Fatigue is turned %s
 Temporary Mana is turned %s%s
 Minion Recovery is turned %s \n \n"""
 % (("RANDOMIZED " if RANDOM else ""), PLAYER_HEALTH, DECK_INIT_SIZE, HAND_INIT_SIZE, HAND_MAX_SIZE, MAX_BOARD_SIZE, CARDS_DRAWN_PER_TURN, MANA_PER_TURN, ("Yes" if SECOND_PLAYER_CARD_BONUS else "No"), ("on" if TEMP_MANA else "off"), ("on" if FATIGUE else "off"), ("\nMax Temp Mana: %d" % MANA_LIMIT if not TEMP_MANA else ""), ("on" if MINION_RECOVER else "off")))
-irrelevent = input("Press any button when you're ready to begin with the name randomization.")
+irrelevent = input("Press any button when you're ready to begin with the name randomization. Good luck!")
