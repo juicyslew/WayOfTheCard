@@ -5,6 +5,9 @@ from math import floor
 import operator
 
 class randGen():
+    """
+    The class behind all random generation in the game except for the art on cards.
+    """
     def __init__(self, type = "creature", word_num = random.choice([1, 2, 3])):
         pass
 
@@ -13,22 +16,21 @@ def generate(cardType = TYPE_CREATURE):
     Generates Names for Creatures.
     (ADD COMMENTS)
     """
-    word_num = random.choice([1,2,3])
-    if cardType == TYPE_CREATURE:
+    if cardType == TYPE_CREATURE:     #Decides name length for creatures
         word_num = random.choice([1,2])
+    else:
+        word_num = random.choice([1,2,3]) #Decides name length for spells
     name = []
     i = 0
-    while i < word_num:
+    while i < word_num: #Randomly pick words from the words
         i += 1
         name.append(random.choice(name_list()))
-    if cardType == TYPE_CREATURE:
+    if cardType == TYPE_CREATURE:   #Add a chance of creature names with "the" in it
         if random.random() < 0.35:
-            #.35
             name = []
             name.append(random_name())
             name.append("the")
-            if random.random() < 0.4:
-                #.4
+            if random.random() < 0.4:   #Adds the possibility of an adjective as well.
                 name.append(random.choice(adjective()))
         name.append(random.choice(noun_list()))
     string = ""
@@ -77,15 +79,15 @@ def noun_list():
 def random_name():
     """
     Unique Character Name Generation
-    (ADD COMMENTS)
+    Returns a string.
     """
     name = ""
     consonants = ["b", "c", "d", "f", "g", "h", "k", "l", "m", "n", "p",
     "r", "s", "t", "v", "w", "y", "z"]
     sounds = ["br", "rd", "rn", "st", "tr", "lt", "pt", "mn", "ny", "gh", "sh",
-    "xx", "kk", "ss", "tt", "mm", "rr", "ll"]
+    "xx", "kk", "ss", "tt", "mm", "rr", "ll"]   #Give pairs of consonants that make certain sounds.
     vowels = ["a", "e", "i", "o", "u"]
-    if random.random() < 0.5:
+    if random.random() < 0.5:   #randomly selects vowels
         name = random.choice(vowels)
     for i in range(0, round(2*random.random() + 1)):
         if i == 0 or random.random() < 0.5:
@@ -98,6 +100,9 @@ def random_name():
     return name
 
 def random_game_name():
+    """
+    Randomly generates a name for the specific game being played.
+    """
     wordlist = ["hearth", "stone", "sweep", "magic", "monster", "iron", "fire",
     "emblem", "war", "craft", "spell", "fate", "shadow", "star", "lock", "mine"]
     rand1 = random.choice(wordlist)
