@@ -57,6 +57,8 @@ class Board():
         self.ice = pygame.image.load(os.path.join('ice.jpg')).convert_alpha()
         self.glow = pygame.image.load(os.path.join('glow.jpg')).convert_alpha()
         self.double_sword = pygame.image.load(os.path.join('crossedswords.png')).convert_alpha()
+        self.mana_crystal = pygame.image.load(os.path.join('crystal.png')).convert_alpha()
+        self.mana_crystal = pygame.transform.scale(self.mana_crystal, (35, 35))
 
         #   Set board constants
         self.effect_spacing = 10        #   Spacing between lines of effect text
@@ -266,6 +268,7 @@ class Board():
         screen.blit(player1_name_render, (xhalf - self.cardwidth/2 + name_x_offset, screen.get_size()[1] - card_y_offset - self.cardheight + name_y_offset))
         screen.blit(player1_health_render, (xhalf - self.cardwidth/2 + health_x_offset, -card_y_offset + health_y_offset + 2*yhalf - self.cardheight))
 
+        self.render_mana()
         card_backlog = []   #   List of cards to render after all other cards are rendered
 
         #   Render all cards in hands
@@ -382,7 +385,8 @@ class Board():
         for card in player2.hand.cards + player1.hand.cards:
             #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2475)))
             try:
-                if turn_status == 3 or turn_status == 2:
+                a = player1.hand.cards.index(card)
+                if turn_status == 3 or turn_status == 1:
                     x = player1.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
                     if player1.hand.cards.index(card) > 5:
                         x += 370
@@ -428,7 +432,7 @@ class Board():
             except ValueError:
                 #art = pygame.transform.scale(art, (int(CARD_WIDTH*0.43), int(CARD_WIDTH*0.2375)))
                 try:
-                    if turn_status == 1 or turn_status == 3:
+                    if turn_status == 2 or turn_status == 3:
                         x = player2.hand.cards.index(card)*(self.cardwidth*0.75 + 10) + 10
                         if player2.hand.cards.index(card) > 5:
                             x += 370
@@ -658,3 +662,8 @@ class Board():
             x = self.screen.get_size()[0]/2
             y = self.cardheight/2
         return (x, y)
+
+    def render_mana(self, num, pos):
+        if num > 0:
+            self.screen.blit(self.mana_crystal, pos)
+            render_mana(num - 1, (pos[0] + 50, pos[1]))
