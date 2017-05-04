@@ -38,7 +38,7 @@ RARITIES = (COMMON, UNCOMMON, RARE, EPIC, LEGENDARY) #IN ORDER COMPARED TO RARIT
 RARITY_DICT = {COMMON:'Common', UNCOMMON:'Uncommon', RARE:'Rare', EPIC:'Epic', LEGENDARY:'Legendary'}
 POWER_DICT = {COMMON:(1.85, .35, 1.3), UNCOMMON:(1.85,.45, 1.5), RARE:(1.85,.5,1.7), EPIC:(1.85,.575,2.0), LEGENDARY:(1.85,.7, 2.5)}
 #EFFECT_DICT = {COMMON:1.55, UNCOMMON:1.65, RARE:1.75, EPIC:1.85, LEGENDARY:2}
-INPUT_RARITY = [.375, .325, .2, .1, .05]
+INPUT_RARITY = [.375, .325, .2, .1, .05]    #Card rarity
 totrarprobs = sum(INPUT_RARITY)
 RARITY_PROBS = [i/totrarprobs for i in INPUT_RARITY]
 DEFAULT_RARITY = RARE
@@ -236,8 +236,6 @@ for i in EFFECT_LIST:
 
 SPELL_EFFECT_POSSIBILITIES = []
 for i in EFFECT_LIST:
-    #if i in STATIC_EFFECT_LIST:
-    #    continue
     Trigger_And_Targets = []
     for j in (TRIGGER_PLAY,):
         Targets = []
@@ -262,19 +260,17 @@ MANA_COST_FONT_SIZE = 40
 END_TURN_SHAPE = (100, 50)
 END_TURN_POS = (WINDOW_WIDTH-END_TURN_SHAPE[0], (WINDOW_HEIGHT-END_TURN_SHAPE[1])/2)
 
+#Define Card Size
 CARD_SCALE = 30
 CARD_WIDTH = CARD_SCALE * 5
 CARD_HEIGHT = CARD_SCALE * 7
 
-"""TODO CONSTANTS:
+"""TODO CONSTANTS (if we want to expand a little); only one left </3
 #Need to code in mana-giving
 COIN = True #True = given to opponent, False = no coin given
 COIN = random.choice([True, False])
-
-#I think this is kinda useless? Players can decide who goes first before they start playing?
-FIRST_PLAYER = True #True means the first player created goes first
-FIRST_PLAYER = random.choice([True, False])
 """
+
 RANDOM = False
 ### RANDOMIZATION PART ###
 info = input("Would you like to hear the rules? (y/n): ").lower()
@@ -299,6 +295,7 @@ if ans == 'y':
 else:
     ARENA = False
 
+#WHERE RANDOMIZATION HAPPENS#
 yup = input("Do you want a randomized game (recommended for advanced players) (y/n): ").lower()
 if yup.lower() == "y":
     PLAYER_HEALTH = random.randint(20, 50)

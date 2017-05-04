@@ -1,9 +1,6 @@
 """
 Initial test of simply setting up the game.  Ignore this.
-
-IGNORE THIS
-IGNORE THIS
-IGNORE THISSSSSSSSSSSSSS
+If you want to see old code, feel free to browse. 
 """
 import random
 from Constants import *

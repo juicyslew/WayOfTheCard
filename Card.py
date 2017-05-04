@@ -137,14 +137,6 @@ class Card():
 %s""" % (self.name, TYPE_DICT[self.cardType], RARITY_DICT[self.rarity], self.stats, eff_s, 'Active Effects: ' + ', '.join(active_strs))
         if self.cardType == TYPE_SPELL:
             s = """@@@ %s || %s || %s @@@\n---%s---%s""" % (self.name, TYPE_DICT[self.cardType], RARITY_DICT[self.rarity], self.stats[0], self.effect)
-        #s = """###Card###
-#name: %s
-#Card Type: %s
-#Stats: %s
-#State: %s
-#Creature Type: %s
-#Effect: %s
-#""" % (self.name, TYPE_DICT[self.cardType], self.stats, STATE_DICT[self.state], CREATURE_DICT[self.creatureType], self.effect)
         return s
 
     def play(self, player_turn, all_players):

@@ -5,6 +5,10 @@ import theano
 import theano.tensor as T
 import pickle as pk
 
+"""
+Old code from when we thought we had time to set up a neural net to make better cards.
+"""
+
 x = 5
 power = 1.5
 initpow = .5

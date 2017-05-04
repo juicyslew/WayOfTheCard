@@ -1,3 +1,7 @@
+"""
+OLD MULTIPLAYER CODE
+FOR USE IF WE EXPAND IN THE FUTURE
+"""
         else:
             while True:
                 player = all_players[player]

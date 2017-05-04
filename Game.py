@@ -179,7 +179,7 @@ class Game():
             self.update_board()
         else:
             pass
-        for c in player.cards:
+        for c in player.cards:  #Decrease the number of times that certain abilities can be used [ex: windfury allows 2 attacks, but attack once and it only allows 1]
             if c.active_effects[WINDFURY_INDEX] == 2:
                 c.active_effects[WINDFURY_INDEX] = 1
             if c.active_effects[FROZEN_INDEX] == 1:

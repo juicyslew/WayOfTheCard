@@ -139,10 +139,13 @@ def generate_stats(cost, card_type, leftover):
     return stats
 
 def generate_effect_name(effect, reminder_text = True):
+    """
+    Randomly generate a name for the different effects that we have.
+    """
     if effect == None:
         return ""
     elif effect == WINDFURY_EFFECT:
-        list1 = ["wind", "double", "duplicate", "duo", "back"] #Why "back"?
+        list1 = ["wind", "double", "duplicate", "duo", "back"]
         list2 = ["fury", "rage", "strike", "slash", "power", "smash"]
         text = random.choice(list1).capitalize() + random.choice(list2).capitalize()
         if reminder_text:
@@ -169,49 +172,41 @@ def generate_effect_name(effect, reminder_text = True):
         if reminder_text:
             text = text + " (this creature can attack the turn it is played)"
         return text
-
-
     #print(generate_stats(True, 10))
 
 def generate_numerical_effect(effect_spend, cardType, second = False):
     """
-    Generates Slightly More Balanced Numerical Effects
+    Generates Balanced Numerical Effects
     """
-    #Return none
-    if cardType == TYPE_SPELL:
-        #varied_costs = [(i, TRIGGER_PLAY, i[2], EFFECT_COST_DICT[i[0]] * TRIGGER_PLAY * TARGET_COST_DICT[i[2]])
-        #                for i in EFFECT_POSSIBILITIES if not i in STATIC_EFFECT_LIST for j in EFFECT_POSSIBILITIES[i] for k, eff_cost in EFFECT_POSSIBILITIES[i][j]] ##CHANGE THIS TO HAVE ITS OWN EFFECT_POSSIBILITIES LIST
-        if second:
+    if cardType == TYPE_SPELL:      #Differentiates between creature and spell cards.
+        if second:  #Both the if and else statements try for various valid combinations.
             valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend % k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES]
         else:
-            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES] #if effect_spend > i[3] and i[3] > 0]
-        ## Effect Choice
-        if len(valid_combs) == 0:
+            valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and k[1] > 0]) for j in i[1]]) for i in SPELL_EFFECT_POSSIBILITIES]
+        if len(valid_combs) == 0: # If there are no valid combinations
             eff = DEAL_EFFECT
             targ = TARGET_CREATURE
             return(((eff, TRIGGER_PLAY, targ, 1),), effect_spend - MIN_EFF_COST)
-    else:
-        if second:
+    else:   #creates valid combinations for creatures
+        if second:  #Both the if and else statements try for various valid combinations.
             valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1] and effect_spend % k[1] < EFFECT_THRESHOLD and k[1] > 0]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
         else:
             valid_combs = [(i[0],[(j[0],[k for k in j[1] if effect_spend > k[1]]) for j in i[1]]) for i in CREATURE_EFFECT_POSSIBILITIES]
-    for i in range(EFFECT_TRY_NUM):
+    for i in range(EFFECT_TRY_NUM): #Tries to successfully create an effect
         success = False
         eff, val_trigs_targs = random.choice(valid_combs)
-        if len(val_trigs_targs) == 0:
-            #del eff, val_trigs_targs
+        if len(val_trigs_targs) == 0: #del eff, val_trigs_targs
             continue
         trig, val_targs = random.choice(val_trigs_targs)
-        if len(val_targs) == 0:
-            #del eff, val_trigs_targs, trig, val_targs
+        if len(val_targs) == 0: #del eff, val_trigs_targs, trig, val_targs
             continue
         targ, spend_cost = random.choice(val_targs)
         success = True
         break
     double = False
-    if (DOUBLE_EFFECT_CHANCE > random.random()) and not second:
+    if (DOUBLE_EFFECT_CHANCE > random.random()) and not second: #Decides whether there are 1 or 2 effects
         double = True
-    if not success:
+    if not success: #Decides what to do if it wasn't successful.
         if cardType == TYPE_SPELL or second:
             print(effect_spend)
             eff = DEAL_EFFECT
@@ -221,9 +216,7 @@ def generate_numerical_effect(effect_spend, cardType, second = False):
             if not second:
                 double = True
         else:
-            return (((None, None, None, 0),), effect_spend)
-    #val = random.choice(valid_combs)
-    #^###################^#
+            return (((None, None, None, 0),), effect_spend) #Return nothing if we are unable to salvage the card.
     elif not eff is None:
         if eff in STATIC_EFFECT_LIST or eff in ONE_DO_EFFECTS:
             numeric = 1

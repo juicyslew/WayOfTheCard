@@ -63,11 +63,11 @@ class Player():
                 card.state = STATE_ACTIVE
             if card.active_effects[FROZEN_INDEX] == 1:
                 card.state = STATE_SLEEP
-            if card.state == STATE_ACTIVE:# and not card is self.player:
+            if card.state == STATE_ACTIVE: #and not card is self.player:
                 ls.append(card)
         return ls
 
-    def check_hand(self):
+    def check_hand(self):   #Simple check card for
         if len(self.hand.cards) > HAND_MAX_SIZE:
             for i in range(len(self.hand.cards)-HAND_MAX_SIZE):
                 print("\n\n!!! Card Lost: \n" + str(self.hand.cards[HAND_MAX_SIZE]))
