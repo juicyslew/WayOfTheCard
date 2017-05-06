@@ -11,8 +11,7 @@ https://www.youtube.com/watch?v=d0bYkYRSbRQ&feature=youtu.be
 https://drive.google.com/open?id=0BzPupSCM6VOqRWpHd1VodTZyTFk
 
 ## Architectural Review Reflection and Synthesis ##
-ArchitecturalReview.md 
-Wayofthecard/ArchitecturalReview.md
+https://github.com/juicyslew/WayOfTheCard/blob/master/ArchitecturalReview.md
 
 ## Authors ##
   MJ McMillen 				Github: MJ-McMillen
