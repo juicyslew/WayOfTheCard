@@ -4,7 +4,7 @@ A randomized card game in all senses of the word. It possesses random rules, ran
 ## Website ##
 https://juicyslew.github.io/WayOfTheCard/
 
-## Gource Visualization Video ##
+## Source Visualization Video ##
 https://www.youtube.com/watch?v=d0bYkYRSbRQ&feature=youtu.be
 
 ## Project Poster ##
